@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prioriza</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.1); border-radius: 10px; }
+        .custom-scrollbar:hover::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.2); }
+        .animate-fadeIn { animation: fadeIn 0.2s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        
+        .task-item.dragging { opacity: 0.5; }
+        .task-item.drag-over { border-top: 4px solid #60a5fa !important; }
+        
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-50 p-4 font-sans text-slate-800 relative">
+
+    <div id="toast" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] px-6 py-3 rounded-full shadow-lg font-bold text-sm transition-all duration-300 ease-out text-white">
+        <span id="toast-msg"></span>
+    </div>
+
+    <div class="max-w-6xl mx-auto mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="text-center md:text-left">
+            <h1 class="text-3xl md:text-4xl font-black text-slate-800 tracking-tight uppercase flex items-center justify-center md:justify-start gap-2">
+                Prioriza <span class="text-red-600 text-3xl md:text-5xl">➔</span>
+            </h1>
+            <p class="text-slate-500 text-sm font-medium">Gestión inteligente de tu tiempo</p>
+        </div>
+
+        <div class="flex gap-3">
+            <button id="btn-open-profile" class="px-4 py-2 bg-white rounded-2xl shadow-sm border border-slate-200 flex items-center gap-3 transition-all hover:shadow-md hover:border-slate-300" title="Ver mi Diagnóstico">
+                <div id="header-icon" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-lg">🌱</div>
+                <div class="flex-col items-start text-left hidden sm:flex">
+                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wide leading-none mb-1">Tu Estilo</span>
+                    <span id="header-archetype" class="text-sm font-black leading-none text-slate-700">Lienzo en Blanco</span>
+                </div>
+                <div class="w-px h-6 bg-slate-200 mx-1 hidden sm:block"></div>
+                <div class="flex items-center gap-1 text-orange-500 font-black text-lg">
+                    <i data-lucide="flame" class="w-5 h-5"></i> <span id="header-streak">0</span>
+                </div>
+            </button>
+
+            <button id="btn-open-sync" class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 text-blue-600 hover:bg-blue-50 transition-colors" title="Sincronizar Dispositivos">
+                <i data-lucide="share-2" class="w-5 h-5"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto mb-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div id="search-container" class="p-2.5 rounded-xl shadow-sm border bg-white border-slate-200 flex items-center gap-2 px-4 transition-colors">
+            <i data-lucide="search" id="search-icon" class="w-5 h-5 text-slate-400"></i>
+            <input type="text" id="search-input" placeholder="Buscar tareas..." class="w-full bg-transparent outline-none text-sm font-medium placeholder:font-normal" />
+            <button id="btn-clear-search" class="hidden text-slate-400 hover:text-slate-700">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+        <div class="lg:col-span-2 bg-white p-2 rounded-xl shadow-sm border border-slate-200">
+            <form id="add-task-form" class="flex flex-col md:flex-row gap-2 h-full">
+                <input type="text" id="new-task-input" placeholder="Escribe una nueva tarea aquí..." class="flex-1 px-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:border-blue-500 outline-none transition-all text-sm" required />
+                <select id="new-task-quadrant" class="px-3 py-2 border border-slate-200 rounded-lg outline-none bg-white cursor-pointer text-sm font-medium text-slate-700 min-w-[140px]">
+                    <option value="q1">Hacer</option>
+                    <option value="q2">Planificar</option>
+                    <option value="q3">Delegar</option>
+                    <option value="q4">Eliminar</option>
+                </select>
+                <button type="submit" id="btn-add-task" class="px-6 py-2 bg-slate-800 text-white font-semibold rounded-lg hover:bg-slate-700 disabled:opacity-50 transition-colors flex items-center justify-center gap-2 text-sm">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Añadir
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto bg-[#6a9bd8] p-3 md:p-5 rounded-2xl shadow-xl relative">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5" id="quadrants-container">
+        </div>
+    </div>
+
+    <div id="modal-confirm" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-[60] p-4 transition-opacity">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center animate-fadeIn">
+            <h3 id="confirm-title" class="text-xl font-black text-slate-800 mb-2"></h3>
+            <p id="confirm-msg" class="text-slate-500 text-sm mb-6"></p>
+            <div id="confirm-actions" class="flex flex-col gap-2"></div>
+        </div>
+    </div>
+
+    <div id="modal-profile" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-opacity">
+        <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl overflow-hidden flex flex-col animate-fadeIn">
+            <div id="profile-header-bg" class="pt-8 pb-12 px-6 flex flex-col items-center justify-center text-center relative">
+                <button id="btn-close-profile" class="absolute top-4 right-4 text-black/30 hover:text-black/60 bg-white/30 backdrop-blur-md rounded-full p-1 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+                <div id="profile-icon" class="w-24 h-24 bg-white border-4 border-white/50 rounded-full shadow-lg flex items-center justify-center text-5xl mb-4"></div>
+                <h2 id="profile-name" class="text-3xl font-black tracking-tight"></h2>
+                <p id="profile-desc" class="text-sm opacity-80 font-semibold mt-1 max-w-[250px] leading-snug"></p>
+            </div>
+
+            <div class="p-6 bg-white rounded-t-3xl -mt-6 relative z-10 flex-1">
+                <div class="bg-slate-50 border border-slate-100 rounded-2xl p-5 mb-6 relative overflow-hidden">
+                    <i data-lucide="brain-circuit" class="absolute -bottom-2 -right-2 w-16 h-16 text-slate-200 opacity-50"></i>
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 relative z-10">Análisis</h3>
+                    <p id="profile-advice" class="text-sm font-medium text-slate-700 relative z-10 leading-relaxed"></p>
+                </div>
+
+                <div class="flex items-center justify-between bg-orange-50 border border-orange-100 p-4 rounded-2xl">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm">
+                            <i data-lucide="flame" class="w-5 h-5 text-orange-500"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-orange-400 uppercase tracking-widest">Días Seguidos</p>
+                            <p class="text-lg font-black text-orange-600"><span id="profile-streak"></span> Días</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Tu Rango</p>
+                        <div id="profile-rank" class="text-sm font-bold flex items-center gap-1 justify-end"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-intro" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl animate-fadeIn">
+            <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 shadow-inner mx-auto">
+                <i data-lucide="info" class="w-8 h-8"></i>
+            </div>
+            <h2 class="text-2xl font-black text-center text-slate-800 mb-4">Domina tu tiempo</h2>
+            <p class="text-slate-600 text-sm text-center mb-6 leading-relaxed">
+                Tus tareas se guardan de forma segura en tu navegador. Completa tareas a diario para subir tu racha y descubre qué tipo de organizador eres.
+            </p>
+            <button id="btn-close-intro" class="w-full bg-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-700 transition-colors">
+                Comenzar a organizar
+            </button>
+        </div>
+    </div>
+
+    <div id="modal-sync" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-fadeIn">
+            <button id="btn-close-sync" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-100 rounded-full p-1 transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            
+            <h2 class="text-xl font-black text-slate-800 mb-1 flex items-center gap-2">
+                <i data-lucide="arrow-right-left" class="text-blue-500 w-5 h-5"></i> Respaldar & Sincronizar
+            </h2>
+            <p class="text-xs text-slate-500 mb-6">Pasa tus datos al celular o guárdalos en tu PC.</p>
+
+            <div class="mb-6 bg-slate-50 border border-slate-200 rounded-2xl p-5">
+                <h3 class="font-bold text-sm text-slate-700 mb-3 flex items-center gap-2">
+                    <i data-lucide="share-2" class="w-4 h-4 text-purple-500"></i> Sincronización Directa
+                </h3>
+                
+                <div id="sync-connected" class="hidden text-center">
+                    <div class="text-green-600 font-bold text-sm mb-3 flex items-center justify-center gap-1">
+                        <i data-lucide="check" class="w-4 h-4"></i> Conectado con éxito
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <button id="btn-sync-merge" class="w-full bg-blue-600 text-white font-bold py-2 rounded-xl text-sm transition-colors hover:bg-blue-700">
+                            Fusionar (Recomendado)
+                        </button>
+                        <button id="btn-sync-overwrite" class="w-full bg-slate-200 text-slate-700 font-bold py-2 rounded-xl text-sm transition-colors hover:bg-slate-300">
+                            Sobrescribir receptor
+                        </button>
+                    </div>
+                </div>
+
+                <div id="sync-setup" class="space-y-4">
+                    <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                        <div>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase">Tu Código</p>
+                            <p id="my-peer-id" class="text-xl font-black tracking-widest text-slate-800">...</p>
+                        </div>
+                        <button id="btn-copy-id" class="p-2 bg-slate-50 rounded-lg border border-slate-100 hover:bg-slate-100">
+                            <i data-lucide="copy" class="w-4 h-4 text-slate-600"></i>
+                        </button>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <input type="text" id="connect-id-input" placeholder="Código destino..." class="w-full text-sm p-3 border border-slate-200 rounded-xl font-mono focus:border-blue-500 outline-none uppercase tracking-widest" maxlength="4" />
+                        <button id="btn-connect" class="px-4 bg-slate-800 text-white font-bold rounded-xl hover:bg-slate-700 disabled:opacity-50 text-sm transition-colors">
+                            Unir
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="font-bold text-sm text-slate-700 mb-3 flex items-center gap-2">
+                    <i data-lucide="file-json" class="w-4 h-4 text-orange-500"></i> Archivos (.json)
+                </h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <button id="btn-export-json" class="flex items-center justify-center gap-2 p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-sm">
+                        <i data-lucide="download" class="w-4 h-4 text-slate-600"></i>
+                        <span class="text-sm font-bold text-slate-700">Exportar</span>
+                    </button>
+                    <button id="btn-import-json" class="flex items-center justify-center gap-2 p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-sm">
+                        <i data-lucide="upload" class="w-4 h-4 text-slate-600"></i>
+                        <span class="text-sm font-bold text-slate-700">Importar</span>
+                    </button>
+                    <input type="file" id="file-input" accept=".json" class="hidden" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const DB_NAME = 'PriorityMatrixDB_v3';
+        const DB_VERSION = 1;
+
+        const quadrantsDef = [
+            { id: 'q1', title: 'HACER', subtitle: 'IMPORTANTES Y URGENTES', bgColor: 'bg-[#ccff99]', tapeColor: 'bg-red-500', icon: 'alert-circle', iconColor: 'text-red-700', textColor: 'text-green-900' },
+            { id: 'q2', title: 'PLANIFICAR', subtitle: 'NO URGENTES, PERO IMPORTANTES', bgColor: 'bg-[#d9f2b3]', tapeColor: 'bg-pink-400', icon: 'calendar', iconColor: 'text-pink-700', textColor: 'text-green-900' },
+            { id: 'q3', title: 'DELEGAR', subtitle: 'NO IMPORTANTES, PERO SÍ URGENTES', bgColor: 'bg-[#ffe699]', tapeColor: 'bg-purple-400', icon: 'users', iconColor: 'text-purple-700', textColor: 'text-yellow-900' },
+            { id: 'q4', title: 'ELIMINAR', subtitle: 'NI IMPORTANTES, NI URGENTES', bgColor: 'bg-[#ffcc66]', tapeColor: 'bg-cyan-400', icon: 'x-circle', iconColor: 'text-cyan-700', textColor: 'text-yellow-900' }
+        ];
+
+        let state = {
+            tasks: [],
+            config: { hasSeenIntro: false, streak: 0, lastVisit: '' },
+            searchTerm: '',
+            draggedTaskId: null,
+            dragOverTaskId: null
+        };
+
+        let peerInstance = null;
+        let p2pConnection = null;
+
+        const initDB = () => {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => resolve(request.result);
+                request.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains('tasks')) db.createObjectStore('tasks', { keyPath: 'id' });
+                    if (!db.objectStoreNames.contains('config')) db.createObjectStore('config', { keyPath: 'id' });
+                };
+            });
+        };
+
+        const dbSaveData = async () => {
+            const db = await initDB();
+            
+            const txTasks = db.transaction('tasks', 'readwrite');
+            const storeTasks = txTasks.objectStore('tasks');
+            storeTasks.clear();
+            state.tasks.forEach(t => storeTasks.put(t));
+
+            const txConfig = db.transaction('config', 'readwrite');
+            const storeConfig = txConfig.objectStore('config');
+            storeConfig.put({ id: 'appConfig', ...state.config });
+        };
+
+        const dbLoadData = async () => {
+            const db = await initDB();
+            
+            const txTasks = db.transaction('tasks', 'readonly');
+            const reqTasks = txTasks.objectStore('tasks').getAll();
+            
+            const txConfig = db.transaction('config', 'readonly');
+            const reqConfig = txConfig.objectStore('config').get('appConfig');
+
+            reqTasks.onsuccess = () => {
+                state.tasks = reqTasks.result || [];
+                reqConfig.onsuccess = () => {
+                    let loadedConfig = reqConfig.result;
+                    const today = new Date().toISOString().split('T')[0];
+
+                    if (!loadedConfig) {
+                        state.config = { hasSeenIntro: false, streak: 1, lastVisit: today };
+                        document.getElementById('modal-intro').classList.remove('hidden');
+                    } else {
+                        const lastVisit = loadedConfig.lastVisit;
+                        if (lastVisit !== today) {
+                            const yesterday = new Date();
+                            yesterday.setDate(yesterday.getDate() - 1);
+                            const yesterdayStr = yesterday.toISOString().split('T')[0];
+                            loadedConfig.streak = (lastVisit === yesterdayStr) ? loadedConfig.streak + 1 : 1;
+                            loadedConfig.lastVisit = today;
+                        }
+                        state.config = loadedConfig;
+                        if (!state.config.hasSeenIntro) document.getElementById('modal-intro').classList.remove('hidden');
+                    }
+                    
+                    renderApp();
+                    dbSaveData();
+                };
+            };
+        };
+
+        const getRank = (streak) => {
+            if (streak >= 30) return { title: 'Leyenda del Tiempo', color: 'text-yellow-600', icon: 'trophy' };
+            if (streak >= 14) return { title: 'Gurú Productivo', color: 'text-purple-600', icon: 'target' };
+            if (streak >= 7) return { title: 'Maestro Estratega', color: 'text-blue-600', icon: 'target' };
+            if (streak >= 3) return { title: 'Organizador Constante', color: 'text-green-600', icon: 'flame' };
+            return { title: 'Iniciador del Orden', color: 'text-slate-600', icon: 'check' };
+        };
+
+        const getArchetype = () => {
+            if (state.tasks.length === 0) return { name: "Lienzo en Blanco", desc: "Añade tareas para descubrir tu estilo.", icon: "🌱", color: "bg-slate-100 text-slate-700", advice: "Comienza a vaciar tu mente añadiendo todos tus pendientes." };
+            
+            const counts = {
+                q1: state.tasks.filter(t => t.quadrant === 'q1').length,
+                q2: state.tasks.filter(t => t.quadrant === 'q2').length,
+                q3: state.tasks.filter(t => t.quadrant === 'q3').length,
+                q4: state.tasks.filter(t => t.quadrant === 'q4').length,
+            };
+            const max = Math.max(counts.q1, counts.q2, counts.q3, counts.q4);
+            
+            if (max === 0) return { name: "Equilibrado", desc: "Manejas todo con perfecta armonía.", icon: "⚖️", color: "bg-teal-100 text-teal-800", advice: "Tienes un balance ideal, asegúrate de mantener el ritmo." };
+            if (max === counts.q2) return { name: "El Estratega", desc: "Te enfocas en lo importante a largo plazo.", icon: "♟️", color: "bg-[#d9f2b3] text-green-900", advice: "¡Excelente! Al planificar evitas que tus metas se conviertan en crisis urgentes." };
+            if (max === counts.q1) return { name: "El Apagafuegos", desc: "Vives reaccionando a las urgencias.", icon: "🚒", color: "bg-[#ccff99] text-green-900", advice: "Estás invirtiendo todo tu tiempo en crisis. Intenta mover prioridades al cuadrante de Planificar." };
+            if (max === counts.q3) return { name: "El Complaciente", desc: "Haces urgencias que no aportan a tus metas.", icon: "🤝", color: "bg-[#ffe699] text-yellow-900", advice: "Estás haciendo el trabajo de otros o tareas de bajo impacto. Aprende a delegar o decir que no." };
+            if (max === counts.q4) return { name: "El Procrastinador", desc: "Tienes demasiadas tareas basura.", icon: "🎮", color: "bg-[#ffcc66] text-yellow-900", advice: "Demasiadas distracciones acumuladas. Haz una limpieza y elimina lo que no sirve de inmediato." };
+            
+            return { name: "Organizador", desc: "Manteniendo el control de tus tareas.", icon: "📋", color: "bg-blue-100 text-blue-800", advice: "Sigue así, organizar es el primer paso." };
+        };
+
+        const renderHeader = () => {
+            const arch = getArchetype();
+            document.getElementById('header-icon').innerText = arch.icon;
+            document.getElementById('header-archetype').innerText = arch.name;
+            document.getElementById('header-streak').innerText = state.config.streak;
+        };
+
+        const renderQuadrants = () => {
+            const container = document.getElementById('quadrants-container');
+            container.innerHTML = '';
+
+            const filteredTasks = state.tasks.filter(task => 
+                task.text.toLowerCase().includes(state.searchTerm.toLowerCase())
+            );
+
+            quadrantsDef.forEach(q => {
+                const tasksInQ = filteredTasks.filter(t => t.quadrant === q.id);
+                
+                let tasksHTML = tasksInQ.length === 0 ? 
+                    `<div class="h-full flex items-center justify-center opacity-40 border-2 border-dashed border-black/20 rounded-xl pointer-events-none">
+                        <p class="text-xs font-bold text-center px-4 uppercase tracking-widest">${state.searchTerm ? 'No hay resultados' : 'Cuadrante Vacío'}</p>
+                    </div>` 
+                    : tasksInQ.map(task => {
+                        const isDragging = state.draggedTaskId === task.id ? 'opacity-50' : '';
+                        const isDragOver = state.dragOverTaskId === task.id ? 'border-t-4 border-t-blue-400' : '';
+
+                        return `
+                        <div class="task-item group bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-sm border border-black/5 flex items-center justify-between gap-3 hover:shadow-md transition-all cursor-move ${isDragging} ${isDragOver}" 
+                             draggable="true" data-id="${task.id}">
+                            <div class="flex items-center gap-2 flex-1 min-w-0 pointer-events-none">
+                                <i data-lucide="grip-vertical" class="w-4 h-4 text-slate-300 hidden md:block flex-shrink-0"></i>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-semibold text-slate-800 break-words">${task.text}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <select class="mobile-move block md:hidden text-xs bg-slate-100 border-none rounded p-1 text-slate-600 outline-none w-20" data-id="${task.id}">
+                                    <option value="q1" ${task.quadrant === 'q1' ? 'selected' : ''}>➜ HACER</option>
+                                    <option value="q2" ${task.quadrant === 'q2' ? 'selected' : ''}>➜ PLAN</option>
+                                    <option value="q3" ${task.quadrant === 'q3' ? 'selected' : ''}>➜ DELEG</option>
+                                    <option value="q4" ${task.quadrant === 'q4' ? 'selected' : ''}>➜ ELIM</option>
+                                </select>
+                                <button class="btn-delete p-1.5 text-slate-400 hover:text-green-600 hover:bg-green-50 rounded transition-colors" data-id="${task.id}" title="Marcar como hecha">
+                                    <i data-lucide="check" class="w-5 h-5 pointer-events-none"></i>
+                                </button>
+                            </div>
+                        </div>`;
+                    }).join('');
+
+                container.innerHTML += `
+                    <div class="quadrant relative flex flex-col h-[420px] rounded-xl shadow-inner ${q.bgColor} p-4 transition-all" data-id="${q.id}">
+                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 w-20 h-7 shadow-sm rotate-2 opacity-90 z-10 pointer-events-none">
+                            <div class="w-full h-full ${q.tapeColor} opacity-80 backdrop-blur-sm"></div>
+                        </div>
+                        <div class="absolute top-3 right-3 flex gap-1 z-20">
+                            <button class="btn-sort p-1.5 text-black/40 hover:text-black/80 hover:bg-white/50 rounded transition-colors" data-id="${q.id}" title="Ordenar A-Z">
+                                <i data-lucide="sort-asc" class="w-5 h-5 pointer-events-none"></i>
+                            </button>
+                            <button class="btn-clear p-1.5 text-black/40 hover:text-red-600 hover:bg-white/50 rounded transition-colors" data-id="${q.id}" title="Vaciar cuadrante">
+                                <i data-lucide="trash" class="w-5 h-5 pointer-events-none"></i>
+                            </button>
+                        </div>
+                        <div class="flex flex-col items-center text-center mb-4 mt-4 ${q.textColor} pointer-events-none">
+                            <div class="flex items-center gap-2 mb-1">
+                                <i data-lucide="${q.icon}" class="w-5 h-5 ${q.iconColor}"></i>
+                                <h2 class="text-xl md:text-2xl font-black tracking-wide uppercase">${q.title}</h2>
+                            </div>
+                            <h3 class="text-xs md:text-sm font-bold uppercase opacity-80">${q.subtitle}</h3>
+                        </div>
+                        <div class="flex-1 overflow-y-auto space-y-2 pr-2 custom-scrollbar relative task-list">
+                            ${tasksHTML}
+                        </div>
+                    </div>
+                `;
+            });
+
+            lucide.createIcons();
+            attachQuadrantEvents();
+        };
+
+        const renderApp = () => {
+            renderHeader();
+            renderQuadrants();
+            dbSaveData();
+        };
+
+        const showToast = (msg, type = 'success') => {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            toastMsg.innerText = msg;
+            toast.className = `fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] px-6 py-3 rounded-full shadow-lg font-bold text-sm transition-all duration-300 ease-out text-white ${type === 'error' ? 'bg-red-600' : 'bg-slate-800'}`;
+            
+            setTimeout(() => { toast.classList.add('hidden'); }, 3000);
+        };
+
+        const showCustomModal = (title, message, actionsHTML) => {
+            document.getElementById('confirm-title').innerText = title;
+            document.getElementById('confirm-msg').innerText = message;
+            document.getElementById('confirm-actions').innerHTML = actionsHTML;
+            document.getElementById('modal-confirm').classList.remove('hidden');
+        };
+
+        const hideCustomModal = () => {
+            document.getElementById('modal-confirm').classList.add('hidden');
+        };
+
+        const searchInput = document.getElementById('search-input');
+        const searchContainer = document.getElementById('search-container');
+        const searchIcon = document.getElementById('search-icon');
+        const btnClearSearch = document.getElementById('btn-clear-search');
+
+        searchInput.addEventListener('input', (e) => {
+            state.searchTerm = e.target.value;
+            if(state.searchTerm) {
+                searchContainer.classList.add('bg-blue-50', 'border-blue-300');
+                searchContainer.classList.remove('bg-white', 'border-slate-200');
+                searchIcon.classList.replace('text-slate-400', 'text-blue-500');
+                btnClearSearch.classList.remove('hidden');
+            } else {
+                searchContainer.classList.remove('bg-blue-50', 'border-blue-300');
+                searchContainer.classList.add('bg-white', 'border-slate-200');
+                searchIcon.classList.replace('text-blue-500', 'text-slate-400');
+                btnClearSearch.classList.add('hidden');
+            }
+            renderQuadrants();
+        });
+
+        btnClearSearch.addEventListener('click', () => {
+            searchInput.value = '';
+            searchInput.dispatchEvent(new Event('input'));
+        });
+
+        document.getElementById('add-task-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const input = document.getElementById('new-task-input');
+            const text = input.value.trim();
+            if (!text) return;
+            
+            const quadrant = document.getElementById('new-task-quadrant').value;
+            state.tasks.push({ id: Date.now().toString(), text, quadrant });
+            input.value = '';
+            renderApp();
+        });
+
+        document.getElementById('new-task-input').addEventListener('input', (e) => {
+             document.getElementById('btn-add-task').disabled = !e.target.value.trim();
+        });
+
+        document.getElementById('btn-close-intro').addEventListener('click', () => {
+            state.config.hasSeenIntro = true;
+            document.getElementById('modal-intro').classList.add('hidden');
+            dbSaveData();
+        });
+
+        document.getElementById('btn-open-profile').addEventListener('click', () => {
+            const arch = getArchetype();
+            const rank = getRank(state.config.streak);
+            
+            document.getElementById('profile-header-bg').className = `pt-8 pb-12 px-6 flex flex-col items-center justify-center text-center relative ${arch.color}`;
+            document.getElementById('profile-icon').innerText = arch.icon;
+            document.getElementById('profile-name').innerText = arch.name;
+            document.getElementById('profile-desc').innerText = arch.desc;
+            document.getElementById('profile-advice').innerText = arch.advice;
+            document.getElementById('profile-streak').innerText = state.config.streak;
+            
+            document.getElementById('profile-rank').innerHTML = `<i data-lucide="${rank.icon}" class="w-4 h-4"></i> ${rank.title}`;
+            document.getElementById('profile-rank').className = `text-sm font-bold flex items-center gap-1 justify-end ${rank.color}`;
+            
+            lucide.createIcons();
+            document.getElementById('modal-profile').classList.remove('hidden');
+        });
+        document.getElementById('btn-close-profile').addEventListener('click', () => document.getElementById('modal-profile').classList.add('hidden'));
+
+        const attachQuadrantEvents = () => {
+            const container = document.getElementById('quadrants-container');
+            const newContainer = container.cloneNode(true);
+            container.parentNode.replaceChild(newContainer, container);
+            
+            newContainer.addEventListener('click', (e) => {
+                if (e.target.closest('.btn-delete')) {
+                    const id = e.target.closest('.btn-delete').dataset.id;
+                    state.tasks = state.tasks.filter(t => t.id !== id);
+                    renderApp();
+                }
+                if (e.target.closest('.btn-clear')) {
+                    const qid = e.target.closest('.btn-clear').dataset.id;
+                    const qDef = quadrantsDef.find(q => q.id === qid);
+                    showCustomModal(
+                        'Vaciar Cuadrante',
+                        `¿Estás seguro de que deseas eliminar TODAS las tareas de "${qDef.title}"?`,
+                        `<button id="btn-confirm-clear" class="w-full py-2.5 rounded-xl font-bold text-sm transition-colors bg-red-500 hover:bg-red-600 text-white">Sí, vaciar</button>
+                         <button id="btn-cancel-clear" class="w-full py-2.5 rounded-xl font-bold text-sm transition-colors bg-slate-200 hover:bg-slate-300 text-slate-800">Cancelar</button>`
+                    );
+                    document.getElementById('btn-confirm-clear').onclick = () => {
+                        state.tasks = state.tasks.filter(t => t.quadrant !== qid);
+                        hideCustomModal();
+                        showToast('Cuadrante vaciado');
+                        renderApp();
+                    };
+                    document.getElementById('btn-cancel-clear').onclick = hideCustomModal;
+                }
+                if (e.target.closest('.btn-sort')) {
+                    const qid = e.target.closest('.btn-sort').dataset.id;
+                    const qTasks = state.tasks.filter(t => t.quadrant === qid).sort((a, b) => a.text.toLowerCase().localeCompare(b.text.toLowerCase()));
+                    const otherTasks = state.tasks.filter(t => t.quadrant !== qid);
+                    state.tasks = [...otherTasks, ...qTasks];
+                    showToast('Tareas ordenadas alfabéticamente');
+                    renderApp();
+                }
+            });
+
+            newContainer.addEventListener('change', (e) => {
+                if (e.target.classList.contains('mobile-move')) {
+                    const id = e.target.dataset.id;
+                    const newQ = e.target.value;
+                    const task = state.tasks.find(t => t.id === id);
+                    if (task) task.quadrant = newQ;
+                    renderApp();
+                }
+            });
+
+            newContainer.addEventListener('dragstart', e => {
+                if(e.target.classList.contains('task-item')){
+                    state.draggedTaskId = e.target.dataset.id;
+                    e.dataTransfer.effectAllowed = "move";
+                    const crt = e.target.cloneNode(true);
+                    crt.style.opacity = '0.5';
+                    crt.style.position = 'absolute';
+                    crt.style.top = '-1000px';
+                    document.body.appendChild(crt);
+                    e.dataTransfer.setDragImage(crt, 0, 0);
+                    setTimeout(() => crt.remove(), 10);
+                    renderQuadrants(); 
+                }
+            });
+
+            newContainer.addEventListener('dragover', e => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = "move";
+                const taskItem = e.target.closest('.task-item');
+                if (taskItem && taskItem.dataset.id !== state.draggedTaskId) {
+                    if (state.dragOverTaskId !== taskItem.dataset.id) {
+                        state.dragOverTaskId = taskItem.dataset.id;
+                        renderQuadrants();
+                    }
+                }
+            });
+
+            newContainer.addEventListener('dragleave', e => {
+                const taskItem = e.target.closest('.task-item');
+                if(!taskItem && state.dragOverTaskId) {
+                    state.dragOverTaskId = null;
+                    renderQuadrants();
+                }
+            })
+
+            newContainer.addEventListener('drop', e => {
+                e.preventDefault();
+                if (!state.draggedTaskId) return;
+
+                const quadrant = e.target.closest('.quadrant');
+                if (quadrant) {
+                    const targetQuadrantId = quadrant.dataset.id;
+                    const draggedIndex = state.tasks.findIndex(t => t.id === state.draggedTaskId);
+                    
+                    if (draggedIndex > -1) {
+                        const draggedTask = { ...state.tasks[draggedIndex] };
+
+                        if (state.dragOverTaskId && state.dragOverTaskId !== state.draggedTaskId) {
+                            const targetIndex = state.tasks.findIndex(t => t.id === state.dragOverTaskId);
+                            const targetTask = state.tasks[targetIndex];
+                            
+                            state.tasks.splice(draggedIndex, 1);
+                            const newTargetIndex = state.tasks.findIndex(t => t.id === state.dragOverTaskId);
+                            
+                            draggedTask.quadrant = targetTask.quadrant;
+                            state.tasks.splice(newTargetIndex, 0, draggedTask);
+                        } else {
+                            draggedTask.quadrant = targetQuadrantId;
+                            state.tasks.splice(draggedIndex, 1);
+                            state.tasks.push(draggedTask);
+                        }
+                    }
+                }
+                
+                state.draggedTaskId = null;
+                state.dragOverTaskId = null;
+                renderApp();
+            });
+            
+            newContainer.addEventListener('dragend', () => {
+                state.draggedTaskId = null;
+                state.dragOverTaskId = null;
+                renderQuadrants();
+            });
+        };
+
+        document.getElementById('btn-open-sync').addEventListener('click', () => {
+            document.getElementById('modal-sync').classList.remove('hidden');
+            if (peerReady && !peerInstance) {
+                const code = Math.random().toString(36).substring(2, 6).toUpperCase();
+                peerInstance = new Peer(`prio-${code}`);
+                
+                peerInstance.on('open', () => {
+                    document.getElementById('my-peer-id').innerText = code;
+                });
+
+                peerInstance.on('connection', (conn) => {
+                    p2pConnection = conn;
+                    setupConnection(conn);
+                });
+            }
+        });
+
+        document.getElementById('btn-close-sync').addEventListener('click', () => document.getElementById('modal-sync').classList.add('hidden'));
+
+        const setupConnection = (conn) => {
+            conn.on('open', () => {
+                document.getElementById('sync-setup').classList.add('hidden');
+                document.getElementById('sync-connected').classList.remove('hidden');
+            });
+            conn.on('data', (data) => {
+                if (data.type === 'SYNC_DATA') {
+                    if (data.mode === 'overwrite') {
+                        state.tasks = data.data;
+                        showToast("Datos sobrescritos exitosamente.");
+                    } else if (data.mode === 'merge') {
+                        data.data.forEach(rt => {
+                            if (!state.tasks.find(lt => lt.id === rt.id || lt.text.toLowerCase() === rt.text.toLowerCase())) {
+                                state.tasks.push(rt);
+                            }
+                        });
+                        showToast("Datos fusionados exitosamente.");
+                    }
+                    renderApp();
+                }
+            });
+            conn.on('close', () => {
+                p2pConnection = null;
+                document.getElementById('sync-setup').classList.remove('hidden');
+                document.getElementById('sync-connected').classList.add('hidden');
+            });
+        };
+
+        document.getElementById('btn-connect').addEventListener('click', () => {
+            const val = document.getElementById('connect-id-input').value.trim().toUpperCase();
+            if (!peerInstance || !val) return;
+            const btn = document.getElementById('btn-connect');
+            btn.innerText = '...';
+            btn.disabled = true;
+            
+            p2pConnection = peerInstance.connect(`prio-${val}`);
+            setupConnection(p2pConnection);
+
+            setTimeout(() => {
+                btn.innerText = 'Unir';
+                btn.disabled = false;
+            }, 3000);
+        });
+
+        document.getElementById('btn-sync-merge').addEventListener('click', () => {
+            if (p2pConnection && p2pConnection.open) {
+                p2pConnection.send({ type: 'SYNC_DATA', data: state.tasks, mode: 'merge' });
+                showToast("Datos enviados correctamente.");
+            }
+        });
+
+        document.getElementById('btn-sync-overwrite').addEventListener('click', () => {
+             if (p2pConnection && p2pConnection.open) {
+                p2pConnection.send({ type: 'SYNC_DATA', data: state.tasks, mode: 'overwrite' });
+                showToast("Datos enviados correctamente.");
+            }
+        });
+
+        document.getElementById('btn-copy-id').addEventListener('click', () => {
+            const code = document.getElementById('my-peer-id').innerText;
+            if(code !== '...') {
+                navigator.clipboard.writeText(code).then(() => showToast("Copiado"));
+            }
+        });
+
+        document.getElementById('btn-export-json').addEventListener('click', () => {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state.tasks));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", `prioriza_tareas.json`);
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+            showToast("Archivo exportado");
+        });
+
+        document.getElementById('btn-import-json').addEventListener('click', () => {
+            document.getElementById('file-input').click();
+        });
+
+        document.getElementById('file-input').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const importedTasks = JSON.parse(event.target.result);
+                    showCustomModal(
+                        'Importar Archivo',
+                        '¿Cómo deseas añadir las tareas del archivo?',
+                        `<button id="btn-import-merge" class="w-full py-2.5 rounded-xl font-bold text-sm transition-colors bg-blue-600 hover:bg-blue-700 text-white mb-2">Fusionar (No borra lo actual)</button>
+                         <button id="btn-import-over" class="w-full py-2.5 rounded-xl font-bold text-sm transition-colors bg-red-500 hover:bg-red-600 text-white mb-2">Sobrescribir todo</button>
+                         <button id="btn-import-cancel" class="w-full py-2.5 rounded-xl font-bold text-sm transition-colors bg-slate-200 hover:bg-slate-300 text-slate-800">Cancelar</button>`
+                    );
+                    
+                    document.getElementById('btn-import-merge').onclick = () => {
+                        importedTasks.forEach(rt => {
+                            if (!state.tasks.find(lt => lt.id === rt.id || lt.text.toLowerCase() === rt.text.toLowerCase())) {
+                                state.tasks.push(rt);
+                            }
+                        });
+                        hideCustomModal();
+                        showToast("Datos fusionados");
+                        renderApp();
+                    };
+                    document.getElementById('btn-import-over').onclick = () => {
+                        state.tasks = importedTasks;
+                        hideCustomModal();
+                        showToast("Datos sobrescritos");
+                        renderApp();
+                    };
+                    document.getElementById('btn-import-cancel').onclick = hideCustomModal;
+
+                } catch (err) {
+                    showToast("Error al leer el JSON", "error");
+                }
+                e.target.value = null;
+            };
+            reader.readAsText(file);
+        });
+
+        lucide.createIcons();
+        dbLoadData();
+
+    </script>
+</body>
+</html>
