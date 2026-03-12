@@ -15,10 +15,8 @@
         .custom-scrollbar:hover::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.2); }
         .animate-fadeIn { animation: fadeIn 0.2s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        
         .task-item.dragging { opacity: 0.5; }
         .task-item.drag-over { border-top: 4px solid #60a5fa !important; }
-        
         .hidden { display: none !important; }
     </style>
 </head>
@@ -498,6 +496,7 @@
             lucide.createIcons();
             document.getElementById('modal-profile').classList.remove('hidden');
         });
+        
         document.getElementById('btn-close-profile').addEventListener('click', () => document.getElementById('modal-profile').classList.add('hidden'));
 
         const attachQuadrantEvents = () => {
@@ -517,7 +516,7 @@
                     showCustomModal(
                         'Vaciar Cuadrante',
                         `¿Estás seguro de que deseas eliminar TODAS las tareas de "${qDef.title}"?`,
-                        `<button id="btn-confirm-clear" class="w-full py-2.5 rounded-xl font-bold text-sm transition-colors bg-red-500 hover:bg-red-600 text-white">Sí, vaciar</button>
+                        `<button id="btn-confirm-clear" class="w-full py-2.5 rounded-xl font-bold text-sm transition-colors bg-red-500 hover:bg-red-600 text-white mb-2">Sí, vaciar</button>
                          <button id="btn-cancel-clear" class="w-full py-2.5 rounded-xl font-bold text-sm transition-colors bg-slate-200 hover:bg-slate-300 text-slate-800">Cancelar</button>`
                     );
                     document.getElementById('btn-confirm-clear').onclick = () => {
@@ -626,7 +625,7 @@
 
         document.getElementById('btn-open-sync').addEventListener('click', () => {
             document.getElementById('modal-sync').classList.remove('hidden');
-            if (peerReady && !peerInstance) {
+            if (window.Peer && !peerInstance) {
                 const code = Math.random().toString(36).substring(2, 6).toUpperCase();
                 peerInstance = new Peer(`prio-${code}`);
                 
@@ -637,6 +636,10 @@
                 peerInstance.on('connection', (conn) => {
                     p2pConnection = conn;
                     setupConnection(conn);
+                });
+                
+                peerInstance.on('error', (err) => {
+                    showToast("Error en conexión P2P", "error");
                 });
             }
         });
