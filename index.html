@@ -27,7 +27,7 @@
         .animate-fadeIn { animation: fadeIn 0.2s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         
-        .task-item.dragging { opacity: 0.5; }
+        .task-item.dragging { opacity: 0.5; border-style: dashed; }
         .task-item.drag-over { border-top: 4px solid #60a5fa !important; }
         
         .touch-drag-handle {
@@ -41,11 +41,10 @@
             position: fixed;
             pointer-events: none;
             z-index: 9999;
-            opacity: 0.9;
+            opacity: 0.95;
             box-shadow: 0 15px 30px rgba(0,0,0,0.3);
-            transform: scale(1.02);
             margin: 0 !important;
-            will-change: top, left;
+            will-change: transform; /* Aceleración por hardware real */
         }
 
         .quadrant.touch-over {
@@ -242,7 +241,7 @@
                     </div>
 
                     <div class="bg-[#ffcc66] p-4 rounded-xl border border-black/5">
-                        <h3 class="font-bold text-yellow-900 flex items-center gap-2 mb-2"><i data-lucide="x-circle" class="w-4 h-4 text-cyan-500"></i> Cuadrante 4: ELIMINAR</h3>
+                        <h3 class="font-bold text-yellow-900 flex items-center gap-2 mb-2"><i data-lucide="trash-2" class="w-4 h-4 text-cyan-500"></i> Cuadrante 4: ELIMINAR</h3>
                         <p class="text-xs text-yellow-800 mb-2 font-semibold">Ni Urgente, Ni Importante</p>
                         <p class="text-sm text-yellow-900/80 mb-2">Distracciones vacías. Bórralas sin culpa. <i>(El ocio consciente va en Planificar)</i>.</p>
                         <ul class="text-xs list-disc pl-4 text-yellow-900/70">
@@ -354,14 +353,14 @@
             { id: 'q1', title: 'HACER', subtitle: 'IMPORTANTES Y URGENTES', bgColor: 'bg-[#ccff99]', tapeColor: 'bg-red-500', icon: 'alert-circle', iconColor: 'text-red-700', textColor: 'text-green-900' },
             { id: 'q2', title: 'PLANIFICAR', subtitle: 'NO URGENTES, PERO IMPORTANTES', bgColor: 'bg-[#d9f2b3]', tapeColor: 'bg-pink-400', icon: 'calendar', iconColor: 'text-pink-700', textColor: 'text-green-900' },
             { id: 'q3', title: 'DELEGAR', subtitle: 'NO IMPORTANTES, PERO SÍ URGENTES', bgColor: 'bg-[#ffe699]', tapeColor: 'bg-purple-400', icon: 'users', iconColor: 'text-purple-700', textColor: 'text-yellow-900' },
-            { id: 'q4', title: 'ELIMINAR', subtitle: 'NI IMPORTANTES, NI URGENTES', bgColor: 'bg-[#ffcc66]', tapeColor: 'bg-cyan-400', icon: 'x-circle', iconColor: 'text-cyan-700', textColor: 'text-yellow-900' }
+            { id: 'q4', title: 'ELIMINAR', subtitle: 'NI IMPORTANTES, NI URGENTES', bgColor: 'bg-[#ffcc66]', tapeColor: 'bg-cyan-400', icon: 'trash-2', iconColor: 'text-cyan-700', textColor: 'text-yellow-900' }
         ];
 
         const suggestionRules = [
             { keywords: ['hoy', 'urgente', 'ahora', 'inmediato', 'jefe', 'cliente', 'pagar', 'vence', 'emergencia', 'urgencia'], q: 'q1', label: 'Hacer (Urgente e Importante)' },
-            { keywords: ['mañana', 'semana', 'proyecto', 'estudiar', 'ejercicio', 'estrategia', 'plan', 'leer', 'curso', 'meta', 'descansar', 'dormir', 'salud', 'meditar', 'familia'], q: 'q2', label: 'Planificar (Importante, No urgente)' },
+            { keywords: ['mañana', 'semana', 'proyecto', 'estudiar', 'ejercicio', 'estrategia', 'plan', 'leer', 'curso', 'meta', 'descansar', 'dormir', 'salud', 'meditar', 'familia', 'ocio', 'jugar'], q: 'q2', label: 'Planificar (Importante, No urgente)' },
             { keywords: ['revisar', 'correo', 'mensaje', 'llamada', 'reunión', 'responder', 'encargo', 'favor', 'preguntar', 'ayudar'], q: 'q3', label: 'Delegar (Urgente, No importante)' },
-            { keywords: ['redes', 'netflix', 'serie', 'película', 'tele', 'ocio', 'tiktok', 'facebook', 'instagram', 'chisme', 'scrollear'], q: 'q4', label: 'Eliminar (Distracción vacía)' }
+            { keywords: ['redes', 'chisme', 'scrollear', 'distracción', 'rumores', 'queja'], q: 'q4', label: 'Eliminar (Distracción vacía)' }
         ];
 
         let state = {
@@ -703,6 +702,28 @@
             document.getElementById('modal-edit').classList.add('hidden');
         });
 
+        const processDrop = (targetQuadrantId) => {
+            const draggedIndex = state.tasks.findIndex(t => t.id === state.draggedTaskId);
+            if (draggedIndex > -1) {
+                const draggedTask = { ...state.tasks[draggedIndex] };
+
+                if (state.dragOverTaskId && state.dragOverTaskId !== state.draggedTaskId) {
+                    const targetIndex = state.tasks.findIndex(t => t.id === state.dragOverTaskId);
+                    const targetTask = state.tasks[targetIndex];
+                    
+                    state.tasks.splice(draggedIndex, 1);
+                    const newTargetIndex = state.tasks.findIndex(t => t.id === state.dragOverTaskId);
+                    
+                    draggedTask.quadrant = targetTask.quadrant;
+                    state.tasks.splice(newTargetIndex, 0, draggedTask);
+                } else {
+                    draggedTask.quadrant = targetQuadrantId;
+                    state.tasks.splice(draggedIndex, 1);
+                    state.tasks.push(draggedTask);
+                }
+            }
+        };
+
         const attachQuadrantEvents = () => {
             const container = document.getElementById('quadrants-container');
             const newContainer = container.cloneNode(true);
@@ -784,9 +805,7 @@
             newContainer.addEventListener('dragend', () => {
                 state.draggedTaskId = null;
                 state.dragOverTaskId = null;
-                document.querySelectorAll('.task-item').forEach(el => {
-                    el.classList.remove('opacity-50', 'border-t-4', 'border-t-blue-400');
-                });
+                renderApp();
             });
 
             newContainer.addEventListener('drop', e => {
@@ -797,27 +816,32 @@
                 if (quadrant) {
                     processDrop(quadrant.dataset.id);
                 }
+                
+                state.draggedTaskId = null;
+                state.dragOverTaskId = null;
+                renderApp();
             });
 
+            // Lógica Táctil Fluida (Mobile/Tablet)
             newContainer.addEventListener('touchstart', e => {
                 const handle = e.target.closest('.touch-drag-handle');
                 if(handle) {
-                    e.preventDefault(); 
                     const taskItem = handle.closest('.task-item');
                     state.draggedTaskId = taskItem.dataset.id;
                     
                     const rect = taskItem.getBoundingClientRect();
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+
                     touchClone = taskItem.cloneNode(true);
                     touchClone.classList.add('touch-clone');
                     touchClone.style.width = `${rect.width}px`;
                     touchClone.style.top = `${rect.top}px`;
                     touchClone.style.left = `${rect.left}px`;
+                    touchClone.style.transform = `translate3d(0px, 0px, 0px)`;
                     document.body.appendChild(touchClone);
                     
                     taskItem.style.opacity = '0.3';
-                    
-                    initialTouchY = e.touches[0].clientY - rect.top;
-                    initialTouchX = e.touches[0].clientX - rect.left;
 
                     quadrantRects = Array.from(document.querySelectorAll('.quadrant')).map(q => {
                         const qRect = q.getBoundingClientRect();
@@ -834,8 +858,9 @@
                     if(rAF_ID) cancelAnimationFrame(rAF_ID);
                     
                     rAF_ID = requestAnimationFrame(() => {
-                        touchClone.style.top = `${touch.clientY - initialTouchY}px`;
-                        touchClone.style.left = `${touch.clientX - initialTouchX}px`;
+                        const deltaX = touch.clientX - touchStartX;
+                        const deltaY = touch.clientY - touchStartY;
+                        touchClone.style.transform = `translate3d(${deltaX}px, ${deltaY}px, 0px)`;
 
                         let foundQ = null;
                         for(const q of quadrantRects) {
@@ -851,59 +876,39 @@
                 }
             }, {passive: false});
 
-            newContainer.addEventListener('touchend', e => {
+            const endTouch = (e) => {
                 if(touchClone && state.draggedTaskId) {
-                    e.preventDefault();
+                    if(e && e.cancelable) e.preventDefault();
                     if(rAF_ID) cancelAnimationFrame(rAF_ID);
 
-                    const touch = e.changedTouches[0];
                     let targetQid = null;
-
-                    for(const q of quadrantRects) {
-                        if(touch.clientX >= q.left && touch.clientX <= q.right && touch.clientY >= q.top && touch.clientY <= q.bottom) {
-                            targetQid = q.id;
-                            break;
+                    if(e && e.changedTouches && e.changedTouches.length > 0) {
+                        const touch = e.changedTouches[0];
+                        for(const q of quadrantRects) {
+                            if(touch.clientX >= q.left && touch.clientX <= q.right && touch.clientY >= q.top && touch.clientY <= q.bottom) {
+                                targetQid = q.id;
+                                break;
+                            }
                         }
                     }
 
                     document.querySelectorAll('.quadrant').forEach(q => q.classList.remove('touch-over'));
                     
-                    if(targetQid) {
-                        processDrop(targetQid);
-                    } else {
-                        renderApp(); 
-                    }
-                    
                     touchClone.remove();
                     touchClone = null;
+
+                    if(targetQid) {
+                        processDrop(targetQid);
+                    }
+                    
                     state.draggedTaskId = null;
                     state.dragOverTaskId = null;
+                    renderApp(); 
                 }
-            });
-        };
+            };
 
-        const processDrop = (targetQuadrantId) => {
-            const draggedIndex = state.tasks.findIndex(t => t.id === state.draggedTaskId);
-            if (draggedIndex > -1) {
-                const draggedTask = { ...state.tasks[draggedIndex] };
-
-                if (state.dragOverTaskId && state.dragOverTaskId !== state.draggedTaskId) {
-                    const targetIndex = state.tasks.findIndex(t => t.id === state.dragOverTaskId);
-                    const targetTask = state.tasks[targetIndex];
-                    
-                    state.tasks.splice(draggedIndex, 1);
-                    const newTargetIndex = state.tasks.findIndex(t => t.id === state.dragOverTaskId);
-                    
-                    draggedTask.quadrant = targetTask.quadrant;
-                    state.tasks.splice(newTargetIndex, 0, draggedTask);
-                } else {
-                    draggedTask.quadrant = targetQuadrantId;
-                    state.tasks.splice(draggedIndex, 1);
-                    state.tasks.push(draggedTask);
-                }
-                dbSaveData();
-                renderApp();
-            }
+            newContainer.addEventListener('touchend', endTouch);
+            newContainer.addEventListener('touchcancel', endTouch);
         };
 
         document.getElementById('btn-open-sync').addEventListener('click', () => {
