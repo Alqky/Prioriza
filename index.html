@@ -524,7 +524,7 @@
                 state.config.lastStreakDate = currentCustomDate;
             }
             dbSaveData();
-            renderHeader();
+            renderApp();
         };
 
         const checkDailyReset = () => {
@@ -736,6 +736,7 @@
             
             state.tasks = newTasksOrder;
             registerUserAction();
+            renderApp();
         };
 
         const renderQuadrants = () => {
@@ -992,6 +993,7 @@
             document.getElementById('ai-suggestion').classList.add('hidden', 'opacity-0');
             document.getElementById('btn-add-task').disabled = true;
             registerUserAction();
+            renderApp();
             showToast('Tarea añadida');
         });
 
@@ -1079,6 +1081,7 @@
                     state.tasks[taskIndex].text = newText;
                     state.tasks[taskIndex].quadrant = newQuadrant;
                     registerUserAction();
+                    renderApp();
                     showToast('Tarea actualizada');
                 }
             }
@@ -1093,9 +1096,23 @@
             newContainer.addEventListener('click', (e) => {
                 if (e.target.closest('.btn-delete')) {
                     const id = e.target.closest('.btn-delete').dataset.id;
-                    state.tasks = state.tasks.filter(t => t.id !== id);
-                    registerUserAction();
-                    showToast('Tarea completada');
+                    const task = state.tasks.find(t => t.id === id);
+                    if(task) {
+                        showCustomModal(
+                            'Finalizar Tarea',
+                            `¿Seguro que quieres dar por finalizada la tarea "${task.text}"?`,
+                            `<button id="btn-confirm-delete-task" class="w-full py-2.5 rounded-xl font-bold text-sm transition-colors bg-green-500 hover:bg-green-600 text-white mb-2">Sí, finalizar</button>
+                             <button id="btn-cancel-delete-task" class="w-full py-2.5 rounded-xl font-bold text-sm transition-colors bg-slate-200 hover:bg-slate-300 text-slate-800">Cancelar</button>`
+                        );
+                        document.getElementById('btn-confirm-delete-task').onclick = () => {
+                            state.tasks = state.tasks.filter(t => t.id !== id);
+                            hideCustomModal();
+                            registerUserAction();
+                            renderApp();
+                            showToast('Tarea completada');
+                        };
+                        document.getElementById('btn-cancel-delete-task').onclick = hideCustomModal;
+                    }
                 }
                 if (e.target.closest('.btn-edit')) {
                     const id = e.target.closest('.btn-edit').dataset.id;
@@ -1121,6 +1138,7 @@
                         state.tasks = state.tasks.filter(t => t.quadrant !== qid);
                         hideCustomModal();
                         registerUserAction();
+                        renderApp();
                         showToast('Cuadrante vaciado');
                     };
                     document.getElementById('btn-cancel-clear').onclick = hideCustomModal;
@@ -1143,6 +1161,7 @@
                     if (task) {
                         task.quadrant = newQ;
                         registerUserAction();
+                        renderApp();
                     }
                 }
             });
