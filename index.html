@@ -28,13 +28,22 @@
         .animate-fadeIn { animation: fadeIn 0.2s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         
+        /* Bloqueo estricto del menú contextual en móviles para tareas */
+        .task-item {
+            -webkit-touch-callout: none !important;
+            -webkit-user-select: none !important;
+            -khtml-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+        }
+
         .touch-drag-handle {
             touch-action: none;
             cursor: grab;
         }
         .touch-drag-handle:active { cursor: grabbing; }
         
-        /* Indicador de dónde va a caer la tarea */
         .sortable-ghost { 
             opacity: 1 !important; 
             background-color: #eff6ff !important; 
@@ -46,9 +55,8 @@
             visibility: hidden;
         }
         
-        /* La tarea que tienes flotando en el dedo/mouse */
         .sortable-fallback { 
-            transition: none !important; /* Esto elimina el lag en móviles */
+            transition: none !important; 
             opacity: 1 !important; 
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3) !important; 
             transform: scale(1.05) rotate(2deg) !important; 
@@ -138,6 +146,7 @@
         </div>
     </div>
 
+    <!-- Modal Editar Mejorado (Con opción de mover de cuadrante) -->
     <div id="modal-edit" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] p-4 transition-opacity">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl animate-fadeIn">
             <div class="flex justify-between items-center mb-4">
@@ -148,6 +157,15 @@
             </div>
             <input type="hidden" id="edit-task-id" />
             <textarea id="edit-task-input" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:border-blue-500 outline-none text-sm mb-4 resize-none h-24" placeholder="Modifica tu tarea..."></textarea>
+            
+            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Mover a otro cuadrante:</label>
+            <select id="edit-task-quadrant" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg outline-none cursor-pointer text-sm font-medium text-slate-700 mb-6 focus:border-blue-500">
+                <option value="q1">Hacer (Urgente e Importante)</option>
+                <option value="q2">Planificar (Importante, No Urgente)</option>
+                <option value="q3">Delegar (Urgente, No Importante)</option>
+                <option value="q4">Eliminar (Ni Urgente, Ni Importante)</option>
+            </select>
+
             <button id="btn-save-edit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition-colors">
                 Guardar Cambios
             </button>
@@ -516,7 +534,7 @@
                 
                 let tasksHTML = tasksInQ.map(task => {
                     return `
-                    <div class="task-item bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-sm border border-black/5 flex items-center justify-between gap-2" data-id="${task.id}">
+                    <div class="task-item bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-sm border border-black/5 flex items-center justify-between gap-2 transition-all" data-id="${task.id}" oncontextmenu="return false;">
                         <div class="flex items-center gap-2 flex-1 min-w-0">
                             <div class="touch-drag-handle p-1 -ml-2 text-slate-300 hover:text-slate-500">
                                 <i data-lucide="grip-vertical" class="w-4 h-4 pointer-events-none"></i>
@@ -734,10 +752,13 @@
         document.getElementById('btn-save-edit').addEventListener('click', () => {
             const id = document.getElementById('edit-task-id').value;
             const newText = document.getElementById('edit-task-input').value.trim();
+            const newQuadrant = document.getElementById('edit-task-quadrant').value;
+            
             if(newText && id) {
                 const taskIndex = state.tasks.findIndex(t => t.id === id);
                 if(taskIndex > -1) {
                     state.tasks[taskIndex].text = newText;
+                    state.tasks[taskIndex].quadrant = newQuadrant;
                     renderApp();
                     showToast('Tarea actualizada');
                 }
@@ -763,6 +784,7 @@
                     if(task) {
                         document.getElementById('edit-task-id').value = task.id;
                         document.getElementById('edit-task-input').value = task.text;
+                        document.getElementById('edit-task-quadrant').value = task.quadrant;
                         document.getElementById('modal-edit').classList.remove('hidden');
                         document.getElementById('edit-task-input').focus();
                     }
