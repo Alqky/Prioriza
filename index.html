@@ -18,6 +18,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 
     <style>
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
@@ -27,31 +28,16 @@
         .animate-fadeIn { animation: fadeIn 0.2s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         
-        .task-item.dragging { opacity: 0.5; border-style: dashed; }
-        .task-item.drag-over { border-top: 4px solid #60a5fa !important; }
-        
         .touch-drag-handle {
             touch-action: none;
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             user-select: none;
+            cursor: grab;
         }
-
-        .touch-clone {
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.95;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
-            margin: 0 !important;
-            will-change: transform; /* Aceleración por hardware real */
-        }
-
-        .quadrant.touch-over {
-            filter: brightness(0.95);
-            outline: 2px dashed rgba(0,0,0,0.3);
-            outline-offset: -4px;
-        }
+        .touch-drag-handle:active { cursor: grabbing; }
+        .sortable-ghost { opacity: 0.3; }
+        .sortable-drag { opacity: 0.9 !important; box-shadow: 0 15px 30px rgba(0,0,0,0.2); cursor: grabbing !important; }
 
         .hidden { display: none !important; }
     </style>
@@ -367,18 +353,11 @@
             tasks: [],
             config: { hasSeenIntro: false, streak: 0, lastVisit: '' },
             searchTerm: '',
-            draggedTaskId: null,
-            dragOverTaskId: null
         };
 
         let peerInstance = null;
         let p2pConnection = null;
-        
-        let touchClone = null;
-        let initialTouchY = 0;
-        let initialTouchX = 0;
-        let quadrantRects = [];
-        let rAF_ID = null;
+        let sortableInstances = [];
 
         const initDB = () => {
             return new Promise((resolve, reject) => {
@@ -478,7 +457,35 @@
             document.getElementById('header-streak').innerText = state.config.streak;
         };
 
+        const syncStateWithDOM = () => {
+            if (state.searchTerm) return; 
+            const newTasksOrder = [];
+            
+            quadrantsDef.forEach(q => {
+                const list = document.getElementById(`list-${q.id}`);
+                if (list) {
+                    Array.from(list.children).forEach(taskEl => {
+                        const id = taskEl.dataset.id;
+                        if (id) {
+                            const task = state.tasks.find(t => t.id === id);
+                            if (task) {
+                                task.quadrant = q.id;
+                                newTasksOrder.push(task);
+                            }
+                        }
+                    });
+                }
+            });
+            
+            state.tasks = newTasksOrder;
+            dbSaveData();
+            renderApp();
+        };
+
         const renderQuadrants = () => {
+            sortableInstances.forEach(instance => instance.destroy());
+            sortableInstances = [];
+
             const container = document.getElementById('quadrants-container');
             container.innerHTML = '';
 
@@ -489,35 +496,27 @@
             quadrantsDef.forEach(q => {
                 const tasksInQ = filteredTasks.filter(t => t.quadrant === q.id);
                 
-                let tasksHTML = tasksInQ.length === 0 ? 
-                    `<div class="h-full flex items-center justify-center opacity-40 border-2 border-dashed border-black/20 rounded-xl pointer-events-none">
-                        <p class="text-xs font-bold text-center px-4 uppercase tracking-widest">${state.searchTerm ? 'No hay resultados' : 'Cuadrante Vacío'}</p>
-                    </div>` 
-                    : tasksInQ.map(task => {
-                        const isDragging = state.draggedTaskId === task.id ? 'opacity-50 border-dashed' : '';
-                        const isDragOver = state.dragOverTaskId === task.id ? 'border-t-4 border-t-blue-400' : '';
-
-                        return `
-                        <div class="task-item group bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-sm border border-black/5 flex items-center justify-between gap-2 hover:shadow-md transition-all cursor-move ${isDragging} ${isDragOver}" 
-                             draggable="true" data-id="${task.id}">
-                            <div class="flex items-center gap-2 flex-1 min-w-0">
-                                <div class="touch-drag-handle p-1 -ml-2 cursor-grab active:cursor-grabbing">
-                                    <i data-lucide="grip-vertical" class="w-4 h-4 text-slate-300 pointer-events-none"></i>
-                                </div>
-                                <div class="flex-1 min-w-0 pointer-events-none">
-                                    <p class="text-sm font-semibold text-slate-800 break-words">${task.text}</p>
-                                </div>
+                let tasksHTML = tasksInQ.map(task => {
+                    return `
+                    <div class="task-item group bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-sm border border-black/5 flex items-center justify-between gap-2 hover:shadow-md transition-all" data-id="${task.id}">
+                        <div class="flex items-center gap-2 flex-1 min-w-0">
+                            <div class="touch-drag-handle p-1 -ml-2 text-slate-300 hover:text-slate-500">
+                                <i data-lucide="grip-vertical" class="w-4 h-4 pointer-events-none"></i>
                             </div>
-                            <div class="flex items-center gap-1">
-                                <button class="btn-edit p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors" data-id="${task.id}" title="Editar tarea">
-                                    <i data-lucide="edit-2" class="w-4 h-4 pointer-events-none"></i>
-                                </button>
-                                <button class="btn-delete p-1.5 text-slate-400 hover:text-green-600 hover:bg-green-50 rounded transition-colors" data-id="${task.id}" title="Completar / Eliminar">
-                                    <i data-lucide="check" class="w-5 h-5 pointer-events-none"></i>
-                                </button>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-semibold text-slate-800 break-words pointer-events-none">${task.text}</p>
                             </div>
-                        </div>`;
-                    }).join('');
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button class="btn-edit p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors" data-id="${task.id}" title="Editar tarea">
+                                <i data-lucide="edit-2" class="w-4 h-4 pointer-events-none"></i>
+                            </button>
+                            <button class="btn-delete p-1.5 text-slate-400 hover:text-green-600 hover:bg-green-50 rounded transition-colors" data-id="${task.id}" title="Completar / Eliminar">
+                                <i data-lucide="check" class="w-5 h-5 pointer-events-none"></i>
+                            </button>
+                        </div>
+                    </div>`;
+                }).join('');
 
                 container.innerHTML += `
                     <div class="quadrant relative flex flex-col h-[420px] rounded-xl shadow-inner ${q.bgColor} p-4 transition-all" data-id="${q.id}">
@@ -539,7 +538,7 @@
                             </div>
                             <h3 class="text-xs md:text-sm font-bold uppercase opacity-80">${q.subtitle}</h3>
                         </div>
-                        <div class="flex-1 overflow-y-auto space-y-2 pr-2 custom-scrollbar relative task-list">
+                        <div class="flex-1 overflow-y-auto space-y-2 pr-2 custom-scrollbar relative task-list" id="list-${q.id}">
                             ${tasksHTML}
                         </div>
                     </div>
@@ -548,6 +547,26 @@
 
             lucide.createIcons();
             attachQuadrantEvents();
+
+            if(typeof Sortable !== 'undefined') {
+                quadrantsDef.forEach(q => {
+                    const el = document.getElementById(`list-${q.id}`);
+                    if(el) {
+                        const instance = new Sortable(el, {
+                            group: 'shared', 
+                            animation: 150,
+                            handle: '.touch-drag-handle',
+                            delay: 100, 
+                            delayOnTouchOnly: true, 
+                            disabled: !!state.searchTerm, 
+                            onEnd: function (evt) {
+                                syncStateWithDOM();
+                            }
+                        });
+                        sortableInstances.push(instance);
+                    }
+                });
+            }
         };
 
         const renderApp = () => {
@@ -702,28 +721,6 @@
             document.getElementById('modal-edit').classList.add('hidden');
         });
 
-        const processDrop = (targetQuadrantId) => {
-            const draggedIndex = state.tasks.findIndex(t => t.id === state.draggedTaskId);
-            if (draggedIndex > -1) {
-                const draggedTask = { ...state.tasks[draggedIndex] };
-
-                if (state.dragOverTaskId && state.dragOverTaskId !== state.draggedTaskId) {
-                    const targetIndex = state.tasks.findIndex(t => t.id === state.dragOverTaskId);
-                    const targetTask = state.tasks[targetIndex];
-                    
-                    state.tasks.splice(draggedIndex, 1);
-                    const newTargetIndex = state.tasks.findIndex(t => t.id === state.dragOverTaskId);
-                    
-                    draggedTask.quadrant = targetTask.quadrant;
-                    state.tasks.splice(newTargetIndex, 0, draggedTask);
-                } else {
-                    draggedTask.quadrant = targetQuadrantId;
-                    state.tasks.splice(draggedIndex, 1);
-                    state.tasks.push(draggedTask);
-                }
-            }
-        };
-
         const attachQuadrantEvents = () => {
             const container = document.getElementById('quadrants-container');
             const newContainer = container.cloneNode(true);
@@ -772,143 +769,6 @@
                     renderApp();
                 }
             });
-
-            newContainer.addEventListener('dragstart', e => {
-                if(e.target.classList.contains('task-item')){
-                    state.draggedTaskId = e.target.dataset.id;
-                    e.dataTransfer.effectAllowed = "move";
-                    setTimeout(() => e.target.classList.add('opacity-50'), 0);
-                }
-            });
-
-            newContainer.addEventListener('dragover', e => {
-                e.preventDefault();
-                e.dataTransfer.dropEffect = "move";
-                const taskItem = e.target.closest('.task-item');
-                if (taskItem && taskItem.dataset.id !== state.draggedTaskId) {
-                    if (state.dragOverTaskId !== taskItem.dataset.id) {
-                        state.dragOverTaskId = taskItem.dataset.id;
-                        document.querySelectorAll('.task-item').forEach(el => el.classList.remove('border-t-4', 'border-t-blue-400'));
-                        taskItem.classList.add('border-t-4', 'border-t-blue-400');
-                    }
-                }
-            });
-
-            newContainer.addEventListener('dragleave', e => {
-                const taskItem = e.target.closest('.task-item');
-                if(taskItem && taskItem.dataset.id === state.dragOverTaskId) {
-                    taskItem.classList.remove('border-t-4', 'border-t-blue-400');
-                    state.dragOverTaskId = null;
-                }
-            });
-            
-            newContainer.addEventListener('dragend', () => {
-                state.draggedTaskId = null;
-                state.dragOverTaskId = null;
-                renderApp();
-            });
-
-            newContainer.addEventListener('drop', e => {
-                e.preventDefault();
-                if (!state.draggedTaskId) return;
-
-                const quadrant = e.target.closest('.quadrant');
-                if (quadrant) {
-                    processDrop(quadrant.dataset.id);
-                }
-                
-                state.draggedTaskId = null;
-                state.dragOverTaskId = null;
-                renderApp();
-            });
-
-            // Lógica Táctil Fluida (Mobile/Tablet)
-            newContainer.addEventListener('touchstart', e => {
-                const handle = e.target.closest('.touch-drag-handle');
-                if(handle) {
-                    const taskItem = handle.closest('.task-item');
-                    state.draggedTaskId = taskItem.dataset.id;
-                    
-                    const rect = taskItem.getBoundingClientRect();
-                    touchStartX = e.touches[0].clientX;
-                    touchStartY = e.touches[0].clientY;
-
-                    touchClone = taskItem.cloneNode(true);
-                    touchClone.classList.add('touch-clone');
-                    touchClone.style.width = `${rect.width}px`;
-                    touchClone.style.top = `${rect.top}px`;
-                    touchClone.style.left = `${rect.left}px`;
-                    touchClone.style.transform = `translate3d(0px, 0px, 0px)`;
-                    document.body.appendChild(touchClone);
-                    
-                    taskItem.style.opacity = '0.3';
-
-                    quadrantRects = Array.from(document.querySelectorAll('.quadrant')).map(q => {
-                        const qRect = q.getBoundingClientRect();
-                        return { id: q.dataset.id, element: q, top: qRect.top, bottom: qRect.bottom, left: qRect.left, right: qRect.right };
-                    });
-                }
-            }, {passive: false});
-
-            newContainer.addEventListener('touchmove', e => {
-                if(touchClone && state.draggedTaskId) {
-                    e.preventDefault(); 
-                    const touch = e.touches[0];
-                    
-                    if(rAF_ID) cancelAnimationFrame(rAF_ID);
-                    
-                    rAF_ID = requestAnimationFrame(() => {
-                        const deltaX = touch.clientX - touchStartX;
-                        const deltaY = touch.clientY - touchStartY;
-                        touchClone.style.transform = `translate3d(${deltaX}px, ${deltaY}px, 0px)`;
-
-                        let foundQ = null;
-                        for(const q of quadrantRects) {
-                            if(touch.clientX >= q.left && touch.clientX <= q.right && touch.clientY >= q.top && touch.clientY <= q.bottom) {
-                                foundQ = q.element;
-                                break;
-                            }
-                        }
-
-                        document.querySelectorAll('.quadrant').forEach(q => q.classList.remove('touch-over'));
-                        if(foundQ) foundQ.classList.add('touch-over');
-                    });
-                }
-            }, {passive: false});
-
-            const endTouch = (e) => {
-                if(touchClone && state.draggedTaskId) {
-                    if(e && e.cancelable) e.preventDefault();
-                    if(rAF_ID) cancelAnimationFrame(rAF_ID);
-
-                    let targetQid = null;
-                    if(e && e.changedTouches && e.changedTouches.length > 0) {
-                        const touch = e.changedTouches[0];
-                        for(const q of quadrantRects) {
-                            if(touch.clientX >= q.left && touch.clientX <= q.right && touch.clientY >= q.top && touch.clientY <= q.bottom) {
-                                targetQid = q.id;
-                                break;
-                            }
-                        }
-                    }
-
-                    document.querySelectorAll('.quadrant').forEach(q => q.classList.remove('touch-over'));
-                    
-                    touchClone.remove();
-                    touchClone = null;
-
-                    if(targetQid) {
-                        processDrop(targetQid);
-                    }
-                    
-                    state.draggedTaskId = null;
-                    state.dragOverTaskId = null;
-                    renderApp(); 
-                }
-            };
-
-            newContainer.addEventListener('touchend', endTouch);
-            newContainer.addEventListener('touchcancel', endTouch);
         };
 
         document.getElementById('btn-open-sync').addEventListener('click', () => {
