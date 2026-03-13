@@ -28,7 +28,6 @@
         .animate-fadeIn { animation: fadeIn 0.2s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         
-        /* Bloqueo estricto del menú contextual en móviles para tareas */
         .task-item {
             -webkit-touch-callout: none !important;
             -webkit-user-select: none !important;
@@ -146,7 +145,6 @@
         </div>
     </div>
 
-    <!-- Modal Editar Mejorado (Con opción de mover de cuadrante) -->
     <div id="modal-edit" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] p-4 transition-opacity">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl animate-fadeIn">
             <div class="flex justify-between items-center mb-4">
@@ -265,7 +263,7 @@
                     <div class="bg-[#ffcc66] p-4 rounded-xl border border-black/5">
                         <h3 class="font-bold text-yellow-900 flex items-center gap-2 mb-2"><i data-lucide="trash-2" class="w-4 h-4 text-cyan-500"></i> Cuadrante 4: ELIMINAR</h3>
                         <p class="text-xs text-yellow-800 mb-2 font-semibold">Ni Urgente, Ni Importante</p>
-                        <p class="text-sm text-yellow-900/80 mb-2">Distracciones vacías. Bórralas sin culpa. <i>(El ocio consciente va en Planificar)</i>.</p>
+                        <p class="text-sm text-yellow-900/80 mb-2">Distracciones vacías. Bórralas sin culpa.</p>
                         <ul class="text-xs list-disc pl-4 text-yellow-900/70">
                             <li>Scrollear sin fin en redes</li>
                             <li>Revisar chismes o drama</li>
