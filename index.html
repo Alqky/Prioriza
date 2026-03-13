@@ -41,11 +41,11 @@
             position: fixed;
             pointer-events: none;
             z-index: 9999;
-            opacity: 0.8;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            transform: scale(1.05);
-            transition: transform 0.1s;
+            opacity: 0.9;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            transform: scale(1.02);
             margin: 0 !important;
+            will-change: top, left;
         }
 
         .quadrant.touch-over {
@@ -222,9 +222,9 @@
                     <div class="bg-[#d9f2b3] p-4 rounded-xl border border-black/5">
                         <h3 class="font-bold text-green-900 flex items-center gap-2 mb-2"><i data-lucide="calendar" class="w-4 h-4 text-pink-500"></i> Cuadrante 2: PLANIFICAR</h3>
                         <p class="text-xs text-green-800 mb-2 font-semibold">No Urgente, pero Importante</p>
-                        <p class="text-sm text-green-900/80 mb-2">El cuadrante del éxito. Metas a largo plazo. Ponles fecha.</p>
+                        <p class="text-sm text-green-900/80 mb-2">El cuadrante del éxito. Metas a largo plazo y <b>descanso real</b>.</p>
                         <ul class="text-xs list-disc pl-4 text-green-900/70">
-                            <li>Hacer ejercicio</li>
+                            <li>Hacer ejercicio y dormir bien</li>
                             <li>Aprender una habilidad nueva</li>
                             <li>Planificación financiera</li>
                         </ul>
@@ -244,11 +244,11 @@
                     <div class="bg-[#ffcc66] p-4 rounded-xl border border-black/5">
                         <h3 class="font-bold text-yellow-900 flex items-center gap-2 mb-2"><i data-lucide="x-circle" class="w-4 h-4 text-cyan-500"></i> Cuadrante 4: ELIMINAR</h3>
                         <p class="text-xs text-yellow-800 mb-2 font-semibold">Ni Urgente, Ni Importante</p>
-                        <p class="text-sm text-yellow-900/80 mb-2">Distracciones que roban tu tiempo. Bórralas sin culpa.</p>
+                        <p class="text-sm text-yellow-900/80 mb-2">Distracciones vacías. Bórralas sin culpa. <i>(El ocio consciente va en Planificar)</i>.</p>
                         <ul class="text-xs list-disc pl-4 text-yellow-900/70">
                             <li>Scrollear sin fin en redes</li>
-                            <li>Ver TV por horas</li>
-                            <li>Revisar chismes</li>
+                            <li>Revisar chismes o drama</li>
+                            <li>Preocupaciones fuera de control</li>
                         </ul>
                     </div>
                 </div>
@@ -358,10 +358,10 @@
         ];
 
         const suggestionRules = [
-            { keywords: ['hoy', 'urgente', 'ahora', 'inmediato', 'jefe', 'cliente', 'pagar', 'vence', 'emergencia'], q: 'q1', label: 'Hacer (Urgente e Importante)' },
-            { keywords: ['mañana', 'semana', 'proyecto', 'estudiar', 'ejercicio', 'estrategia', 'plan', 'leer', 'curso', 'meta'], q: 'q2', label: 'Planificar (Importante, No urgente)' },
-            { keywords: ['revisar', 'correo', 'mensaje', 'llamada', 'reunión', 'responder', 'encargo', 'favor', 'preguntar'], q: 'q3', label: 'Delegar (Urgente, No importante)' },
-            { keywords: ['redes', 'netflix', 'serie', 'película', 'videojuego', 'tele', 'jugar', 'ocio', 'tiktok', 'facebook'], q: 'q4', label: 'Eliminar (Ni urgente, Ni importante)' }
+            { keywords: ['hoy', 'urgente', 'ahora', 'inmediato', 'jefe', 'cliente', 'pagar', 'vence', 'emergencia', 'urgencia'], q: 'q1', label: 'Hacer (Urgente e Importante)' },
+            { keywords: ['mañana', 'semana', 'proyecto', 'estudiar', 'ejercicio', 'estrategia', 'plan', 'leer', 'curso', 'meta', 'descansar', 'dormir', 'salud', 'meditar', 'familia'], q: 'q2', label: 'Planificar (Importante, No urgente)' },
+            { keywords: ['revisar', 'correo', 'mensaje', 'llamada', 'reunión', 'responder', 'encargo', 'favor', 'preguntar', 'ayudar'], q: 'q3', label: 'Delegar (Urgente, No importante)' },
+            { keywords: ['redes', 'netflix', 'serie', 'película', 'tele', 'ocio', 'tiktok', 'facebook', 'instagram', 'chisme', 'scrollear'], q: 'q4', label: 'Eliminar (Distracción vacía)' }
         ];
 
         let state = {
@@ -378,6 +378,8 @@
         let touchClone = null;
         let initialTouchY = 0;
         let initialTouchX = 0;
+        let quadrantRects = [];
+        let rAF_ID = null;
 
         const initDB = () => {
             return new Promise((resolve, reject) => {
@@ -465,7 +467,7 @@
             if (max === counts.q2) return { name: "El Estratega", desc: "Te enfocas en lo importante a largo plazo.", icon: "♟️", color: "bg-[#d9f2b3] text-green-900", advice: "¡Excelente! Al planificar evitas que tus metas se conviertan en crisis urgentes." };
             if (max === counts.q1) return { name: "El Apagafuegos", desc: "Vives reaccionando a las urgencias.", icon: "🚒", color: "bg-[#ccff99] text-green-900", advice: "Estás invirtiendo todo tu tiempo en crisis. Intenta mover prioridades al cuadrante de Planificar." };
             if (max === counts.q3) return { name: "El Complaciente", desc: "Haces urgencias que no aportan a tus metas.", icon: "🤝", color: "bg-[#ffe699] text-yellow-900", advice: "Estás haciendo el trabajo de otros o tareas de bajo impacto. Aprende a delegar o decir que no." };
-            if (max === counts.q4) return { name: "El Procrastinador", desc: "Tienes demasiadas tareas basura.", icon: "🎮", color: "bg-[#ffcc66] text-yellow-900", advice: "Demasiadas distracciones acumuladas. Haz una limpieza y elimina lo que no sirve de inmediato." };
+            if (max === counts.q4) return { name: "Acumulador de Basura", desc: "Tienes demasiadas distracciones.", icon: "🗑️", color: "bg-[#ffcc66] text-yellow-900", advice: "Ojo: El descanso real va en 'Planificar'. Lo que tienes aquí son solo distracciones vacías que debes eliminar." };
             
             return { name: "Organizador", desc: "Manteniendo el control de tus tareas.", icon: "📋", color: "bg-blue-100 text-blue-800", advice: "Sigue así, organizar es el primer paso." };
         };
@@ -750,7 +752,6 @@
                 }
             });
 
-            // DRAG AND DROP - MOUSE (PC)
             newContainer.addEventListener('dragstart', e => {
                 if(e.target.classList.contains('task-item')){
                     state.draggedTaskId = e.target.dataset.id;
@@ -798,7 +799,6 @@
                 }
             });
 
-            // DRAG AND DROP - TOUCH (MOBILE/TABLET)
             newContainer.addEventListener('touchstart', e => {
                 const handle = e.target.closest('.touch-drag-handle');
                 if(handle) {
@@ -818,6 +818,11 @@
                     
                     initialTouchY = e.touches[0].clientY - rect.top;
                     initialTouchX = e.touches[0].clientX - rect.left;
+
+                    quadrantRects = Array.from(document.querySelectorAll('.quadrant')).map(q => {
+                        const qRect = q.getBoundingClientRect();
+                        return { id: q.dataset.id, element: q, top: qRect.top, bottom: qRect.bottom, left: qRect.left, right: qRect.right };
+                    });
                 }
             }, {passive: false});
 
@@ -825,48 +830,54 @@
                 if(touchClone && state.draggedTaskId) {
                     e.preventDefault(); 
                     const touch = e.touches[0];
-                    touchClone.style.top = `${touch.clientY - initialTouchY}px`;
-                    touchClone.style.left = `${touch.clientX - initialTouchX}px`;
-
-                    touchClone.hidden = true;
-                    const elemBelow = document.elementFromPoint(touch.clientX, touch.clientY);
-                    touchClone.hidden = false;
-
-                    document.querySelectorAll('.quadrant').forEach(q => q.classList.remove('touch-over'));
                     
-                    if(elemBelow) {
-                        const quadrant = elemBelow.closest('.quadrant');
-                        if(quadrant) {
-                            quadrant.classList.add('touch-over');
-                            state.dragOverTaskId = null; // Simplificado para mobile, solo mueve al cuadrante
+                    if(rAF_ID) cancelAnimationFrame(rAF_ID);
+                    
+                    rAF_ID = requestAnimationFrame(() => {
+                        touchClone.style.top = `${touch.clientY - initialTouchY}px`;
+                        touchClone.style.left = `${touch.clientX - initialTouchX}px`;
+
+                        let foundQ = null;
+                        for(const q of quadrantRects) {
+                            if(touch.clientX >= q.left && touch.clientX <= q.right && touch.clientY >= q.top && touch.clientY <= q.bottom) {
+                                foundQ = q.element;
+                                break;
+                            }
                         }
-                    }
+
+                        document.querySelectorAll('.quadrant').forEach(q => q.classList.remove('touch-over'));
+                        if(foundQ) foundQ.classList.add('touch-over');
+                    });
                 }
             }, {passive: false});
 
             newContainer.addEventListener('touchend', e => {
                 if(touchClone && state.draggedTaskId) {
                     e.preventDefault();
-                    
-                    touchClone.hidden = true;
+                    if(rAF_ID) cancelAnimationFrame(rAF_ID);
+
                     const touch = e.changedTouches[0];
-                    const elemBelow = document.elementFromPoint(touch.clientX, touch.clientY);
-                    touchClone.hidden = false;
+                    let targetQid = null;
+
+                    for(const q of quadrantRects) {
+                        if(touch.clientX >= q.left && touch.clientX <= q.right && touch.clientY >= q.top && touch.clientY <= q.bottom) {
+                            targetQid = q.id;
+                            break;
+                        }
+                    }
 
                     document.querySelectorAll('.quadrant').forEach(q => q.classList.remove('touch-over'));
                     
-                    if(elemBelow) {
-                        const quadrant = elemBelow.closest('.quadrant');
-                        if(quadrant) {
-                            processDrop(quadrant.dataset.id);
-                        }
+                    if(targetQid) {
+                        processDrop(targetQid);
+                    } else {
+                        renderApp(); 
                     }
                     
                     touchClone.remove();
                     touchClone = null;
                     state.draggedTaskId = null;
                     state.dragOverTaskId = null;
-                    renderApp();
                 }
             });
         };
