@@ -34,11 +34,24 @@
         }
         .touch-drag-handle:active { cursor: grabbing; }
         
-        .sortable-ghost { opacity: 0.4; background-color: #f8fafc; border: 2px dashed #94a3b8; }
-        .sortable-fallback { 
+        /* Indicador de dónde va a caer la tarea */
+        .sortable-ghost { 
             opacity: 1 !important; 
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1) !important; 
-            transform: scale(1.05); 
+            background-color: #eff6ff !important; 
+            border: 2px dashed #3b82f6 !important; 
+            box-shadow: none !important;
+            color: transparent !important;
+        }
+        .sortable-ghost * {
+            visibility: hidden;
+        }
+        
+        /* La tarea que tienes flotando en el dedo/mouse */
+        .sortable-fallback { 
+            transition: none !important; /* Esto elimina el lag en móviles */
+            opacity: 1 !important; 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3) !important; 
+            transform: scale(1.05) rotate(2deg) !important; 
             z-index: 9999 !important; 
             background: white !important; 
             cursor: grabbing !important; 
@@ -503,7 +516,7 @@
                 
                 let tasksHTML = tasksInQ.map(task => {
                     return `
-                    <div class="task-item group bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-sm border border-black/5 flex items-center justify-between gap-2 transition-all" data-id="${task.id}">
+                    <div class="task-item bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-sm border border-black/5 flex items-center justify-between gap-2" data-id="${task.id}">
                         <div class="flex items-center gap-2 flex-1 min-w-0">
                             <div class="touch-drag-handle p-1 -ml-2 text-slate-300 hover:text-slate-500">
                                 <i data-lucide="grip-vertical" class="w-4 h-4 pointer-events-none"></i>
@@ -559,14 +572,16 @@
                     if(el) {
                         const instance = new Sortable(el, {
                             group: 'shared', 
-                            animation: 150,
+                            animation: 200,
                             handle: '.touch-drag-handle',
-                            delay: 200, 
+                            delay: 150, 
                             delayOnTouchOnly: true, 
                             touchStartThreshold: 5,
                             forceFallback: true, 
                             fallbackClass: 'sortable-fallback',
                             ghostClass: 'sortable-ghost',
+                            dragClass: 'sortable-drag',
+                            fallbackOnBody: true,
                             disabled: !!state.searchTerm, 
                             onEnd: function (evt) {
                                 syncStateWithDOM();
