@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Prioriza</title>
     
     <meta name="theme-color" content="#a855f7">
@@ -26,8 +26,34 @@
         .custom-scrollbar:hover::-webkit-scrollbar-thumb { background-color: rgba(0,0,0,0.2); }
         .animate-fadeIn { animation: fadeIn 0.2s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        
         .task-item.dragging { opacity: 0.5; }
         .task-item.drag-over { border-top: 4px solid #60a5fa !important; }
+        
+        .touch-drag-handle {
+            touch-action: none;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .touch-clone {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.8;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transform: scale(1.05);
+            transition: transform 0.1s;
+            margin: 0 !important;
+        }
+
+        .quadrant.touch-over {
+            filter: brightness(0.95);
+            outline: 2px dashed rgba(0,0,0,0.3);
+            outline-offset: -4px;
+        }
+
         .hidden { display: none !important; }
     </style>
 </head>
@@ -45,7 +71,11 @@
             <p class="text-slate-500 text-sm font-medium">Gestión inteligente de tu tiempo</p>
         </div>
 
-        <div class="flex gap-3">
+        <div class="flex gap-2 sm:gap-3 flex-wrap justify-center">
+            <button id="btn-open-guide" class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 text-emerald-600 hover:bg-emerald-50 transition-colors" title="Guía y Consejos">
+                <i data-lucide="book-open" class="w-5 h-5"></i>
+            </button>
+
             <button id="btn-open-profile" class="px-4 py-2 bg-white rounded-2xl shadow-sm border border-slate-200 flex items-center gap-3 transition-all hover:shadow-md hover:border-slate-300" title="Ver mi Diagnóstico">
                 <div id="header-icon" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-lg">🌱</div>
                 <div class="flex-col items-start text-left hidden sm:flex">
@@ -73,16 +103,19 @@
             </button>
         </div>
 
-        <div class="lg:col-span-2 bg-white p-2 rounded-xl shadow-sm border border-slate-200">
-            <form id="add-task-form" class="flex flex-col md:flex-row gap-2 h-full">
-                <input type="text" id="new-task-input" placeholder="Escribe una nueva tarea aquí..." class="flex-1 px-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:border-blue-500 outline-none transition-all text-sm" required />
-                <select id="new-task-quadrant" class="px-3 py-2 border border-slate-200 rounded-lg outline-none bg-white cursor-pointer text-sm font-medium text-slate-700 min-w-[140px]">
+        <div class="lg:col-span-2 bg-white p-3 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-center">
+            <form id="add-task-form" class="flex flex-col md:flex-row gap-2">
+                <div class="flex-1 relative">
+                    <input type="text" id="new-task-input" placeholder="Escribe una nueva tarea aquí..." class="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:border-blue-500 outline-none transition-all text-sm" required autocomplete="off" />
+                    <p id="ai-suggestion" class="absolute -bottom-5 left-2 text-[10px] font-bold text-blue-600 hidden opacity-0 transition-opacity">💡 Sugerencia: ...</p>
+                </div>
+                <select id="new-task-quadrant" class="px-3 py-2 border border-slate-200 rounded-lg outline-none bg-white cursor-pointer text-sm font-medium text-slate-700 min-w-[140px] mt-4 md:mt-0">
                     <option value="q1">Hacer</option>
                     <option value="q2">Planificar</option>
                     <option value="q3">Delegar</option>
                     <option value="q4">Eliminar</option>
                 </select>
-                <button type="submit" id="btn-add-task" class="px-6 py-2 bg-slate-800 text-white font-semibold rounded-lg hover:bg-slate-700 disabled:opacity-50 transition-colors flex items-center justify-center gap-2 text-sm">
+                <button type="submit" id="btn-add-task" class="px-6 py-2 bg-slate-800 text-white font-semibold rounded-lg hover:bg-slate-700 disabled:opacity-50 transition-colors flex items-center justify-center gap-2 text-sm mt-2 md:mt-0">
                     <i data-lucide="plus" class="w-4 h-4"></i> Añadir
                 </button>
             </form>
@@ -99,6 +132,22 @@
             <h3 id="confirm-title" class="text-xl font-black text-slate-800 mb-2"></h3>
             <p id="confirm-msg" class="text-slate-500 text-sm mb-6"></p>
             <div id="confirm-actions" class="flex flex-col gap-2"></div>
+        </div>
+    </div>
+
+    <div id="modal-edit" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] p-4 transition-opacity">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl animate-fadeIn">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-black text-slate-800 flex items-center gap-2">
+                    <i data-lucide="edit-3" class="w-5 h-5 text-blue-500"></i> Editar Tarea
+                </h3>
+                <button id="btn-close-edit" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <input type="hidden" id="edit-task-id" />
+            <textarea id="edit-task-input" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:border-blue-500 outline-none text-sm mb-4 resize-none h-24" placeholder="Modifica tu tarea..."></textarea>
+            <button id="btn-save-edit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition-colors">
+                Guardar Cambios
+            </button>
         </div>
     </div>
 
@@ -139,9 +188,77 @@
         </div>
     </div>
 
+    <div id="modal-guide" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-opacity">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 md:p-8 shadow-2xl relative animate-fadeIn max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <button id="btn-close-guide" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-100 rounded-full p-1 transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            
+            <div class="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
+                <div class="p-3 bg-emerald-100 text-emerald-600 rounded-xl">
+                    <i data-lucide="book-open" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-black text-slate-800">Guía de Organización</h2>
+                    <p class="text-sm text-slate-500 font-medium">¿Cómo usar la Matriz de Eisenhower?</p>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <p class="text-sm text-slate-600 leading-relaxed">La matriz divide tus tareas según su <b>Urgencia</b> (requiere atención ya) e <b>Importancia</b> (aporta a tus metas a largo plazo).</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-[#ccff99] p-4 rounded-xl border border-black/5">
+                        <h3 class="font-bold text-green-900 flex items-center gap-2 mb-2"><i data-lucide="alert-circle" class="w-4 h-4 text-red-600"></i> Cuadrante 1: HACER</h3>
+                        <p class="text-xs text-green-800 mb-2 font-semibold">Urgente e Importante</p>
+                        <p class="text-sm text-green-900/80 mb-2">Crisis o problemas inminentes. Hazlo tú mismo, ahora.</p>
+                        <ul class="text-xs list-disc pl-4 text-green-900/70">
+                            <li>Pagar tarjeta que vence hoy</li>
+                            <li>Arreglar falla en el trabajo</li>
+                            <li>Emergencia médica</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-[#d9f2b3] p-4 rounded-xl border border-black/5">
+                        <h3 class="font-bold text-green-900 flex items-center gap-2 mb-2"><i data-lucide="calendar" class="w-4 h-4 text-pink-500"></i> Cuadrante 2: PLANIFICAR</h3>
+                        <p class="text-xs text-green-800 mb-2 font-semibold">No Urgente, pero Importante</p>
+                        <p class="text-sm text-green-900/80 mb-2">El cuadrante del éxito. Metas a largo plazo. Ponles fecha.</p>
+                        <ul class="text-xs list-disc pl-4 text-green-900/70">
+                            <li>Hacer ejercicio</li>
+                            <li>Aprender una habilidad nueva</li>
+                            <li>Planificación financiera</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-[#ffe699] p-4 rounded-xl border border-black/5">
+                        <h3 class="font-bold text-yellow-900 flex items-center gap-2 mb-2"><i data-lucide="users" class="w-4 h-4 text-purple-500"></i> Cuadrante 3: DELEGAR</h3>
+                        <p class="text-xs text-yellow-800 mb-2 font-semibold">Urgente, pero No Importante</p>
+                        <p class="text-sm text-yellow-900/80 mb-2">Interrupciones y peticiones de otros. Intenta delegar o automatizar.</p>
+                        <ul class="text-xs list-disc pl-4 text-yellow-900/70">
+                            <li>Responder correos rutinarios</li>
+                            <li>Llamadas sin objetivo claro</li>
+                            <li>Favores de compañeros</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-[#ffcc66] p-4 rounded-xl border border-black/5">
+                        <h3 class="font-bold text-yellow-900 flex items-center gap-2 mb-2"><i data-lucide="x-circle" class="w-4 h-4 text-cyan-500"></i> Cuadrante 4: ELIMINAR</h3>
+                        <p class="text-xs text-yellow-800 mb-2 font-semibold">Ni Urgente, Ni Importante</p>
+                        <p class="text-sm text-yellow-900/80 mb-2">Distracciones que roban tu tiempo. Bórralas sin culpa.</p>
+                        <ul class="text-xs list-disc pl-4 text-yellow-900/70">
+                            <li>Scrollear sin fin en redes</li>
+                            <li>Ver TV por horas</li>
+                            <li>Revisar chismes</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="modal-intro" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
         <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl animate-fadeIn">
-            <div class="w-16 h-16 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-inner mx-auto">
+            <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 shadow-inner mx-auto">
                 <i data-lucide="info" class="w-8 h-8"></i>
             </div>
             <h2 class="text-2xl font-black text-center text-slate-800 mb-4">Domina tu tiempo</h2>
@@ -240,6 +357,13 @@
             { id: 'q4', title: 'ELIMINAR', subtitle: 'NI IMPORTANTES, NI URGENTES', bgColor: 'bg-[#ffcc66]', tapeColor: 'bg-cyan-400', icon: 'x-circle', iconColor: 'text-cyan-700', textColor: 'text-yellow-900' }
         ];
 
+        const suggestionRules = [
+            { keywords: ['hoy', 'urgente', 'ahora', 'inmediato', 'jefe', 'cliente', 'pagar', 'vence', 'emergencia'], q: 'q1', label: 'Hacer (Urgente e Importante)' },
+            { keywords: ['mañana', 'semana', 'proyecto', 'estudiar', 'ejercicio', 'estrategia', 'plan', 'leer', 'curso', 'meta'], q: 'q2', label: 'Planificar (Importante, No urgente)' },
+            { keywords: ['revisar', 'correo', 'mensaje', 'llamada', 'reunión', 'responder', 'encargo', 'favor', 'preguntar'], q: 'q3', label: 'Delegar (Urgente, No importante)' },
+            { keywords: ['redes', 'netflix', 'serie', 'película', 'videojuego', 'tele', 'jugar', 'ocio', 'tiktok', 'facebook'], q: 'q4', label: 'Eliminar (Ni urgente, Ni importante)' }
+        ];
+
         let state = {
             tasks: [],
             config: { hasSeenIntro: false, streak: 0, lastVisit: '' },
@@ -250,6 +374,10 @@
 
         let peerInstance = null;
         let p2pConnection = null;
+        
+        let touchClone = null;
+        let initialTouchY = 0;
+        let initialTouchX = 0;
 
         const initDB = () => {
             return new Promise((resolve, reject) => {
@@ -365,26 +493,25 @@
                         <p class="text-xs font-bold text-center px-4 uppercase tracking-widest">${state.searchTerm ? 'No hay resultados' : 'Cuadrante Vacío'}</p>
                     </div>` 
                     : tasksInQ.map(task => {
-                        const isDragging = state.draggedTaskId === task.id ? 'opacity-50' : '';
+                        const isDragging = state.draggedTaskId === task.id ? 'opacity-50 border-dashed' : '';
                         const isDragOver = state.dragOverTaskId === task.id ? 'border-t-4 border-t-blue-400' : '';
 
                         return `
-                        <div class="task-item group bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-sm border border-black/5 flex items-center justify-between gap-3 hover:shadow-md transition-all cursor-move ${isDragging} ${isDragOver}" 
+                        <div class="task-item group bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-sm border border-black/5 flex items-center justify-between gap-2 hover:shadow-md transition-all cursor-move ${isDragging} ${isDragOver}" 
                              draggable="true" data-id="${task.id}">
-                            <div class="flex items-center gap-2 flex-1 min-w-0 pointer-events-none">
-                                <i data-lucide="grip-vertical" class="w-4 h-4 text-slate-300 hidden md:block flex-shrink-0"></i>
-                                <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 flex-1 min-w-0">
+                                <div class="touch-drag-handle p-1 -ml-2 cursor-grab active:cursor-grabbing">
+                                    <i data-lucide="grip-vertical" class="w-4 h-4 text-slate-300 pointer-events-none"></i>
+                                </div>
+                                <div class="flex-1 min-w-0 pointer-events-none">
                                     <p class="text-sm font-semibold text-slate-800 break-words">${task.text}</p>
                                 </div>
                             </div>
                             <div class="flex items-center gap-1">
-                                <select class="mobile-move block md:hidden text-xs bg-slate-100 border-none rounded p-1 text-slate-600 outline-none w-20" data-id="${task.id}">
-                                    <option value="q1" ${task.quadrant === 'q1' ? 'selected' : ''}>➜ HACER</option>
-                                    <option value="q2" ${task.quadrant === 'q2' ? 'selected' : ''}>➜ PLAN</option>
-                                    <option value="q3" ${task.quadrant === 'q3' ? 'selected' : ''}>➜ DELEG</option>
-                                    <option value="q4" ${task.quadrant === 'q4' ? 'selected' : ''}>➜ ELIM</option>
-                                </select>
-                                <button class="btn-delete p-1.5 text-slate-400 hover:text-green-600 hover:bg-green-50 rounded transition-colors" data-id="${task.id}" title="Marcar como hecha">
+                                <button class="btn-edit p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors" data-id="${task.id}" title="Editar tarea">
+                                    <i data-lucide="edit-2" class="w-4 h-4 pointer-events-none"></i>
+                                </button>
+                                <button class="btn-delete p-1.5 text-slate-400 hover:text-green-600 hover:bg-green-50 rounded transition-colors" data-id="${task.id}" title="Completar / Eliminar">
                                     <i data-lucide="check" class="w-5 h-5 pointer-events-none"></i>
                                 </button>
                             </div>
@@ -433,7 +560,7 @@
             const toastMsg = document.getElementById('toast-msg');
             toastMsg.innerText = msg;
             toast.className = `fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] px-6 py-3 rounded-full shadow-lg font-bold text-sm transition-all duration-300 ease-out text-white ${type === 'error' ? 'bg-red-600' : 'bg-slate-800'}`;
-            
+            toast.classList.remove('hidden');
             setTimeout(() => { toast.classList.add('hidden'); }, 3000);
         };
 
@@ -446,6 +573,35 @@
 
         const hideCustomModal = () => {
             document.getElementById('modal-confirm').classList.add('hidden');
+        };
+
+        const checkSuggestions = (text) => {
+            const suggestionEl = document.getElementById('ai-suggestion');
+            const selectEl = document.getElementById('new-task-quadrant');
+            if(!text) {
+                suggestionEl.classList.add('opacity-0', 'hidden');
+                return;
+            }
+            
+            let matched = null;
+            const lowerText = text.toLowerCase();
+            
+            for(const rule of suggestionRules) {
+                if(rule.keywords.some(kw => lowerText.includes(kw))) {
+                    matched = rule;
+                    break;
+                }
+            }
+
+            if(matched) {
+                suggestionEl.innerText = `💡 Sugerencia: ${matched.label}`;
+                suggestionEl.classList.remove('hidden');
+                setTimeout(() => suggestionEl.classList.remove('opacity-0'), 50);
+                selectEl.value = matched.q;
+            } else {
+                suggestionEl.classList.add('opacity-0');
+                setTimeout(() => suggestionEl.classList.add('hidden'), 200);
+            }
         };
 
         const searchInput = document.getElementById('search-input');
@@ -483,17 +639,28 @@
             const quadrant = document.getElementById('new-task-quadrant').value;
             state.tasks.push({ id: Date.now().toString(), text, quadrant });
             input.value = '';
+            document.getElementById('ai-suggestion').classList.add('hidden', 'opacity-0');
+            document.getElementById('btn-add-task').disabled = true;
             renderApp();
+            showToast('Tarea añadida');
         });
 
         document.getElementById('new-task-input').addEventListener('input', (e) => {
              document.getElementById('btn-add-task').disabled = !e.target.value.trim();
+             checkSuggestions(e.target.value.trim());
         });
 
         document.getElementById('btn-close-intro').addEventListener('click', () => {
             state.config.hasSeenIntro = true;
             document.getElementById('modal-intro').classList.add('hidden');
             dbSaveData();
+        });
+
+        document.getElementById('btn-open-guide').addEventListener('click', () => {
+            document.getElementById('modal-guide').classList.remove('hidden');
+        });
+        document.getElementById('btn-close-guide').addEventListener('click', () => {
+            document.getElementById('modal-guide').classList.add('hidden');
         });
 
         document.getElementById('btn-open-profile').addEventListener('click', () => {
@@ -516,6 +683,24 @@
         
         document.getElementById('btn-close-profile').addEventListener('click', () => document.getElementById('modal-profile').classList.add('hidden'));
 
+        document.getElementById('btn-close-edit').addEventListener('click', () => {
+            document.getElementById('modal-edit').classList.add('hidden');
+        });
+
+        document.getElementById('btn-save-edit').addEventListener('click', () => {
+            const id = document.getElementById('edit-task-id').value;
+            const newText = document.getElementById('edit-task-input').value.trim();
+            if(newText && id) {
+                const taskIndex = state.tasks.findIndex(t => t.id === id);
+                if(taskIndex > -1) {
+                    state.tasks[taskIndex].text = newText;
+                    renderApp();
+                    showToast('Tarea actualizada');
+                }
+            }
+            document.getElementById('modal-edit').classList.add('hidden');
+        });
+
         const attachQuadrantEvents = () => {
             const container = document.getElementById('quadrants-container');
             const newContainer = container.cloneNode(true);
@@ -525,7 +710,18 @@
                 if (e.target.closest('.btn-delete')) {
                     const id = e.target.closest('.btn-delete').dataset.id;
                     state.tasks = state.tasks.filter(t => t.id !== id);
+                    showToast('Tarea completada');
                     renderApp();
+                }
+                if (e.target.closest('.btn-edit')) {
+                    const id = e.target.closest('.btn-edit').dataset.id;
+                    const task = state.tasks.find(t => t.id === id);
+                    if(task) {
+                        document.getElementById('edit-task-id').value = task.id;
+                        document.getElementById('edit-task-input').value = task.text;
+                        document.getElementById('modal-edit').classList.remove('hidden');
+                        document.getElementById('edit-task-input').focus();
+                    }
                 }
                 if (e.target.closest('.btn-clear')) {
                     const qid = e.target.closest('.btn-clear').dataset.id;
@@ -554,21 +750,12 @@
                 }
             });
 
-            newContainer.addEventListener('change', (e) => {
-                if (e.target.classList.contains('mobile-move')) {
-                    const id = e.target.dataset.id;
-                    const newQ = e.target.value;
-                    const task = state.tasks.find(t => t.id === id);
-                    if (task) task.quadrant = newQ;
-                    renderApp();
-                }
-            });
-
+            // DRAG AND DROP - MOUSE (PC)
             newContainer.addEventListener('dragstart', e => {
                 if(e.target.classList.contains('task-item')){
                     state.draggedTaskId = e.target.dataset.id;
                     e.dataTransfer.effectAllowed = "move";
-                    e.target.classList.add('opacity-50');
+                    setTimeout(() => e.target.classList.add('opacity-50'), 0);
                 }
             });
 
@@ -607,33 +794,105 @@
 
                 const quadrant = e.target.closest('.quadrant');
                 if (quadrant) {
-                    const targetQuadrantId = quadrant.dataset.id;
-                    const draggedIndex = state.tasks.findIndex(t => t.id === state.draggedTaskId);
-                    
-                    if (draggedIndex > -1) {
-                        const draggedTask = { ...state.tasks[draggedIndex] };
+                    processDrop(quadrant.dataset.id);
+                }
+            });
 
-                        if (state.dragOverTaskId && state.dragOverTaskId !== state.draggedTaskId) {
-                            const targetIndex = state.tasks.findIndex(t => t.id === state.dragOverTaskId);
-                            const targetTask = state.tasks[targetIndex];
-                            
-                            state.tasks.splice(draggedIndex, 1);
-                            const newTargetIndex = state.tasks.findIndex(t => t.id === state.dragOverTaskId);
-                            
-                            draggedTask.quadrant = targetTask.quadrant;
-                            state.tasks.splice(newTargetIndex, 0, draggedTask);
-                        } else {
-                            draggedTask.quadrant = targetQuadrantId;
-                            state.tasks.splice(draggedIndex, 1);
-                            state.tasks.push(draggedTask);
+            // DRAG AND DROP - TOUCH (MOBILE/TABLET)
+            newContainer.addEventListener('touchstart', e => {
+                const handle = e.target.closest('.touch-drag-handle');
+                if(handle) {
+                    e.preventDefault(); 
+                    const taskItem = handle.closest('.task-item');
+                    state.draggedTaskId = taskItem.dataset.id;
+                    
+                    const rect = taskItem.getBoundingClientRect();
+                    touchClone = taskItem.cloneNode(true);
+                    touchClone.classList.add('touch-clone');
+                    touchClone.style.width = `${rect.width}px`;
+                    touchClone.style.top = `${rect.top}px`;
+                    touchClone.style.left = `${rect.left}px`;
+                    document.body.appendChild(touchClone);
+                    
+                    taskItem.style.opacity = '0.3';
+                    
+                    initialTouchY = e.touches[0].clientY - rect.top;
+                    initialTouchX = e.touches[0].clientX - rect.left;
+                }
+            }, {passive: false});
+
+            newContainer.addEventListener('touchmove', e => {
+                if(touchClone && state.draggedTaskId) {
+                    e.preventDefault(); 
+                    const touch = e.touches[0];
+                    touchClone.style.top = `${touch.clientY - initialTouchY}px`;
+                    touchClone.style.left = `${touch.clientX - initialTouchX}px`;
+
+                    touchClone.hidden = true;
+                    const elemBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                    touchClone.hidden = false;
+
+                    document.querySelectorAll('.quadrant').forEach(q => q.classList.remove('touch-over'));
+                    
+                    if(elemBelow) {
+                        const quadrant = elemBelow.closest('.quadrant');
+                        if(quadrant) {
+                            quadrant.classList.add('touch-over');
+                            state.dragOverTaskId = null; // Simplificado para mobile, solo mueve al cuadrante
                         }
                     }
                 }
-                
-                state.draggedTaskId = null;
-                state.dragOverTaskId = null;
-                renderApp();
+            }, {passive: false});
+
+            newContainer.addEventListener('touchend', e => {
+                if(touchClone && state.draggedTaskId) {
+                    e.preventDefault();
+                    
+                    touchClone.hidden = true;
+                    const touch = e.changedTouches[0];
+                    const elemBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                    touchClone.hidden = false;
+
+                    document.querySelectorAll('.quadrant').forEach(q => q.classList.remove('touch-over'));
+                    
+                    if(elemBelow) {
+                        const quadrant = elemBelow.closest('.quadrant');
+                        if(quadrant) {
+                            processDrop(quadrant.dataset.id);
+                        }
+                    }
+                    
+                    touchClone.remove();
+                    touchClone = null;
+                    state.draggedTaskId = null;
+                    state.dragOverTaskId = null;
+                    renderApp();
+                }
             });
+        };
+
+        const processDrop = (targetQuadrantId) => {
+            const draggedIndex = state.tasks.findIndex(t => t.id === state.draggedTaskId);
+            if (draggedIndex > -1) {
+                const draggedTask = { ...state.tasks[draggedIndex] };
+
+                if (state.dragOverTaskId && state.dragOverTaskId !== state.draggedTaskId) {
+                    const targetIndex = state.tasks.findIndex(t => t.id === state.dragOverTaskId);
+                    const targetTask = state.tasks[targetIndex];
+                    
+                    state.tasks.splice(draggedIndex, 1);
+                    const newTargetIndex = state.tasks.findIndex(t => t.id === state.dragOverTaskId);
+                    
+                    draggedTask.quadrant = targetTask.quadrant;
+                    state.tasks.splice(newTargetIndex, 0, draggedTask);
+                } else {
+                    draggedTask.quadrant = targetQuadrantId;
+                    state.tasks.splice(draggedIndex, 1);
+                    state.tasks.push(draggedTask);
+                }
+                dbSaveData();
+                renderApp();
+            }
         };
 
         document.getElementById('btn-open-sync').addEventListener('click', () => {
@@ -652,7 +911,7 @@
                 });
                 
                 peerInstance.on('error', (err) => {
-                    showToast("Error en conexión de red", "error");
+                    showToast("Error en red. Usa los archivos JSON.", "error");
                 });
             }
         });
@@ -749,9 +1008,7 @@
                 try {
                     const importedTasks = JSON.parse(event.target.result);
                     
-                    if (!Array.isArray(importedTasks)) {
-                        throw new Error("Formato inválido");
-                    }
+                    if (!Array.isArray(importedTasks)) throw new Error();
 
                     showCustomModal(
                         'Importar Archivo',
