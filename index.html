@@ -3,22 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Prioriza</title>
+    <title>IntegraMente - Productividad y Salud Mental</title>
     
-    <meta name="theme-color" content="#a855f7">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Prioriza">
+    <meta name="theme-color" content="#334155">
     
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+PHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIGZpbGw9IiNhODU1ZjciIHJ4PSIxMTIiLz48cGF0aCBkPSJNMzY4IDI0MCBMMjI0IDM4NCAxNDQgMzA0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjQ4IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4=">
-    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+PHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIGZpbGw9IiNhODU1ZjciIHJ4PSIxMTIiLz48cGF0aCBkPSJNMzY4IDI0MCBMMjI0IDM4NCAxNDQgMzA0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjQ4IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4=">
-    <link rel="manifest" href='data:application/manifest+json;charset=utf-8,{"name":"Prioriza","short_name":"Prioriza","start_url":".","display":"standalone","background_color":"#f8fafc","theme_color":"#a855f7","icons":[{"src":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+PHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIGZpbGw9IiNhODU1ZjciIHJ4PSIxMTIiLz48cGF0aCBkPSJNMzY4IDI0MCBMMjI0IDM4NCAxNDQgMzA0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjQ4IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4=","sizes":"192x192","type":"image/svg+xml"},{"src":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+PHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIGZpbGw9IiNhODU1ZjciIHJ4PSIxMTIiLz48cGF0aCBkPSJNMzY4IDI0MCBMMjI0IDM4NCAxNDQgMzA0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjQ4IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4=","sizes":"512x512","type":"image/svg+xml"}]}'>
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
@@ -29,121 +22,291 @@
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         
         .task-item {
-            -webkit-touch-callout: none !important;
-            -webkit-user-select: none !important;
-            -khtml-user-select: none !important;
-            -moz-user-select: none !important;
-            -ms-user-select: none !important;
-            user-select: none !important;
+            -webkit-touch-callout: none !important; -webkit-user-select: none !important;
+            -khtml-user-select: none !important; -moz-user-select: none !important;
+            -ms-user-select: none !important; user-select: none !important;
         }
-
-        .touch-drag-handle {
-            touch-action: none;
-            cursor: grab;
-        }
+        .touch-drag-handle { touch-action: none; cursor: grab; }
         .touch-drag-handle:active { cursor: grabbing; }
-        
-        .sortable-ghost { 
-            opacity: 1 !important; 
-            background-color: #eff6ff !important; 
-            border: 2px dashed #3b82f6 !important; 
-            box-shadow: none !important;
-            color: transparent !important;
-        }
-        .sortable-ghost * {
-            visibility: hidden;
-        }
-        
-        .sortable-fallback { 
-            transition: none !important; 
-            opacity: 1 !important; 
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3) !important; 
-            transform: scale(1.05) rotate(2deg) !important; 
-            z-index: 9999 !important; 
-            background: white !important; 
-            cursor: grabbing !important; 
-        }
+        .sortable-ghost { opacity: 1 !important; background-color: #eff6ff !important; border: 2px dashed #3b82f6 !important; box-shadow: none !important; color: transparent !important; }
+        .sortable-ghost * { visibility: hidden; }
+        .sortable-fallback { transition: none !important; opacity: 1 !important; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3) !important; transform: scale(1.05) rotate(2deg) !important; z-index: 9999 !important; background: white !important; cursor: grabbing !important; }
 
+        details > summary { list-style: none; }
+        details > summary::-webkit-details-marker { display: none; }
+        .pdf-wrap-text { word-wrap: break-word !important; overflow-wrap: break-word !important; white-space: pre-wrap !important; }
+        .pdf-row { page-break-inside: avoid !important; }
+        .text-wrap-fix { overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; white-space: pre-wrap; }
+        
         .hidden { display: none !important; }
     </style>
 </head>
-<body class="min-h-screen bg-slate-50 p-4 font-sans text-slate-800 relative">
+<body class="min-h-screen bg-slate-50 font-sans text-slate-800 relative">
 
     <div id="toast" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] px-6 py-3 rounded-full shadow-lg font-bold text-sm transition-all duration-300 ease-out text-white">
         <span id="toast-msg"></span>
     </div>
 
-    <div class="max-w-6xl mx-auto mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
-        <div class="text-center md:text-left">
-            <h1 class="text-3xl md:text-4xl font-black text-slate-800 tracking-tight uppercase flex items-center justify-center md:justify-start gap-2">
-                Prioriza <span class="text-red-600 text-3xl md:text-5xl">➔</span>
-            </h1>
-            <p class="text-slate-500 text-sm font-medium">Gestión inteligente de tu tiempo</p>
-        </div>
-
-        <div class="flex gap-2 sm:gap-3 flex-wrap justify-center">
-            <button id="btn-open-guide" class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 text-emerald-600 hover:bg-emerald-50 transition-colors" title="Guía y Consejos">
-                <i data-lucide="book-open" class="w-5 h-5"></i>
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-6xl mx-auto flex gap-2 p-3 overflow-x-auto custom-scrollbar">
+            <button id="nav-prioriza" class="flex-1 py-3 px-4 rounded-xl font-black bg-slate-800 text-white flex items-center justify-center gap-2 transition-all min-w-[150px]">
+                <i data-lucide="layout-grid" class="w-5 h-5"></i> Prioriza
             </button>
-
-            <button id="btn-open-routines" class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 text-purple-600 hover:bg-purple-50 transition-colors" title="Rutinas Diarias">
-                <i data-lucide="refresh-cw" class="w-5 h-5"></i>
-            </button>
-
-            <button id="btn-open-profile" class="px-4 py-2 bg-white rounded-2xl shadow-sm border border-slate-200 flex items-center gap-3 transition-all hover:shadow-md hover:border-slate-300" title="Ver mi Diagnóstico">
-                <div id="header-icon" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-lg">🌱</div>
-                <div class="flex-col items-start text-left hidden sm:flex">
-                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wide leading-none mb-1">Tu Estilo</span>
-                    <span id="header-archetype" class="text-sm font-black leading-none text-slate-700">Lienzo en Blanco</span>
-                </div>
-                
-                <div id="header-streak-divider" class="w-px h-6 bg-slate-200 mx-1 hidden sm:block"></div>
-                <div id="header-streak-container" class="flex items-center gap-1 text-orange-500 font-black text-lg">
-                    <i data-lucide="flame" class="w-5 h-5"></i> <span id="header-streak">0</span>
-                    <span id="header-timer" class="text-[10px] text-slate-400 font-mono ml-2 tracking-widest hidden sm:inline"></span>
-                </div>
-            </button>
-
-            <button id="btn-open-sync" class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 text-blue-600 hover:bg-blue-50 transition-colors" title="Sincronizar Dispositivos">
-                <i data-lucide="share-2" class="w-5 h-5"></i>
+            <button id="nav-menteclara" class="flex-1 py-3 px-4 rounded-xl font-bold bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-800 flex items-center justify-center gap-2 transition-all min-w-[150px]">
+                <i data-lucide="brain" class="w-5 h-5"></i> MenteClara
             </button>
         </div>
-    </div>
+    </nav>
 
-    <div class="max-w-6xl mx-auto mb-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div id="search-container" class="p-2.5 rounded-xl shadow-sm border bg-white border-slate-200 flex items-center gap-2 px-4 transition-colors">
-            <i data-lucide="search" id="search-icon" class="w-5 h-5 text-slate-400"></i>
-            <input type="text" id="search-input" placeholder="Buscar tareas..." class="w-full bg-transparent outline-none text-sm font-medium placeholder:font-normal" />
-            <button id="btn-clear-search" class="hidden text-slate-400 hover:text-slate-700">
-                <i data-lucide="x" class="w-4 h-4"></i>
-            </button>
-        </div>
-
-        <div class="lg:col-span-2 bg-white p-3 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-center">
-            <form id="add-task-form" class="flex flex-col md:flex-row gap-2 h-full">
-                <div class="flex-1 relative">
-                    <input type="text" id="new-task-input" placeholder="Escribe una nueva tarea aquí..." class="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:border-blue-500 outline-none transition-all text-sm" required autocomplete="off" />
-                    <p id="ai-suggestion" class="absolute -bottom-5 left-2 text-[10px] font-bold text-blue-600 hidden opacity-0 transition-opacity">💡 Sugerencia: ...</p>
+    <div id="view-prioriza" class="p-4 block">
+        <div class="max-w-6xl mx-auto mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-center md:text-left flex items-center gap-3">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-black text-slate-800 tracking-tight uppercase flex items-center justify-center md:justify-start gap-2">
+                        Prioriza <span class="text-red-600 text-3xl md:text-5xl">➔</span>
+                    </h1>
+                    <p class="text-slate-500 text-sm font-medium">Gestión inteligente de tu tiempo</p>
                 </div>
-                <select id="new-task-quadrant" class="px-3 py-2 border border-slate-200 rounded-lg outline-none bg-white cursor-pointer text-sm font-medium text-slate-700 min-w-[140px] mt-4 md:mt-0">
-                    <option value="q1">Hacer</option>
-                    <option value="q2">Planificar</option>
-                    <option value="q3">Delegar</option>
-                    <option value="q4">Eliminar</option>
-                </select>
-                <button type="submit" id="btn-add-task" class="px-6 py-2 bg-slate-800 text-white font-semibold rounded-lg hover:bg-slate-700 disabled:opacity-50 transition-colors flex items-center justify-center gap-2 text-sm mt-2 md:mt-0">
-                    <i data-lucide="plus" class="w-4 h-4"></i> Añadir
+            </div>
+
+            <div class="flex gap-2 sm:gap-3 flex-wrap justify-center">
+                <button id="btn-open-guide-prio" class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 text-emerald-600 hover:bg-emerald-50 transition-colors" title="Guía y Consejos">
+                    <i data-lucide="book-open" class="w-5 h-5"></i>
                 </button>
-            </form>
+                <button id="btn-open-routines" class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 text-purple-600 hover:bg-purple-50 transition-colors" title="Rutinas Diarias">
+                    <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+                </button>
+                <button id="btn-open-profile" class="px-4 py-2 bg-white rounded-2xl shadow-sm border border-slate-200 flex items-center gap-3 transition-all hover:shadow-md hover:border-slate-300" title="Ver mi Diagnóstico">
+                    <div id="header-icon" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-lg">🌱</div>
+                    <div class="flex-col items-start text-left hidden sm:flex">
+                        <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wide leading-none mb-1">Tu Estilo</span>
+                        <span id="header-archetype" class="text-sm font-black leading-none text-slate-700">Lienzo en Blanco</span>
+                    </div>
+                    <div id="header-streak-divider" class="w-px h-6 bg-slate-200 mx-1 hidden sm:block"></div>
+                    <div id="header-streak-container" class="flex items-center gap-1 text-orange-500 font-black text-lg">
+                        <i data-lucide="flame" class="w-5 h-5"></i> <span id="header-streak">0</span>
+                        <span id="header-timer" class="text-[10px] text-slate-400 font-mono ml-2 tracking-widest hidden sm:inline"></span>
+                    </div>
+                </button>
+                <button class="btn-open-sync bg-white p-3 rounded-2xl shadow-sm border border-slate-200 text-blue-600 hover:bg-blue-50 transition-colors" title="Sincronizar Dispositivos">
+                    <i data-lucide="share-2" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="max-w-6xl mx-auto mb-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div id="search-container" class="p-2.5 rounded-xl shadow-sm border bg-white border-slate-200 flex items-center gap-2 px-4 transition-colors">
+                <i data-lucide="search" id="search-icon" class="w-5 h-5 text-slate-400"></i>
+                <input type="text" id="search-input" placeholder="Buscar tareas..." class="w-full bg-transparent outline-none text-sm font-medium placeholder:font-normal" />
+                <button id="btn-clear-search" class="hidden text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+
+            <div class="lg:col-span-2 bg-white p-3 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-center">
+                <form id="add-task-form" class="flex flex-col md:flex-row gap-2 h-full">
+                    <div class="flex-1 relative">
+                        <input type="text" id="new-task-input" placeholder="Escribe una nueva tarea aquí..." class="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-lg focus:border-blue-500 outline-none transition-all text-sm" required autocomplete="off" />
+                        <p id="ai-suggestion" class="absolute -bottom-5 left-2 text-[10px] font-bold text-blue-600 hidden opacity-0 transition-opacity">💡 Sugerencia: ...</p>
+                    </div>
+                    <select id="new-task-quadrant" class="px-3 py-2 border border-slate-200 rounded-lg outline-none bg-white cursor-pointer text-sm font-medium text-slate-700 min-w-[140px] mt-4 md:mt-0">
+                        <option value="q1">Hacer</option>
+                        <option value="q2">Planificar</option>
+                        <option value="q3">Delegar</option>
+                        <option value="q4">Eliminar</option>
+                    </select>
+                    <button type="submit" id="btn-add-task" class="px-6 py-2 bg-slate-800 text-white font-semibold rounded-lg hover:bg-slate-700 disabled:opacity-50 transition-colors flex items-center justify-center gap-2 text-sm mt-2 md:mt-0">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Añadir
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="max-w-6xl mx-auto bg-[#6a9bd8] p-3 md:p-5 rounded-2xl shadow-xl relative">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5" id="quadrants-container"></div>
         </div>
     </div>
 
-    <div class="max-w-6xl mx-auto bg-[#6a9bd8] p-3 md:p-5 rounded-2xl shadow-xl relative">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5" id="quadrants-container">
+    <div id="view-menteclara" class="p-4 hidden">
+        <div class="max-w-6xl mx-auto mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-center md:text-left flex items-center gap-3">
+                <div class="w-12 h-12 bg-sky-500 text-white rounded-2xl flex items-center justify-center shadow-lg min-w-[48px]">
+                    <i data-lucide="brain" class="w-7 h-7"></i>
+                </div>
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-black text-slate-800 tracking-tight uppercase">
+                        Mente<span class="text-sky-500">Clara</span>
+                    </h1>
+                    <p class="text-slate-500 text-sm font-medium">Distorsiones Cognitivas y ABC</p>
+                </div>
+            </div>
+
+            <div class="flex gap-2 sm:gap-3 flex-wrap justify-center">
+                <button id="btn-open-guide-mente" class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 text-emerald-600 hover:bg-emerald-50 transition-colors" title="Guía Teórica">
+                    <i data-lucide="book-open" class="w-5 h-5"></i>
+                </button>
+                <button class="btn-open-sync bg-white p-3 rounded-2xl shadow-sm border border-slate-200 text-purple-600 hover:bg-purple-50 transition-colors" title="Exportar y Sincronizar">
+                    <i data-lucide="share-2" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+            
+            <div class="lg:col-span-1 sticky top-24">
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+                        <h2 class="text-base font-black text-slate-800 flex items-center gap-2">
+                            <i data-lucide="plus-circle" class="w-5 h-5 text-sky-500"></i> Nuevo Registro
+                        </h2>
+                    </div>
+
+                    <div class="bg-slate-100 p-1 rounded-xl flex mb-5 shadow-inner">
+                        <button id="toggle-dist" class="flex-1 py-2 text-xs font-black rounded-lg bg-white text-sky-600 shadow-sm transition-all">Distorsión</button>
+                        <button id="toggle-abc" class="flex-1 py-2 text-xs font-bold rounded-lg text-slate-500 hover:text-slate-700 transition-all">Modelo ABC</button>
+                    </div>
+                    
+                    <form id="form-dist" class="flex flex-col gap-4">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Fecha y Hora</label>
+                            <input type="datetime-local" id="new-dist-date" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-sky-500 outline-none text-sm text-slate-700" required>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Tipo de Distorsión</label>
+                            <select id="new-type" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-sky-500 outline-none cursor-pointer text-sm font-medium text-slate-700">
+                                <option value="personalizacion">Personalización</option>
+                                <option value="sobregeneralizacion">Sobregeneralización</option>
+                                <option value="abstraccion">Abstracción Selectiva</option>
+                                <option value="dicotomico">Pensamiento Dicotómico</option>
+                                <option value="interpretacion">Interpretación del Pensamiento</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Ejemplo del pensamiento</label>
+                            <textarea id="new-ejemplo" placeholder='Ej. "Si mi pareja está enojada es porque hice algo mal..."' class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-sky-500 outline-none text-sm resize-none h-16" required></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Consecuencias experimentadas</label>
+                            <textarea id="new-consecuencias" placeholder="Ej. Ansiedad, estrés, peleas..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-sky-500 outline-none text-sm resize-none h-12" required></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Beneficios al cambiarlo</label>
+                            <textarea id="new-beneficios" placeholder="Ej. Mayor paz mental, mejor comunicación..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-sky-500 outline-none text-sm resize-none h-12" required></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-3 bg-slate-800 text-white font-bold rounded-xl hover:bg-slate-700 transition-colors flex items-center justify-center gap-2 text-sm mt-2 shadow-md">
+                            <i data-lucide="save" class="w-4 h-4"></i> Guardar Distorsión
+                        </button>
+                    </form>
+
+                    <form id="form-abc" class="hidden flex-col gap-4">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Fecha y Hora</label>
+                            <input type="datetime-local" id="new-abc-date" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-sky-500 outline-none text-sm text-slate-700" required>
+                        </div>
+                        <div class="bg-blue-50/50 p-3 rounded-xl border border-blue-100">
+                            <label class="block text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">A: Situación</label>
+                            <textarea id="abc-a" placeholder="Situación que generó malestar..." class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg focus:border-blue-500 outline-none text-sm resize-none h-12" required></textarea>
+                        </div>
+                        <div class="bg-red-50/50 p-3 rounded-xl border border-red-100 flex flex-col gap-2">
+                            <div>
+                                <label class="block text-[10px] font-black text-red-600 uppercase tracking-widest mb-1">B: Pensamiento</label>
+                                <textarea id="abc-b-pen" placeholder="¿Qué se te vino a la mente?" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg focus:border-red-500 outline-none text-sm resize-none h-12" required></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-red-500/80 uppercase tracking-widest mb-1">Pruebas</label>
+                                <textarea id="abc-b-pru" placeholder="¿Qué evidencias tienes?" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg focus:border-red-500 outline-none text-sm resize-none h-10"></textarea>
+                            </div>
+                        </div>
+                        <div class="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100 flex flex-col gap-2">
+                            <label class="block text-[10px] font-black text-emerald-600 uppercase tracking-widest">C: Manifestaciones</label>
+                            <textarea id="abc-c-emo" placeholder="Emocionales (Ej. Tristeza)" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg focus:border-emerald-500 outline-none text-xs resize-none h-10" required></textarea>
+                            <textarea id="abc-c-con" placeholder="Conductuales (Ej. Llorar)" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg focus:border-emerald-500 outline-none text-xs resize-none h-10"></textarea>
+                            <textarea id="abc-c-fis" placeholder="Físicas (Ej. Dolor pecho)" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg focus:border-emerald-500 outline-none text-xs resize-none h-10"></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-3 bg-slate-800 text-white font-bold rounded-xl hover:bg-slate-700 transition-colors flex items-center justify-center gap-2 text-sm mt-2 shadow-md">
+                            <i data-lucide="save" class="w-4 h-4"></i> Guardar ABC
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2">
+                <div class="flex flex-col sm:flex-row items-center justify-between mb-4 gap-3">
+                    <div class="flex gap-1 bg-slate-200 p-1 rounded-xl shadow-inner w-full sm:w-auto">
+                        <button id="filter-all" class="flex-1 sm:flex-none px-4 py-1.5 text-xs font-bold rounded-lg bg-white text-slate-800 shadow-sm transition-all filter-btn" data-filter="all">Todos</button>
+                        <button id="filter-dist" class="flex-1 sm:flex-none px-4 py-1.5 text-xs font-bold rounded-lg text-slate-500 hover:text-slate-700 transition-all filter-btn" data-filter="dist">Distorsiones</button>
+                        <button id="filter-abc" class="flex-1 sm:flex-none px-4 py-1.5 text-xs font-bold rounded-lg text-slate-500 hover:text-slate-700 transition-all filter-btn" data-filter="abc">ABC</button>
+                    </div>
+                    <div class="flex gap-2">
+                        <button id="btn-collapse-all" class="flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-slate-800 bg-white border border-slate-200 px-3 py-1.5 rounded-lg shadow-sm transition-colors">
+                            <i data-lucide="fold-vertical" class="w-4 h-4"></i> Contraer
+                        </button>
+                        <button id="btn-expand-all" class="flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-slate-800 bg-white border border-slate-200 px-3 py-1.5 rounded-lg shadow-sm transition-colors">
+                            <i data-lucide="unfold-vertical" class="w-4 h-4"></i> Expandir
+                        </button>
+                    </div>
+                </div>
+                <div class="space-y-3" id="entries-container"></div>
+            </div>
         </div>
     </div>
 
-    <div id="modal-confirm" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-[60] p-4 transition-opacity">
+    <div id="modal-sync" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-opacity">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-fadeIn max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <button id="btn-close-sync" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-100 rounded-full p-1 transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <h2 class="text-xl font-black text-slate-800 mb-1 flex items-center gap-2">
+                <i data-lucide="share-2" class="text-indigo-500 w-5 h-5"></i> Sincronización Global
+            </h2>
+            <p class="text-xs text-slate-500 mb-6">Respalda tus tareas (Prioriza) y registros cognitivos (MenteClara) al mismo tiempo.</p>
+
+            <div class="mb-5 bg-red-50 border border-red-100 rounded-2xl p-4">
+                <h3 class="font-bold text-sm text-red-800 mb-2 flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4"></i> Exportar Registros a PDF</h3>
+                <p class="text-[10px] text-red-600 mb-3">Genera un documento formal sólo con los datos psicológicos (MenteClara).</p>
+                <button id="btn-export-pdf" class="w-full flex items-center justify-center gap-2 py-2.5 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors font-bold text-sm shadow-sm">
+                    <i data-lucide="download" class="w-4 h-4"></i> Descargar PDF MenteClara
+                </button>
+            </div>
+
+            <div class="mb-5">
+                <h3 class="font-bold text-sm text-slate-700 mb-3 flex items-center gap-2"><i data-lucide="file-json" class="w-4 h-4 text-orange-500"></i> Respaldo Completo (JSON)</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <button id="btn-export-json" class="flex items-center justify-center gap-2 p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-sm">
+                        <i data-lucide="download" class="w-4 h-4 text-slate-600"></i><span class="text-xs font-bold text-slate-700">Exportar Todo</span>
+                    </button>
+                    <button id="btn-import-json" class="flex items-center justify-center gap-2 p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-sm">
+                        <i data-lucide="upload" class="w-4 h-4 text-slate-600"></i><span class="text-xs font-bold text-slate-700">Importar Todo</span>
+                    </button>
+                    <input type="file" id="file-input" accept=".json" class="hidden" />
+                </div>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                <h3 class="font-bold text-sm text-slate-700 mb-3 flex items-center gap-2"><i data-lucide="wifi" class="w-4 h-4 text-indigo-500"></i> Conexión P2P (Ambas Apps)</h3>
+                <div id="sync-connected" class="hidden text-center">
+                    <div class="text-green-600 font-bold text-sm mb-3 flex items-center justify-center gap-1"><i data-lucide="check" class="w-4 h-4"></i> ¡Dispositivos conectados!</div>
+                    <div class="flex flex-col gap-2">
+                        <button id="btn-sync-merge" class="w-full bg-indigo-600 text-white font-bold py-2 rounded-xl text-xs hover:bg-indigo-700">Enviar Todo (Fusionar)</button>
+                        <button id="btn-sync-overwrite" class="w-full bg-slate-200 text-slate-700 font-bold py-2 rounded-xl text-xs hover:bg-slate-300">Enviar Todo (Sobrescribir)</button>
+                    </div>
+                </div>
+                <div id="sync-setup" class="space-y-3">
+                    <div class="p-3 bg-white rounded-xl shadow-sm border border-slate-100">
+                        <p class="text-[10px] text-slate-500 mb-1">Tu Código de Enlace:</p>
+                        <div class="flex justify-between items-center">
+                            <p id="my-peer-id" class="text-lg font-black tracking-widest text-slate-800">Cargando...</p>
+                            <button id="btn-copy-id" class="p-1.5 bg-slate-50 rounded-md hover:bg-slate-100"><i data-lucide="copy" class="w-4 h-4 text-slate-600"></i></button>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" id="connect-id-input" placeholder="Ej. A1B2" class="w-full text-sm p-2 border border-slate-200 rounded-xl font-mono focus:border-indigo-500 outline-none uppercase tracking-widest" maxlength="4" />
+                        <button id="btn-connect" class="px-4 bg-slate-800 text-white font-bold rounded-xl hover:bg-slate-700 text-sm">Unir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-confirm" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-[70] p-4 transition-opacity">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center animate-fadeIn">
             <h3 id="confirm-title" class="text-xl font-black text-slate-800 mb-2"></h3>
             <p id="confirm-msg" class="text-slate-500 text-sm mb-6"></p>
@@ -151,92 +314,65 @@
         </div>
     </div>
 
-    <div id="modal-edit" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] p-4 transition-opacity">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl animate-fadeIn">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-black text-slate-800 flex items-center gap-2">
-                    <i data-lucide="edit-3" class="w-5 h-5 text-blue-500"></i> Editar Tarea
-                </h3>
-                <button id="btn-close-edit" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
+    <div id="modal-intro" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-[60] p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl animate-fadeIn">
+            <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 shadow-inner mx-auto">
+                <i data-lucide="info" class="w-8 h-8"></i>
             </div>
-            <input type="hidden" id="edit-task-id" />
-            <textarea id="edit-task-input" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:border-blue-500 outline-none text-sm mb-4 resize-none h-24" placeholder="Modifica tu tarea..."></textarea>
-            
-            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Mover a otro cuadrante:</label>
-            <select id="edit-task-quadrant" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg outline-none cursor-pointer text-sm font-medium text-slate-700 mb-6 focus:border-blue-500">
-                <option value="q1">Hacer (Urgente e Importante)</option>
-                <option value="q2">Planificar (Importante, No Urgente)</option>
-                <option value="q3">Delegar (Urgente, No Importante)</option>
-                <option value="q4">Eliminar (Ni Urgente, Ni Importante)</option>
-            </select>
-
-            <button id="btn-save-edit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition-colors">
-                Guardar Cambios
+            <h2 class="text-2xl font-black text-center text-slate-800 mb-4">Bienvenido a IntegraMente</h2>
+            <p class="text-slate-600 text-sm text-center mb-6 leading-relaxed">
+                Aquí tienes <b>Prioriza</b> (Gestión de tiempo con Matriz de Eisenhower) y <b>MenteClara</b> (Gestión emocional con TCC). 
+                Tus datos se guardan de forma segura y privada en tu navegador.
+            </p>
+            <button id="btn-close-intro" class="w-full bg-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-700 transition-colors">
+                Comenzar a usar
             </button>
         </div>
     </div>
 
-    <div id="modal-routines" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-opacity">
+    <div id="modal-routines" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] p-4 transition-opacity">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-fadeIn max-h-[90vh] overflow-y-auto custom-scrollbar">
-            <button id="btn-close-routines" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-100 rounded-full p-1 transition-colors">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-            
-            <h2 class="text-xl font-black text-slate-800 mb-1 flex items-center gap-2">
-                <i data-lucide="refresh-cw" class="text-purple-500 w-5 h-5"></i> Rutinas Diarias
-            </h2>
+            <button id="btn-close-routines" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-100 rounded-full p-1 transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <h2 class="text-xl font-black text-slate-800 mb-1 flex items-center gap-2"><i data-lucide="refresh-cw" class="text-purple-500 w-5 h-5"></i> Rutinas Diarias</h2>
             <p class="text-xs text-slate-500 mb-6">Añade tareas que reaparecerán cada 24 hrs en tu matriz automáticamente.</p>
 
             <form id="add-routine-form" class="flex flex-col gap-2 mb-4 p-4 bg-purple-50 rounded-xl border border-purple-100">
-                <input type="text" id="new-routine-input" placeholder="Ej. Dormir 8 horas, Hacer ejercicio..." class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg focus:border-purple-500 outline-none text-sm" required autocomplete="off" />
+                <input type="text" id="new-routine-input" placeholder="Ej. Dormir 8 horas..." class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg focus:border-purple-500 outline-none text-sm" required autocomplete="off" />
                 <div class="flex gap-2">
                     <select id="new-routine-quadrant" class="flex-1 px-3 py-2 border border-slate-200 rounded-lg outline-none bg-white text-sm font-medium text-slate-700">
-                        <option value="q1">Hacer</option>
-                        <option value="q2">Planificar</option>
-                        <option value="q3">Delegar</option>
-                        <option value="q4">Eliminar</option>
+                        <option value="q1">Hacer</option><option value="q2">Planificar</option><option value="q3">Delegar</option><option value="q4">Eliminar</option>
                     </select>
-                    <button type="submit" class="px-4 py-2 bg-purple-600 text-white font-bold rounded-lg hover:bg-purple-700 text-sm transition-colors">
-                        Añadir
-                    </button>
+                    <button type="submit" class="px-4 py-2 bg-purple-600 text-white font-bold rounded-lg hover:bg-purple-700 text-sm transition-colors">Añadir</button>
                 </div>
             </form>
 
             <div class="mb-6 p-4 bg-slate-50 rounded-xl border border-slate-200">
                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Hora de Reinicio de 24 hrs</label>
-                <p class="text-[10px] text-slate-400 mb-2">A esta hora se inyectan las rutinas y se comprueba si usaste la app para tu racha.</p>
                 <input type="time" id="reset-time-input" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg focus:border-blue-500 outline-none text-sm font-mono cursor-pointer" />
             </div>
 
             <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Tus Rutinas Actuales</h3>
-            <div id="routines-list" class="space-y-2">
-            </div>
+            <div id="routines-list" class="space-y-2"></div>
         </div>
     </div>
 
-    <div id="modal-profile" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-opacity">
+    <div id="modal-profile" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-[60] p-4 transition-opacity">
         <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl overflow-hidden flex flex-col animate-fadeIn">
             <div id="profile-header-bg" class="pt-8 pb-12 px-6 flex flex-col items-center justify-center text-center relative">
-                <button id="btn-close-profile" class="absolute top-4 right-4 text-black/30 hover:text-black/60 bg-white/30 backdrop-blur-md rounded-full p-1 transition-colors">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
+                <button id="btn-close-profile" class="absolute top-4 right-4 text-black/30 hover:text-black/60 bg-white/30 backdrop-blur-md rounded-full p-1 transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
                 <div id="profile-icon" class="w-24 h-24 bg-white border-4 border-white/50 rounded-full shadow-lg flex items-center justify-center text-5xl mb-4"></div>
                 <h2 id="profile-name" class="text-3xl font-black tracking-tight"></h2>
                 <p id="profile-desc" class="text-sm opacity-80 font-semibold mt-1 max-w-[250px] leading-snug"></p>
             </div>
-
             <div class="p-6 bg-white rounded-t-3xl -mt-6 relative z-10 flex-1">
                 <div class="bg-slate-50 border border-slate-100 rounded-2xl p-5 mb-4 relative overflow-hidden">
                     <i data-lucide="brain-circuit" class="absolute -bottom-2 -right-2 w-16 h-16 text-slate-200 opacity-50"></i>
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 relative z-10">Análisis</h3>
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 relative z-10">Análisis Prioriza</h3>
                     <p id="profile-advice" class="text-sm font-medium text-slate-700 relative z-10 leading-relaxed"></p>
                 </div>
-
                 <div id="profile-streak-container" class="flex items-center justify-between bg-orange-50 border border-orange-100 p-4 rounded-2xl mb-4">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm">
-                            <i data-lucide="flame" class="w-5 h-5 text-orange-500"></i>
-                        </div>
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm"><i data-lucide="flame" class="w-5 h-5 text-orange-500"></i></div>
                         <div>
                             <p class="text-xs font-bold text-orange-400 uppercase tracking-widest">Días Seguidos</p>
                             <p class="text-lg font-black text-orange-600"><span id="profile-streak"></span> Días</p>
@@ -247,10 +383,9 @@
                         <div id="profile-rank" class="text-sm font-bold flex items-center gap-1 justify-end"></div>
                     </div>
                 </div>
-
                 <div class="flex items-center justify-between bg-white border border-slate-200 p-3 rounded-xl">
                     <div class="flex flex-col">
-                        <span class="text-sm font-bold text-slate-700">Sistema de Rachas y Reloj</span>
+                        <span class="text-sm font-bold text-slate-700">Sistema de Rachas</span>
                         <span class="text-[10px] text-slate-400 font-medium">Motivación diaria visible</span>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer">
@@ -258,172 +393,147 @@
                         <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
                     </label>
                 </div>
-
             </div>
         </div>
     </div>
 
-    <div id="modal-guide" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-opacity">
-        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 md:p-8 shadow-2xl relative animate-fadeIn max-h-[90vh] overflow-y-auto custom-scrollbar">
-            <button id="btn-close-guide" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-100 rounded-full p-1 transition-colors">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-            
-            <div class="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
-                <div class="p-3 bg-emerald-100 text-emerald-600 rounded-xl">
-                    <i data-lucide="book-open" class="w-6 h-6"></i>
-                </div>
-                <div>
-                    <h2 class="text-2xl font-black text-slate-800">Guía de Organización</h2>
-                    <p class="text-sm text-slate-500 font-medium">¿Cómo usar la Matriz de Eisenhower?</p>
-                </div>
+    <div id="modal-edit-task" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] p-4 transition-opacity">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl animate-fadeIn">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="edit-3" class="w-5 h-5 text-blue-500"></i> Editar Tarea</h3>
+                <button id="btn-close-edit-task" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
+            <input type="hidden" id="edit-task-id" />
+            <textarea id="edit-task-input" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:border-blue-500 outline-none text-sm mb-4 resize-none h-24" placeholder="Modifica tu tarea..."></textarea>
+            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Mover a otro cuadrante:</label>
+            <select id="edit-task-quadrant" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg outline-none cursor-pointer text-sm font-medium text-slate-700 mb-6">
+                <option value="q1">Hacer (Urgente e Importante)</option>
+                <option value="q2">Planificar (Importante, No Urgente)</option>
+                <option value="q3">Delegar (Urgente, No Importante)</option>
+                <option value="q4">Eliminar (Ni Urgente, Ni Importante)</option>
+            </select>
+            <button id="btn-save-edit-task" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition-colors">Guardar Cambios</button>
+        </div>
+    </div>
 
+    <div id="modal-guide-prio" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] p-4 transition-opacity">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 md:p-8 shadow-2xl relative animate-fadeIn max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <button id="btn-close-guide-prio" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-100 rounded-full p-1 transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <div class="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
+                <div class="p-3 bg-emerald-100 text-emerald-600 rounded-xl"><i data-lucide="book-open" class="w-6 h-6"></i></div>
+                <div><h2 class="text-2xl font-black text-slate-800">Guía: Matriz de Eisenhower</h2><p class="text-sm text-slate-500 font-medium">¿Cómo organizar tareas?</p></div>
+            </div>
             <div class="space-y-6">
-                <p class="text-sm text-slate-600 leading-relaxed">La matriz divide tus tareas según su <b>Urgencia</b> (requiere atención ya) e <b>Importancia</b> (aporta a tus metas a largo plazo).</p>
-                
+                <p class="text-sm text-slate-600 leading-relaxed">Divide tareas según <b>Urgencia</b> (requiere atención ya) e <b>Importancia</b> (aporta a metas a largo plazo).</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="bg-[#ccff99] p-4 rounded-xl border border-black/5">
                         <h3 class="font-bold text-green-900 flex items-center gap-2 mb-2"><i data-lucide="alert-circle" class="w-4 h-4 text-red-600"></i> Cuadrante 1: HACER</h3>
-                        <p class="text-xs text-green-800 mb-2 font-semibold">Urgente e Importante</p>
-                        <p class="text-sm text-green-900/80 mb-2">Crisis o problemas inminentes. Hazlo tú mismo, ahora.</p>
-                        <ul class="text-xs list-disc pl-4 text-green-900/70">
-                            <li>Pagar tarjeta que vence hoy</li>
-                            <li>Arreglar falla en el trabajo</li>
-                            <li>Emergencia médica</li>
-                        </ul>
+                        <p class="text-sm text-green-900/80 mb-2">Crisis o problemas inminentes. (Ej. Pagar algo hoy)</p>
                     </div>
-
                     <div class="bg-[#d9f2b3] p-4 rounded-xl border border-black/5">
                         <h3 class="font-bold text-green-900 flex items-center gap-2 mb-2"><i data-lucide="calendar" class="w-4 h-4 text-pink-500"></i> Cuadrante 2: PLANIFICAR</h3>
-                        <p class="text-xs text-green-800 mb-2 font-semibold">No Urgente, pero Importante</p>
-                        <p class="text-sm text-green-900/80 mb-2">El cuadrante del éxito. Metas a largo plazo y <b>descanso real</b>.</p>
-                        <ul class="text-xs list-disc pl-4 text-green-900/70">
-                            <li>Hacer ejercicio y dormir bien</li>
-                            <li>Aprender una habilidad nueva</li>
-                            <li>Planificación financiera</li>
-                        </ul>
+                        <p class="text-sm text-green-900/80 mb-2">Metas a largo plazo y descanso. (Ej. Ejercicio, estudiar)</p>
                     </div>
-
                     <div class="bg-[#ffe699] p-4 rounded-xl border border-black/5">
                         <h3 class="font-bold text-yellow-900 flex items-center gap-2 mb-2"><i data-lucide="users" class="w-4 h-4 text-purple-500"></i> Cuadrante 3: DELEGAR</h3>
-                        <p class="text-xs text-yellow-800 mb-2 font-semibold">Urgente, pero No Importante</p>
-                        <p class="text-sm text-yellow-900/80 mb-2">Interrupciones y peticiones de otros. Intenta delegar o automatizar.</p>
-                        <ul class="text-xs list-disc pl-4 text-yellow-900/70">
-                            <li>Responder correos rutinarios</li>
-                            <li>Llamadas sin objetivo claro</li>
-                            <li>Favores de compañeros</li>
-                        </ul>
+                        <p class="text-sm text-yellow-900/80 mb-2">Urgente, pero no importante. Peticiones de otros.</p>
                     </div>
-
                     <div class="bg-[#ffcc66] p-4 rounded-xl border border-black/5">
                         <h3 class="font-bold text-yellow-900 flex items-center gap-2 mb-2"><i data-lucide="trash-2" class="w-4 h-4 text-cyan-500"></i> Cuadrante 4: ELIMINAR</h3>
-                        <p class="text-xs text-yellow-800 mb-2 font-semibold">Ni Urgente, Ni Importante</p>
-                        <p class="text-sm text-yellow-900/80 mb-2">Distracciones vacías. Bórralas sin culpa. <i>(El ocio consciente va en Planificar)</i>.</p>
-                        <ul class="text-xs list-disc pl-4 text-yellow-900/70">
-                            <li>Scrollear sin fin en redes</li>
-                            <li>Revisar chismes o drama</li>
-                            <li>Preocupaciones fuera de control</li>
-                        </ul>
+                        <p class="text-sm text-yellow-900/80 mb-2">Ni urgente, ni importante. Distracciones vacías.</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="modal-intro" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl animate-fadeIn">
-            <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 shadow-inner mx-auto">
-                <i data-lucide="info" class="w-8 h-8"></i>
+    <div id="modal-edit-dist" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] p-4 transition-opacity">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl animate-fadeIn">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="edit-3" class="w-5 h-5 text-sky-500"></i> Editar Distorsión</h3>
+                <button id="btn-close-edit-dist" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
-            <h2 class="text-2xl font-black text-center text-slate-800 mb-4">Domina tu tiempo</h2>
-            <p class="text-slate-600 text-sm text-center mb-6 leading-relaxed">
-                Tus tareas se guardan de forma segura en tu navegador. Interactúa con la app a diario para mantener tu racha y descubre qué tipo de organizador eres.
-            </p>
-            <button id="btn-close-intro" class="w-full bg-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-700 transition-colors">
-                Comenzar a organizar
-            </button>
+            <input type="hidden" id="edit-dist-id" />
+            <input type="datetime-local" id="edit-dist-date" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg outline-none text-sm mb-3">
+            <select id="edit-dist-type" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg outline-none cursor-pointer text-sm font-medium mb-3">
+                <option value="personalizacion">Personalización</option><option value="sobregeneralizacion">Sobregeneralización</option>
+                <option value="abstraccion">Abstracción Selectiva</option><option value="dicotomico">Pensamiento Dicotómico</option>
+                <option value="interpretacion">Interpretación del Pensamiento</option>
+            </select>
+            <textarea id="edit-dist-ejemplo" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg outline-none text-sm mb-3 h-16 resize-none" placeholder="Ejemplo..."></textarea>
+            <textarea id="edit-dist-consecuencias" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg outline-none text-sm mb-3 h-16 resize-none" placeholder="Consecuencias..."></textarea>
+            <textarea id="edit-dist-beneficios" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg outline-none text-sm mb-4 h-16 resize-none" placeholder="Beneficios..."></textarea>
+            <button id="btn-save-edit-dist" class="w-full bg-sky-600 text-white font-bold py-3 rounded-xl hover:bg-sky-700 transition-colors">Guardar Cambios</button>
         </div>
     </div>
 
-    <div id="modal-sync" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-fadeIn">
-            <button id="btn-close-sync" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-100 rounded-full p-1 transition-colors">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-            
-            <h2 class="text-xl font-black text-slate-800 mb-1 flex items-center gap-2">
-                <i data-lucide="arrow-right-left" class="text-purple-500 w-5 h-5"></i> Sincronizar Datos
-            </h2>
-            <p class="text-xs text-slate-500 mb-6">Conecta tus dispositivos para enviar o recibir tus tareas y configuración.</p>
-
-            <div class="mb-6 bg-slate-50 border border-slate-200 rounded-2xl p-5">
-                <h3 class="font-bold text-sm text-slate-700 mb-4 flex items-center gap-2">
-                    <i data-lucide="share-2" class="w-4 h-4 text-purple-500"></i> Conexión Inalámbrica
-                </h3>
-                
-                <div id="sync-connected" class="hidden text-center">
-                    <div class="text-green-600 font-bold text-sm mb-3 flex items-center justify-center gap-1">
-                        <i data-lucide="check" class="w-4 h-4"></i> ¡Dispositivos conectados!
-                    </div>
-                    <p class="text-xs text-slate-500 mb-4">¿Qué información deseas enviar desde este equipo al otro?</p>
-                    <div class="flex flex-col gap-2">
-                        <button id="btn-sync-merge" class="w-full bg-purple-600 text-white font-bold py-2 rounded-xl text-sm transition-colors hover:bg-purple-700">
-                            Enviar y Combinar (No borra)
-                        </button>
-                        <button id="btn-sync-overwrite" class="w-full bg-slate-200 text-slate-700 font-bold py-2 rounded-xl text-sm transition-colors hover:bg-slate-300">
-                            Enviar y Reemplazar todo
-                        </button>
-                    </div>
-                </div>
-
-                <div id="sync-setup" class="space-y-4">
-                    <div class="p-3 bg-blue-50 border border-blue-100 rounded-xl">
-                        <p class="text-xs font-bold text-blue-800 mb-1">Paso 1: Tu Código</p>
-                        <p class="text-[10px] text-blue-600 mb-2">Ingresa este código en tu otro equipo para enlazarlos:</p>
-                        <div class="flex justify-between items-center bg-white p-2 rounded-lg shadow-sm">
-                            <p id="my-peer-id" class="text-xl font-black tracking-widest text-slate-800">Cargando...</p>
-                            <button id="btn-copy-id" class="p-1.5 bg-slate-50 rounded-md hover:bg-slate-100">
-                                <i data-lucide="copy" class="w-4 h-4 text-slate-600"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="p-3 bg-purple-50 border border-purple-100 rounded-xl">
-                        <p class="text-xs font-bold text-purple-800 mb-1">Paso 2: Conectar</p>
-                        <p class="text-[10px] text-purple-600 mb-2">O ingresa aquí el código que te muestra tu otro equipo:</p>
-                        <div class="flex gap-2">
-                            <input type="text" id="connect-id-input" placeholder="Ej. A1B2" class="w-full text-sm p-2 border border-white rounded-lg font-mono focus:border-purple-500 outline-none uppercase tracking-widest shadow-sm" maxlength="4" />
-                            <button id="btn-connect" class="px-4 bg-purple-600 text-white font-bold rounded-lg hover:bg-purple-700 disabled:opacity-50 text-sm transition-colors shadow-sm">
-                                Unir
-                            </button>
-                        </div>
-                    </div>
-                </div>
+    <div id="modal-edit-abc" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] p-4 transition-opacity">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl animate-fadeIn">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-black text-slate-800 flex items-center gap-2"><i data-lucide="edit-3" class="w-5 h-5 text-sky-500"></i> Editar ABC</h3>
+                <button id="btn-close-edit-abc" class="text-slate-400 hover:text-slate-700"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
+            <input type="hidden" id="edit-abc-id" />
+            <div class="space-y-3 mb-4 max-h-[60vh] overflow-y-auto custom-scrollbar pr-2">
+                <input type="datetime-local" id="edit-abc-date" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg outline-none text-sm">
+                <textarea id="edit-abc-a" class="w-full p-2 bg-blue-50 border border-blue-200 rounded-lg outline-none text-sm h-12 resize-none" placeholder="A: Situación"></textarea>
+                <textarea id="edit-abc-b-pen" class="w-full p-2 bg-red-50 border border-red-200 rounded-lg outline-none text-sm h-12 resize-none" placeholder="B: Pensamiento"></textarea>
+                <textarea id="edit-abc-b-pru" class="w-full p-2 bg-red-50 border border-red-200 rounded-lg outline-none text-sm h-12 resize-none" placeholder="Pruebas que lo apoyan"></textarea>
+                <textarea id="edit-abc-c-emo" class="w-full p-2 bg-emerald-50 border border-emerald-200 rounded-lg outline-none text-sm h-12 resize-none" placeholder="C: Emocionales"></textarea>
+                <textarea id="edit-abc-c-con" class="w-full p-2 bg-emerald-50 border border-emerald-200 rounded-lg outline-none text-sm h-12 resize-none" placeholder="C: Conductuales"></textarea>
+                <textarea id="edit-abc-c-fis" class="w-full p-2 bg-emerald-50 border border-emerald-200 rounded-lg outline-none text-sm h-12 resize-none" placeholder="C: Físicas"></textarea>
+            </div>
+            <button id="btn-save-edit-abc" class="w-full bg-sky-600 text-white font-bold py-3 rounded-xl hover:bg-sky-700 transition-colors">Guardar Cambios</button>
+        </div>
+    </div>
 
-            <div>
-                <h3 class="font-bold text-sm text-slate-700 mb-3 flex items-center gap-2">
-                    <i data-lucide="file-json" class="w-4 h-4 text-orange-500"></i> Respaldo Manual
-                </h3>
-                <div class="grid grid-cols-2 gap-3">
-                    <button id="btn-export-json" class="flex items-center justify-center gap-2 p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-sm">
-                        <i data-lucide="download" class="w-4 h-4 text-slate-600"></i>
-                        <span class="text-sm font-bold text-slate-700">Exportar .json</span>
-                    </button>
-                    <button id="btn-import-json" class="flex items-center justify-center gap-2 p-3 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shadow-sm">
-                        <i data-lucide="upload" class="w-4 h-4 text-slate-600"></i>
-                        <span class="text-sm font-bold text-slate-700">Importar .json</span>
-                    </button>
-                    <input type="file" id="file-input" accept=".json" class="hidden" />
+    <div id="modal-guide-mente" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] p-4 transition-opacity">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 md:p-8 shadow-2xl relative animate-fadeIn max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <button id="btn-close-guide-mente" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 bg-slate-100 rounded-full p-1 transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <div class="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
+                <div class="p-3 bg-sky-100 text-sky-600 rounded-xl"><i data-lucide="book-open" class="w-6 h-6"></i></div>
+                <div><h2 class="text-2xl font-black text-slate-800">Guía Clínica: TCC</h2><p class="text-sm text-slate-500 font-medium">Conceptos de Distorsiones y ABC</p></div>
+            </div>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="font-black text-slate-700 uppercase tracking-widest text-xs mb-3 border-b border-slate-200 pb-1">1. Autoregistro ABC</h3>
+                    <ul class="text-sm space-y-2 text-slate-700">
+                        <li><span class="font-bold text-blue-600 bg-blue-50 px-1 rounded">A - Situación:</span> El hecho real que desencadena el malestar.</li>
+                        <li><span class="font-bold text-red-600 bg-red-50 px-1 rounded">B - Pensamiento:</span> Lo que interpretas. Cuestiónalo: ¿Qué pruebas tengo?</li>
+                        <li><span class="font-bold text-emerald-600 bg-emerald-50 px-1 rounded">C - Consecuencias:</span> Lo que sientes (Emocional), haces (Conductual) y experimenta tu cuerpo (Físico).</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-black text-slate-700 uppercase tracking-widest text-xs mb-3 border-b border-slate-200 pb-1">2. Distorsiones Frecuentes</h3>
+                    <div class="space-y-2 text-sm text-slate-700">
+                        <p><b>Personalización:</b> Asumir responsabilidad excesiva por eventos externos.</p>
+                        <p><b>Sobregeneralización:</b> Extraer una conclusión general de un solo hecho negativo.</p>
+                        <p><b>Abstracción Selectiva:</b> Enfatizar un detalle negativo, ignorando lo positivo.</p>
+                        <p><b>Pensamiento Dicotómico:</b> Ver las cosas en extremos opuestos, sin matices.</p>
+                        <p><b>Interpretación del Pensamiento:</b> Creer saber lo que los demás piensan ("leer la mente").</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const DB_NAME = 'PriorityMatrixDB_v3';
+        const DB_NAME = 'IntegraMenteDB_v1';
         const DB_VERSION = 1;
+
+        let state = {
+            currentApp: 'prioriza',
+            
+            tasks: [],
+            config: { hasSeenIntro: false, streak: 0, streakEnabled: true, dailyPresets: [], resetTime: "00:00", lastRoutineDate: null, lastStreakDate: null },
+            searchTerm: '',
+            
+            entries: [],
+            filterView: 'all'
+        };
+
+        let peerInstance = null;
+        let p2pConnection = null;
 
         const quadrantsDef = [
             { id: 'q1', title: 'HACER', subtitle: 'IMPORTANTES Y URGENTES', bgColor: 'bg-[#ccff99]', tapeColor: 'bg-red-500', icon: 'alert-circle', iconColor: 'text-red-700', textColor: 'text-green-900', labelName: 'Hacer' },
@@ -431,32 +541,37 @@
             { id: 'q3', title: 'DELEGAR', subtitle: 'NO IMPORTANTES, PERO SÍ URGENTES', bgColor: 'bg-[#ffe699]', tapeColor: 'bg-purple-400', icon: 'users', iconColor: 'text-purple-700', textColor: 'text-yellow-900', labelName: 'Delegar' },
             { id: 'q4', title: 'ELIMINAR', subtitle: 'NI IMPORTANTES, NI URGENTES', bgColor: 'bg-[#ffcc66]', tapeColor: 'bg-cyan-400', icon: 'trash-2', iconColor: 'text-cyan-700', textColor: 'text-yellow-900', labelName: 'Eliminar' }
         ];
-
         const suggestionRules = [
             { keywords: ['hoy', 'urgente', 'ahora', 'inmediato', 'jefe', 'cliente', 'pagar', 'vence', 'emergencia', 'urgencia'], q: 'q1', label: 'Hacer (Urgente e Importante)' },
             { keywords: ['mañana', 'semana', 'proyecto', 'estudiar', 'ejercicio', 'estrategia', 'plan', 'leer', 'curso', 'meta', 'descansar', 'dormir', 'salud', 'meditar', 'familia', 'ocio', 'jugar'], q: 'q2', label: 'Planificar (Importante, No urgente)' },
             { keywords: ['revisar', 'correo', 'mensaje', 'llamada', 'reunión', 'responder', 'encargo', 'favor', 'preguntar', 'ayudar'], q: 'q3', label: 'Delegar (Urgente, No importante)' },
             { keywords: ['redes', 'chisme', 'scrollear', 'distracción', 'rumores', 'queja'], q: 'q4', label: 'Eliminar (Distracción vacía)' }
         ];
-
-        let state = {
-            tasks: [],
-            config: { 
-                hasSeenIntro: false, 
-                streak: 0, 
-                streakEnabled: true, 
-                dailyPresets: [],
-                resetTime: "00:00",
-                lastRoutineDate: null,
-                lastStreakDate: null
-            },
-            searchTerm: '',
-        };
-
-        let peerInstance = null;
-        let p2pConnection = null;
         let sortableInstances = [];
         let timerInterval = null;
+
+        const distTypes = {
+            'personalizacion': { name: 'Personalización', icon: 'user-minus', color: 'blue' },
+            'sobregeneralizacion': { name: 'Sobregeneralización', icon: 'copy-minus', color: 'red' },
+            'abstraccion': { name: 'Abstracción Selectiva', icon: 'search-x', color: 'orange' },
+            'dicotomico': { name: 'Pensamiento Dicotómico', icon: 'split-square-horizontal', color: 'purple' },
+            'interpretacion': { name: 'Interpretación del P.', icon: 'message-circle-question', color: 'teal' }
+        };
+
+        const getCustomDateStr = (dateObj, timeStr) => {
+            const [hh, mm] = timeStr.split(':').map(Number);
+            const copy = new Date(dateObj);
+            if (copy.getHours() < hh || (copy.getHours() === hh && copy.getMinutes() < mm)) copy.setDate(copy.getDate() - 1);
+            return `${copy.getFullYear()}-${String(copy.getMonth()+1).padStart(2,'0')}-${String(copy.getDate()).padStart(2,'0')}`;
+        };
+        const getLocalISOString = (dateObj) => {
+            const d = dateObj ? new Date(dateObj) : new Date();
+            const tzoffset = d.getTimezoneOffset() * 60000;
+            return (new Date(d - tzoffset)).toISOString().slice(0, 16);
+        };
+        const formatUIDate = (isoString) => {
+            return new Date(isoString).toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' });
+        };
 
         const initDB = () => {
             return new Promise((resolve, reject) => {
@@ -467,30 +582,104 @@
                     const db = e.target.result;
                     if (!db.objectStoreNames.contains('tasks')) db.createObjectStore('tasks', { keyPath: 'id' });
                     if (!db.objectStoreNames.contains('config')) db.createObjectStore('config', { keyPath: 'id' });
+                    if (!db.objectStoreNames.contains('entries')) db.createObjectStore('entries', { keyPath: 'id' });
                 };
             });
         };
 
         const dbSaveData = async () => {
             const db = await initDB();
-            const txTasks = db.transaction('tasks', 'readwrite');
-            const storeTasks = txTasks.objectStore('tasks');
+            const tx = db.transaction(['tasks', 'config', 'entries'], 'readwrite');
+            
+            const storeTasks = tx.objectStore('tasks');
             storeTasks.clear();
             state.tasks.forEach(t => storeTasks.put(t));
 
-            const txConfig = db.transaction('config', 'readwrite');
-            const storeConfig = txConfig.objectStore('config');
+            const storeConfig = tx.objectStore('config');
             storeConfig.put({ id: 'appConfig', ...state.config });
+
+            const storeEntries = tx.objectStore('entries');
+            storeEntries.clear();
+            state.entries.forEach(e => storeEntries.put(e));
         };
 
-        const getCustomDateStr = (dateObj, timeStr) => {
-            const [hh, mm] = timeStr.split(':').map(Number);
-            const copy = new Date(dateObj);
-            if (copy.getHours() < hh || (copy.getHours() === hh && copy.getMinutes() < mm)) {
-                copy.setDate(copy.getDate() - 1);
-            }
-            return `${copy.getFullYear()}-${String(copy.getMonth()+1).padStart(2,'0')}-${String(copy.getDate()).padStart(2,'0')}`;
+        const dbLoadData = async () => {
+            const db = await initDB();
+            
+            const txTasks = db.transaction('tasks', 'readonly');
+            txTasks.objectStore('tasks').getAll().onsuccess = (e) => { state.tasks = e.target.result || []; };
+            
+            const txEntries = db.transaction('entries', 'readonly');
+            txEntries.objectStore('entries').getAll().onsuccess = (e) => { 
+                state.entries = e.target.result || [];
+                state.entries.forEach(e => { if(!e.recordType) e.recordType = 'dist'; if(!e.date) e.date = new Date().toISOString(); });
+            };
+            
+            const txConfig = db.transaction('config', 'readonly');
+            txConfig.objectStore('config').get('appConfig').onsuccess = (e) => {
+                let loadedConfig = e.target.result;
+                if (!loadedConfig) {
+                    state.config = { hasSeenIntro: false, streak: 0, streakEnabled: true, dailyPresets: [], resetTime: "00:00", lastRoutineDate: null, lastStreakDate: null };
+                    document.getElementById('modal-intro').classList.remove('hidden');
+                } else {
+                    if (loadedConfig.streakEnabled === undefined) loadedConfig.streakEnabled = true;
+                    if (loadedConfig.dailyPresets === undefined) loadedConfig.dailyPresets = [];
+                    if (loadedConfig.resetTime === undefined) loadedConfig.resetTime = "00:00";
+                    if (loadedConfig.lastRoutineDate === undefined) loadedConfig.lastRoutineDate = null;
+                    if (loadedConfig.lastStreakDate === undefined) loadedConfig.lastStreakDate = null;
+                    if (loadedConfig.streak === undefined) loadedConfig.streak = 0;
+                    state.config = loadedConfig;
+                    if (!state.config.hasSeenIntro) document.getElementById('modal-intro').classList.remove('hidden');
+                }
+                document.getElementById('toggle-streak').checked = state.config.streakEnabled;
+                document.getElementById('reset-time-input').value = state.config.resetTime;
+                
+                checkDailyReset();
+                startTimer();
+                renderApp();
+            };
         };
+
+        const showToast = (msg, type = 'success') => {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.className = `fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] px-6 py-3 rounded-full shadow-lg font-bold text-sm transition-all duration-300 ease-out text-white ${type === 'error' ? 'bg-red-600' : 'bg-slate-800'}`;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        };
+
+        const showConfirm = (title, msg, onConfirm) => {
+            document.getElementById('confirm-title').innerText = title;
+            document.getElementById('confirm-msg').innerText = msg;
+            document.getElementById('confirm-actions').innerHTML = `
+                <button id="btn-confirm-yes" class="w-full py-2.5 rounded-xl font-bold text-sm transition-colors bg-red-500 hover:bg-red-600 text-white mb-2">Confirmar</button>
+                <button id="btn-confirm-no" class="w-full py-2.5 rounded-xl font-bold text-sm transition-colors bg-slate-200 hover:bg-slate-300 text-slate-800">Cancelar</button>
+            `;
+            document.getElementById('modal-confirm').classList.remove('hidden');
+            document.getElementById('btn-confirm-yes').onclick = () => { onConfirm(); document.getElementById('modal-confirm').classList.add('hidden'); };
+            document.getElementById('btn-confirm-no').onclick = () => document.getElementById('modal-confirm').classList.add('hidden');
+        };
+
+        const renderApp = () => {
+            if (state.currentApp === 'prioriza') {
+                document.getElementById('view-prioriza').classList.remove('hidden');
+                document.getElementById('view-menteclara').classList.add('hidden');
+                document.getElementById('nav-prioriza').className = "flex-1 py-3 px-4 rounded-xl font-black bg-slate-800 text-white flex items-center justify-center gap-2 transition-all min-w-[150px] shadow-md";
+                document.getElementById('nav-menteclara').className = "flex-1 py-3 px-4 rounded-xl font-bold bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-800 flex items-center justify-center gap-2 transition-all min-w-[150px]";
+                renderPrioriza();
+            } else {
+                document.getElementById('view-prioriza').classList.add('hidden');
+                document.getElementById('view-menteclara').classList.remove('hidden');
+                document.getElementById('nav-prioriza').className = "flex-1 py-3 px-4 rounded-xl font-bold bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-800 flex items-center justify-center gap-2 transition-all min-w-[150px]";
+                document.getElementById('nav-menteclara').className = "flex-1 py-3 px-4 rounded-xl font-black bg-sky-500 text-white flex items-center justify-center gap-2 transition-all min-w-[150px] shadow-md";
+                renderMenteClara();
+            }
+            lucide.createIcons();
+            dbSaveData();
+        };
+
+        document.getElementById('nav-prioriza').addEventListener('click', () => { state.currentApp = 'prioriza'; renderApp(); });
+        document.getElementById('nav-menteclara').addEventListener('click', () => { state.currentApp = 'menteclara'; renderApp(); });
 
         const getVisualStreak = () => {
             if (!state.config.lastStreakDate) return 0;
@@ -498,33 +687,23 @@
             const lastDateObj = new Date(state.config.lastStreakDate + 'T00:00:00');
             const currDateObj = new Date(currentCustomDate + 'T00:00:00');
             const diffDays = Math.floor(Math.abs(currDateObj - lastDateObj) / (1000 * 60 * 60 * 24));
-            
-            if (diffDays > 1) return 0; 
-            return state.config.streak || 0; 
+            return diffDays > 1 ? 0 : (state.config.streak || 0);
         };
 
         const registerUserAction = () => {
             if (!state.config.streakEnabled) return;
             const currentCustomDate = getCustomDateStr(new Date(), state.config.resetTime);
-            
             if (!state.config.lastStreakDate) {
-                state.config.streak = 1;
-                state.config.lastStreakDate = currentCustomDate;
+                state.config.streak = 1; state.config.lastStreakDate = currentCustomDate;
             } else if (state.config.lastStreakDate !== currentCustomDate) {
                 const lastDateObj = new Date(state.config.lastStreakDate + 'T00:00:00');
                 const currDateObj = new Date(currentCustomDate + 'T00:00:00');
-                const diffTime = Math.abs(currDateObj - lastDateObj);
-                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-                
-                if (diffDays === 1) {
-                    state.config.streak += 1;
-                } else if (diffDays > 1) {
-                    state.config.streak = 1;
-                }
+                const diffDays = Math.floor(Math.abs(currDateObj - lastDateObj) / (1000 * 60 * 60 * 24));
+                if (diffDays === 1) state.config.streak += 1;
+                else if (diffDays > 1) state.config.streak = 1;
                 state.config.lastStreakDate = currentCustomDate;
             }
-            dbSaveData();
-            renderApp();
+            dbSaveData(); renderApp();
         };
 
         const checkDailyReset = () => {
@@ -534,31 +713,23 @@
             if (state.config.lastRoutineDate !== currentCustomDate) {
                 if (state.config.dailyPresets && state.config.dailyPresets.length > 0) {
                     state.config.dailyPresets.forEach((p, idx) => {
-                        const exists = state.tasks.find(t => t.text === p.text);
-                        if(!exists) {
+                        if(!state.tasks.find(t => t.text === p.text)) {
                             state.tasks.push({ id: Date.now().toString() + idx, text: p.text, quadrant: p.quadrant });
                         }
                     });
                 }
-                state.config.lastRoutineDate = currentCustomDate;
-                needsSave = true;
+                state.config.lastRoutineDate = currentCustomDate; needsSave = true;
             }
             
             const vs = getVisualStreak();
             if (vs === 0 && state.config.streak > 0 && state.config.lastStreakDate) {
                 const lastDateObj = new Date(state.config.lastStreakDate + 'T00:00:00');
                 const currDateObj = new Date(currentCustomDate + 'T00:00:00');
-                const diffDays = Math.floor(Math.abs(currDateObj - lastDateObj) / (1000 * 60 * 60 * 24));
-                if(diffDays > 1) {
-                    state.config.streak = 0;
-                    needsSave = true;
+                if(Math.floor(Math.abs(currDateObj - lastDateObj) / (1000 * 60 * 60 * 24)) > 1) {
+                    state.config.streak = 0; needsSave = true;
                 }
             }
-
-            if (needsSave) {
-                dbSaveData();
-                renderApp();
-            }
+            if (needsSave) { dbSaveData(); renderApp(); }
         };
 
         const startTimer = () => {
@@ -568,9 +739,7 @@
                 const now = new Date();
                 const [hh, mm] = state.config.resetTime.split(':').map(Number);
                 let nextReset = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hh, mm, 0, 0);
-                if (now >= nextReset) {
-                    nextReset.setDate(nextReset.getDate() + 1);
-                }
+                if (now >= nextReset) nextReset.setDate(nextReset.getDate() + 1);
                 const diff = nextReset - now;
                 const h = Math.floor(diff / (1000 * 60 * 60));
                 const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
@@ -578,52 +747,8 @@
                 
                 const el = document.getElementById('header-timer');
                 if (el) el.innerText = `⏳ ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-                
                 checkDailyReset();
             }, 1000);
-        };
-
-        const dbLoadData = async () => {
-            const db = await initDB();
-            
-            const txTasks = db.transaction('tasks', 'readonly');
-            const reqTasks = txTasks.objectStore('tasks').getAll();
-            
-            const txConfig = db.transaction('config', 'readonly');
-            const reqConfig = txConfig.objectStore('config').get('appConfig');
-
-            reqTasks.onsuccess = () => {
-                state.tasks = reqTasks.result || [];
-                reqConfig.onsuccess = () => {
-                    let loadedConfig = reqConfig.result;
-                    
-                    if (!loadedConfig) {
-                        state.config = { hasSeenIntro: false, streak: 0, streakEnabled: true, dailyPresets: [], resetTime: "00:00", lastRoutineDate: null, lastStreakDate: null };
-                        document.getElementById('modal-intro').classList.remove('hidden');
-                    } else {
-                        if (loadedConfig.streakEnabled === undefined) loadedConfig.streakEnabled = true;
-                        if (loadedConfig.dailyPresets === undefined) loadedConfig.dailyPresets = [];
-                        if (loadedConfig.resetTime === undefined) loadedConfig.resetTime = "00:00";
-                        if (loadedConfig.lastRoutineDate === undefined) loadedConfig.lastRoutineDate = null;
-                        if (loadedConfig.lastStreakDate === undefined) loadedConfig.lastStreakDate = null;
-                        
-                        if (loadedConfig.streak === undefined) {
-                            loadedConfig.streak = 0;
-                            if(loadedConfig.lastVisit) loadedConfig.lastStreakDate = loadedConfig.lastVisit;
-                        }
-
-                        state.config = loadedConfig;
-                        if (!state.config.hasSeenIntro) document.getElementById('modal-intro').classList.remove('hidden');
-                    }
-                    
-                    document.getElementById('toggle-streak').checked = state.config.streakEnabled;
-                    document.getElementById('reset-time-input').value = state.config.resetTime;
-                    
-                    checkDailyReset();
-                    startTimer();
-                    renderApp();
-                };
-            };
         };
 
         const getRank = (streak) => {
@@ -636,667 +761,454 @@
 
         const getArchetype = () => {
             if (state.tasks.length === 0) return { name: "Lienzo en Blanco", desc: "Añade tareas para descubrir tu estilo.", icon: "🌱", color: "bg-slate-100 text-slate-700", advice: "Comienza a vaciar tu mente añadiendo todos tus pendientes." };
-            
             const counts = {
-                q1: state.tasks.filter(t => t.quadrant === 'q1').length,
-                q2: state.tasks.filter(t => t.quadrant === 'q2').length,
-                q3: state.tasks.filter(t => t.quadrant === 'q3').length,
-                q4: state.tasks.filter(t => t.quadrant === 'q4').length,
+                q1: state.tasks.filter(t => t.quadrant === 'q1').length, q2: state.tasks.filter(t => t.quadrant === 'q2').length,
+                q3: state.tasks.filter(t => t.quadrant === 'q3').length, q4: state.tasks.filter(t => t.quadrant === 'q4').length,
             };
             const max = Math.max(counts.q1, counts.q2, counts.q3, counts.q4);
-            
             if (max === 0) return { name: "Equilibrado", desc: "Manejas todo con perfecta armonía.", icon: "⚖️", color: "bg-teal-100 text-teal-800", advice: "Tienes un balance ideal, asegúrate de mantener el ritmo." };
-            if (max === counts.q2) return { name: "El Estratega", desc: "Te enfocas en lo importante a largo plazo.", icon: "♟️", color: "bg-[#d9f2b3] text-green-900", advice: "¡Excelente! Al planificar evitas que tus metas se conviertan en crisis urgentes." };
+            if (max === counts.q2) return { name: "El Estratega", desc: "Te enfocas en lo importante a largo plazo.", icon: "♟️", color: "bg-[#d9f2b3] text-green-900", advice: "¡Excelente! Al planificar evitas que tus metas se conviertan en crisis." };
             if (max === counts.q1) return { name: "El Apagafuegos", desc: "Vives reaccionando a las urgencias.", icon: "🚒", color: "bg-[#ccff99] text-green-900", advice: "Estás invirtiendo todo tu tiempo en crisis. Intenta mover prioridades al cuadrante de Planificar." };
-            if (max === counts.q3) return { name: "El Complaciente", desc: "Haces urgencias que no aportan a tus metas.", icon: "🤝", color: "bg-[#ffe699] text-yellow-900", advice: "Estás haciendo el trabajo de otros o tareas de bajo impacto. Aprende a delegar o decir que no." };
-            if (max === counts.q4) return { name: "Acumulador de Basura", desc: "Tienes demasiadas distracciones.", icon: "🗑️", color: "bg-[#ffcc66] text-yellow-900", advice: "Ojo: El descanso real va en 'Planificar'. Lo que tienes aquí son solo distracciones vacías que debes eliminar." };
-            
+            if (max === counts.q3) return { name: "El Complaciente", desc: "Haces urgencias que no aportan a tus metas.", icon: "🤝", color: "bg-[#ffe699] text-yellow-900", advice: "Estás haciendo el trabajo de otros o tareas de bajo impacto. Aprende a delegar." };
+            if (max === counts.q4) return { name: "Acumulador de Basura", desc: "Tienes demasiadas distracciones.", icon: "🗑️", color: "bg-[#ffcc66] text-yellow-900", advice: "Ojo: El descanso real va en 'Planificar'. Lo que tienes aquí son solo distracciones vacías." };
             return { name: "Organizador", desc: "Manteniendo el control de tus tareas.", icon: "📋", color: "bg-blue-100 text-blue-800", advice: "Sigue así, organizar es el primer paso." };
         };
 
-        const renderHeader = () => {
+        const renderPrioriza = () => {
             const arch = getArchetype();
             document.getElementById('header-icon').innerText = arch.icon;
             document.getElementById('header-archetype').innerText = arch.name;
             
             const hsContainer = document.getElementById('header-streak-container');
             const hsDivider = document.getElementById('header-streak-divider');
-            
             if (state.config.streakEnabled) {
-                hsContainer.classList.remove('hidden');
-                hsContainer.classList.add('flex');
-                hsDivider.classList.remove('sm:hidden');
-                hsDivider.classList.add('sm:block');
+                hsContainer.classList.remove('hidden'); hsContainer.classList.add('flex');
+                hsDivider.classList.remove('sm:hidden'); hsDivider.classList.add('sm:block');
                 document.getElementById('header-streak').innerText = getVisualStreak();
             } else {
-                hsContainer.classList.add('hidden');
-                hsContainer.classList.remove('flex');
-                hsDivider.classList.add('sm:hidden');
-                hsDivider.classList.remove('sm:block');
-            }
-        };
-
-        const renderRoutines = () => {
-            const list = document.getElementById('routines-list');
-            list.innerHTML = '';
-            
-            if (state.config.dailyPresets.length === 0) {
-                list.innerHTML = `<p class="text-xs text-center text-slate-400 p-4 border-2 border-dashed border-slate-200 rounded-xl">No hay rutinas configuradas.</p>`;
-                return;
+                hsContainer.classList.add('hidden'); hsContainer.classList.remove('flex');
+                hsDivider.classList.add('sm:hidden'); hsDivider.classList.remove('sm:block');
             }
 
-            state.config.dailyPresets.forEach(preset => {
-                const qInfo = quadrantsDef.find(q => q.id === preset.quadrant);
-                list.innerHTML += `
-                    <div class="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-lg shadow-sm">
-                        <div class="flex flex-col">
-                            <span class="text-sm font-bold text-slate-700">${preset.text}</span>
-                            <span class="text-[10px] font-semibold text-slate-500 flex items-center gap-1">
-                                <i data-lucide="arrow-right" class="w-3 h-3"></i> ${qInfo.labelName}
-                            </span>
-                        </div>
-                        <button class="btn-delete-routine p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors" data-id="${preset.id}">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                `;
-            });
-            lucide.createIcons();
-
-            document.querySelectorAll('.btn-delete-routine').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const id = e.currentTarget.dataset.id;
-                    state.config.dailyPresets = state.config.dailyPresets.filter(p => p.id !== id);
-                    dbSaveData();
-                    renderRoutines();
-                    showToast('Rutina eliminada');
-                });
-            });
-        };
-
-        const syncStateWithDOM = () => {
-            if (state.searchTerm) return; 
-            const newTasksOrder = [];
-            
-            quadrantsDef.forEach(q => {
-                const list = document.getElementById(`list-${q.id}`);
-                if (list) {
-                    Array.from(list.children).forEach(taskEl => {
-                        const id = taskEl.dataset.id;
-                        if (id) {
-                            const task = state.tasks.find(t => t.id === id);
-                            if (task) {
-                                task.quadrant = q.id;
-                                newTasksOrder.push(task);
-                            }
-                        }
-                    });
-                }
-            });
-            
-            state.tasks = newTasksOrder;
-            registerUserAction();
-            renderApp();
-        };
-
-        const renderQuadrants = () => {
             sortableInstances.forEach(instance => instance.destroy());
             sortableInstances = [];
-
             const container = document.getElementById('quadrants-container');
             container.innerHTML = '';
 
-            const filteredTasks = state.tasks.filter(task => 
-                task.text.toLowerCase().includes(state.searchTerm.toLowerCase())
-            );
+            const filteredTasks = state.tasks.filter(task => task.text.toLowerCase().includes(state.searchTerm.toLowerCase()));
 
             quadrantsDef.forEach(q => {
                 const tasksInQ = filteredTasks.filter(t => t.quadrant === q.id);
-                
-                let tasksHTML = tasksInQ.map(task => {
-                    return `
+                let tasksHTML = tasksInQ.map(task => `
                     <div class="task-item bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-sm border border-black/5 flex items-center justify-between gap-2 transition-all" data-id="${task.id}">
                         <div class="flex items-center gap-2 flex-1 min-w-0">
-                            <div class="touch-drag-handle p-1 -ml-2 text-slate-300 hover:text-slate-500">
-                                <i data-lucide="grip-vertical" class="w-4 h-4 pointer-events-none"></i>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm font-semibold text-slate-800 break-words pointer-events-none">${task.text}</p>
-                            </div>
+                            <div class="touch-drag-handle p-1 -ml-2 text-slate-300 hover:text-slate-500"><i data-lucide="grip-vertical" class="w-4 h-4 pointer-events-none"></i></div>
+                            <div class="flex-1 min-w-0"><p class="text-sm font-semibold text-slate-800 break-words pointer-events-none">${task.text}</p></div>
                         </div>
                         <div class="flex items-center gap-1">
-                            <button class="btn-edit p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors" data-id="${task.id}" title="Editar tarea">
-                                <i data-lucide="edit-2" class="w-4 h-4 pointer-events-none"></i>
-                            </button>
-                            <button class="btn-delete p-1.5 text-slate-400 hover:text-green-600 hover:bg-green-50 rounded transition-colors" data-id="${task.id}" title="Completar / Eliminar">
-                                <i data-lucide="check" class="w-5 h-5 pointer-events-none"></i>
-                            </button>
+                            <button class="btn-edit-prio p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors" data-id="${task.id}" title="Editar tarea"><i data-lucide="edit-2" class="w-4 h-4 pointer-events-none"></i></button>
+                            <button class="btn-delete-prio p-1.5 text-slate-400 hover:text-green-600 hover:bg-green-50 rounded transition-colors" data-id="${task.id}" title="Completar / Eliminar"><i data-lucide="check" class="w-5 h-5 pointer-events-none"></i></button>
                         </div>
-                    </div>`;
-                }).join('');
+                    </div>`).join('');
 
                 container.innerHTML += `
                     <div class="quadrant relative flex flex-col h-[420px] rounded-xl shadow-inner ${q.bgColor} p-4 transition-all" data-id="${q.id}">
-                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 w-20 h-7 shadow-sm rotate-2 opacity-90 z-10 pointer-events-none">
-                            <div class="w-full h-full ${q.tapeColor} opacity-80 backdrop-blur-sm"></div>
-                        </div>
+                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 w-20 h-7 shadow-sm rotate-2 opacity-90 z-10 pointer-events-none"><div class="w-full h-full ${q.tapeColor} opacity-80 backdrop-blur-sm"></div></div>
                         <div class="absolute top-3 right-3 flex gap-1 z-20">
-                            <button class="btn-sort p-1.5 text-black/40 hover:text-black/80 hover:bg-white/50 rounded transition-colors" data-id="${q.id}" title="Ordenar A-Z">
-                                <i data-lucide="sort-asc" class="w-5 h-5 pointer-events-none"></i>
-                            </button>
-                            <button class="btn-clear p-1.5 text-black/40 hover:text-red-600 hover:bg-white/50 rounded transition-colors" data-id="${q.id}" title="Vaciar cuadrante">
-                                <i data-lucide="trash" class="w-5 h-5 pointer-events-none"></i>
-                            </button>
+                            <button class="btn-sort p-1.5 text-black/40 hover:text-black/80 hover:bg-white/50 rounded transition-colors" data-id="${q.id}" title="Ordenar A-Z"><i data-lucide="sort-asc" class="w-5 h-5 pointer-events-none"></i></button>
+                            <button class="btn-clear p-1.5 text-black/40 hover:text-red-600 hover:bg-white/50 rounded transition-colors" data-id="${q.id}" title="Vaciar cuadrante"><i data-lucide="trash" class="w-5 h-5 pointer-events-none"></i></button>
                         </div>
                         <div class="flex flex-col items-center text-center mb-4 mt-4 ${q.textColor} pointer-events-none">
-                            <div class="flex items-center gap-2 mb-1">
-                                <i data-lucide="${q.icon}" class="w-5 h-5 ${q.iconColor}"></i>
-                                <h2 class="text-xl md:text-2xl font-black tracking-wide uppercase">${q.title}</h2>
-                            </div>
+                            <div class="flex items-center gap-2 mb-1"><i data-lucide="${q.icon}" class="w-5 h-5 ${q.iconColor}"></i><h2 class="text-xl md:text-2xl font-black tracking-wide uppercase">${q.title}</h2></div>
                             <h3 class="text-xs md:text-sm font-bold uppercase opacity-80">${q.subtitle}</h3>
                         </div>
-                        <div class="flex-1 overflow-y-auto space-y-2 pr-2 custom-scrollbar relative task-list" id="list-${q.id}">
-                            ${tasksHTML}
-                        </div>
-                    </div>
-                `;
+                        <div class="flex-1 overflow-y-auto space-y-2 pr-2 custom-scrollbar relative task-list" id="list-${q.id}">${tasksHTML}</div>
+                    </div>`;
             });
-
-            lucide.createIcons();
-            attachQuadrantEvents();
 
             if(typeof Sortable !== 'undefined') {
                 quadrantsDef.forEach(q => {
                     const el = document.getElementById(`list-${q.id}`);
                     if(el) {
-                        const instance = new Sortable(el, {
-                            group: 'shared', 
-                            animation: 200,
-                            handle: '.touch-drag-handle',
-                            delay: 150, 
-                            delayOnTouchOnly: true, 
-                            touchStartThreshold: 5,
-                            forceFallback: true, 
-                            fallbackClass: 'sortable-fallback',
-                            ghostClass: 'sortable-ghost',
-                            fallbackOnBody: true,
-                            disabled: !!state.searchTerm, 
+                        sortableInstances.push(new Sortable(el, {
+                            group: 'shared', animation: 200, handle: '.touch-drag-handle', delay: 150, delayOnTouchOnly: true, touchStartThreshold: 5,
+                            forceFallback: true, fallbackClass: 'sortable-fallback', ghostClass: 'sortable-ghost', fallbackOnBody: true, disabled: !!state.searchTerm,
                             onEnd: function () {
-                                syncStateWithDOM();
+                                if (state.searchTerm) return;
+                                const newTasksOrder = [];
+                                quadrantsDef.forEach(q => {
+                                    const list = document.getElementById(`list-${q.id}`);
+                                    if (list) {
+                                        Array.from(list.children).forEach(taskEl => {
+                                            const id = taskEl.dataset.id;
+                                            const task = state.tasks.find(t => t.id === id);
+                                            if (task) { task.quadrant = q.id; newTasksOrder.push(task); }
+                                        });
+                                    }
+                                });
+                                state.tasks = newTasksOrder; registerUserAction(); renderApp();
                             }
-                        });
-                        sortableInstances.push(instance);
+                        }));
                     }
                 });
             }
         };
 
-        const renderApp = () => {
-            renderHeader();
-            renderQuadrants();
-            dbSaveData();
-        };
-
-        const showToast = (msg, type = 'success') => {
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toast-msg');
-            toastMsg.innerText = msg;
-            toast.className = `fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] px-6 py-3 rounded-full shadow-lg font-bold text-sm transition-all duration-300 ease-out text-white ${type === 'error' ? 'bg-red-600' : 'bg-slate-800'}`;
-            toast.classList.remove('hidden');
-            setTimeout(() => { toast.classList.add('hidden'); }, 3000);
-        };
-
-        const showCustomModal = (title, message, actionsHTML) => {
-            document.getElementById('confirm-title').innerText = title;
-            document.getElementById('confirm-msg').innerText = message;
-            document.getElementById('confirm-actions').innerHTML = actionsHTML;
-            document.getElementById('modal-confirm').classList.remove('hidden');
-        };
-
-        const hideCustomModal = () => {
-            document.getElementById('modal-confirm').classList.add('hidden');
-        };
-
-        const checkSuggestions = (text) => {
-            const suggestionEl = document.getElementById('ai-suggestion');
-            const selectEl = document.getElementById('new-task-quadrant');
-            if(!text) {
-                suggestionEl.classList.add('opacity-0', 'hidden');
-                return;
-            }
-            
-            let matched = null;
-            const lowerText = text.toLowerCase();
-            
-            for(const rule of suggestionRules) {
-                if(rule.keywords.some(kw => lowerText.includes(kw))) {
-                    matched = rule;
-                    break;
-                }
-            }
-
-            if(matched) {
-                suggestionEl.innerText = `💡 Sugerencia: ${matched.label}`;
-                suggestionEl.classList.remove('hidden');
-                setTimeout(() => suggestionEl.classList.remove('opacity-0'), 50);
-                selectEl.value = matched.q;
-            } else {
-                suggestionEl.classList.add('opacity-0');
-                setTimeout(() => suggestionEl.classList.add('hidden'), 200);
-            }
-        };
-
-        const processSyncData = (payload, mode) => {
-            let importedTasks = [];
-            let importedConfig = null;
-
-            if (Array.isArray(payload)) {
-                importedTasks = payload;
-            } else if (payload && payload.tasks) {
-                importedTasks = payload.tasks;
-                importedConfig = payload.config;
-            } else {
-                showToast("Formato de datos inválido", "error");
-                return;
-            }
-
-            if (mode === 'overwrite') {
-                state.tasks = importedTasks;
-                if (importedConfig) state.config = importedConfig;
-                showToast("Datos sobrescritos exitosamente.");
-            } else if (mode === 'merge') {
-                let newTasks = [...state.tasks];
-                importedTasks.forEach(rt => {
-                    if (!newTasks.find(lt => lt.id === rt.id || lt.text.toLowerCase() === rt.text.toLowerCase())) {
-                        newTasks.push(rt);
-                    }
-                });
-                state.tasks = newTasks;
-                
-                if (importedConfig) {
-                    state.config.streak = Math.max(state.config.streak || 0, importedConfig.streak || 0);
-                    if (importedConfig.streakEnabled !== undefined) state.config.streakEnabled = importedConfig.streakEnabled;
-                    if (importedConfig.hasSeenIntro !== undefined) state.config.hasSeenIntro = importedConfig.hasSeenIntro;
-                    if (importedConfig.resetTime !== undefined) state.config.resetTime = importedConfig.resetTime;
-                    
-                    if (importedConfig.dailyPresets) {
-                        importedConfig.dailyPresets.forEach(rp => {
-                            if (!state.config.dailyPresets.find(lp => lp.text.toLowerCase() === rp.text.toLowerCase())) {
-                                state.config.dailyPresets.push(rp);
-                            }
-                        });
-                    }
-                }
-                showToast("Datos y configuración fusionados.");
-            }
-            
-            document.getElementById('toggle-streak').checked = state.config.streakEnabled;
-            document.getElementById('reset-time-input').value = state.config.resetTime;
-            
-            checkDailyReset();
-            startTimer();
-            renderApp();
-        };
-
-        document.getElementById('toggle-streak').addEventListener('change', (e) => {
-            state.config.streakEnabled = e.target.checked;
-            dbSaveData();
-            renderApp();
-        });
-
-        document.getElementById('reset-time-input').addEventListener('change', (e) => {
-            const val = e.target.value;
-            if(val) {
-                state.config.resetTime = val;
-                dbSaveData();
-                showToast("Hora de reinicio guardada");
-                checkDailyReset();
-                startTimer();
-            }
-        });
-
-        const searchInput = document.getElementById('search-input');
-        const searchContainer = document.getElementById('search-container');
-        const searchIcon = document.getElementById('search-icon');
-        const btnClearSearch = document.getElementById('btn-clear-search');
-
-        searchInput.addEventListener('input', (e) => {
+        document.getElementById('search-input').addEventListener('input', (e) => {
             state.searchTerm = e.target.value;
-            if(state.searchTerm) {
-                searchContainer.classList.add('bg-blue-50', 'border-blue-300');
-                searchContainer.classList.remove('bg-white', 'border-slate-200');
-                searchIcon.classList.replace('text-slate-400', 'text-blue-500');
-                btnClearSearch.classList.remove('hidden');
-            } else {
-                searchContainer.classList.remove('bg-blue-50', 'border-blue-300');
-                searchContainer.classList.add('bg-white', 'border-slate-200');
-                searchIcon.classList.replace('text-blue-500', 'text-slate-400');
-                btnClearSearch.classList.add('hidden');
-            }
-            renderQuadrants();
+            const sc = document.getElementById('search-container'), si = document.getElementById('search-icon'), bc = document.getElementById('btn-clear-search');
+            if(state.searchTerm) { sc.classList.add('bg-blue-50', 'border-blue-300'); sc.classList.remove('bg-white', 'border-slate-200'); si.classList.replace('text-slate-400', 'text-blue-500'); bc.classList.remove('hidden'); } 
+            else { sc.classList.remove('bg-blue-50', 'border-blue-300'); sc.classList.add('bg-white', 'border-slate-200'); si.classList.replace('text-blue-500', 'text-slate-400'); bc.classList.add('hidden'); }
+            renderApp();
         });
-
-        btnClearSearch.addEventListener('click', () => {
-            searchInput.value = '';
-            searchInput.dispatchEvent(new Event('input'));
-        });
+        document.getElementById('btn-clear-search').addEventListener('click', () => { document.getElementById('search-input').value = ''; document.getElementById('search-input').dispatchEvent(new Event('input')); });
 
         document.getElementById('add-task-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            const input = document.getElementById('new-task-input');
-            const text = input.value.trim();
+            const input = document.getElementById('new-task-input'), text = input.value.trim(), quadrant = document.getElementById('new-task-quadrant').value;
             if (!text) return;
-            
-            const quadrant = document.getElementById('new-task-quadrant').value;
             state.tasks.push({ id: Date.now().toString(), text, quadrant });
-            input.value = '';
-            document.getElementById('ai-suggestion').classList.add('hidden', 'opacity-0');
-            document.getElementById('btn-add-task').disabled = true;
-            registerUserAction();
-            renderApp();
-            showToast('Tarea añadida');
+            input.value = ''; document.getElementById('ai-suggestion').classList.add('hidden', 'opacity-0'); document.getElementById('btn-add-task').disabled = true;
+            registerUserAction(); renderApp(); showToast('Tarea añadida');
         });
 
         document.getElementById('new-task-input').addEventListener('input', (e) => {
-             document.getElementById('btn-add-task').disabled = !e.target.value.trim();
-             checkSuggestions(e.target.value.trim());
+            const text = e.target.value.trim();
+            document.getElementById('btn-add-task').disabled = !text;
+            const suggEl = document.getElementById('ai-suggestion'), selEl = document.getElementById('new-task-quadrant');
+            if(!text) { suggEl.classList.add('opacity-0', 'hidden'); return; }
+            let matched = suggestionRules.find(r => r.keywords.some(kw => text.toLowerCase().includes(kw)));
+            if(matched) {
+                suggEl.innerText = `💡 Sugerencia: ${matched.label}`; suggEl.classList.remove('hidden'); setTimeout(() => suggEl.classList.remove('opacity-0'), 50); selEl.value = matched.q;
+            } else { suggEl.classList.add('opacity-0'); setTimeout(() => suggEl.classList.add('hidden'), 200); }
         });
 
-        document.getElementById('btn-close-intro').addEventListener('click', () => {
-            state.config.hasSeenIntro = true;
-            document.getElementById('modal-intro').classList.add('hidden');
-            dbSaveData();
+        document.getElementById('quadrants-container').addEventListener('click', (e) => {
+            if (e.target.closest('.btn-delete-prio')) {
+                const id = e.target.closest('.btn-delete-prio').dataset.id;
+                const task = state.tasks.find(t => t.id === id);
+                if(task) showConfirm('Finalizar Tarea', `¿Seguro que quieres dar por finalizada la tarea "${task.text}"?`, () => {
+                    state.tasks = state.tasks.filter(t => t.id !== id); registerUserAction(); renderApp(); showToast('Tarea completada');
+                });
+            }
+            if (e.target.closest('.btn-edit-prio')) {
+                const id = e.target.closest('.btn-edit-prio').dataset.id;
+                const task = state.tasks.find(t => t.id === id);
+                if(task) {
+                    document.getElementById('edit-task-id').value = task.id; document.getElementById('edit-task-input').value = task.text; document.getElementById('edit-task-quadrant').value = task.quadrant;
+                    document.getElementById('modal-edit-task').classList.remove('hidden'); document.getElementById('edit-task-input').focus();
+                }
+            }
+            if (e.target.closest('.btn-clear')) {
+                const qid = e.target.closest('.btn-clear').dataset.id, qDef = quadrantsDef.find(q => q.id === qid);
+                showConfirm('Vaciar Cuadrante', `¿Eliminar TODAS las tareas de "${qDef.title}"?`, () => {
+                    state.tasks = state.tasks.filter(t => t.quadrant !== qid); registerUserAction(); renderApp(); showToast('Cuadrante vaciado');
+                });
+            }
+            if (e.target.closest('.btn-sort')) {
+                const qid = e.target.closest('.btn-sort').dataset.id;
+                const qTasks = state.tasks.filter(t => t.quadrant === qid).sort((a, b) => a.text.toLowerCase().localeCompare(b.text.toLowerCase()));
+                state.tasks = [...state.tasks.filter(t => t.quadrant !== qid), ...qTasks]; showToast('Tareas ordenadas'); renderApp();
+            }
         });
 
-        document.getElementById('btn-open-guide').addEventListener('click', () => {
-            document.getElementById('modal-guide').classList.remove('hidden');
-        });
-        document.getElementById('btn-close-guide').addEventListener('click', () => {
-            document.getElementById('modal-guide').classList.add('hidden');
-        });
-
-        document.getElementById('btn-open-routines').addEventListener('click', () => {
-            renderRoutines();
-            document.getElementById('modal-routines').classList.remove('hidden');
-        });
-        document.getElementById('btn-close-routines').addEventListener('click', () => {
-            document.getElementById('modal-routines').classList.add('hidden');
+        document.getElementById('btn-save-edit-task').addEventListener('click', () => {
+            const id = document.getElementById('edit-task-id').value, text = document.getElementById('edit-task-input').value.trim(), q = document.getElementById('edit-task-quadrant').value;
+            if(text && id) {
+                const idx = state.tasks.findIndex(t => t.id === id);
+                if(idx > -1) { state.tasks[idx].text = text; state.tasks[idx].quadrant = q; registerUserAction(); renderApp(); showToast('Tarea actualizada'); }
+            }
+            document.getElementById('modal-edit-task').classList.add('hidden');
         });
 
+        const renderRoutines = () => {
+            const list = document.getElementById('routines-list'); list.innerHTML = '';
+            if (state.config.dailyPresets.length === 0) { list.innerHTML = `<p class="text-xs text-center text-slate-400 p-4 border-2 border-dashed border-slate-200 rounded-xl">No hay rutinas configuradas.</p>`; return; }
+            state.config.dailyPresets.forEach(preset => {
+                const qInfo = quadrantsDef.find(q => q.id === preset.quadrant);
+                list.innerHTML += `<div class="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-lg shadow-sm">
+                    <div class="flex flex-col"><span class="text-sm font-bold text-slate-700">${preset.text}</span><span class="text-[10px] font-semibold text-slate-500 flex items-center gap-1"><i data-lucide="arrow-right" class="w-3 h-3"></i> ${qInfo.labelName}</span></div>
+                    <button class="btn-delete-routine p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors" data-id="${preset.id}"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                </div>`;
+            });
+            lucide.createIcons();
+            document.querySelectorAll('.btn-delete-routine').forEach(btn => btn.addEventListener('click', (e) => {
+                state.config.dailyPresets = state.config.dailyPresets.filter(p => p.id !== e.currentTarget.dataset.id); dbSaveData(); renderRoutines(); showToast('Rutina eliminada');
+            }));
+        };
         document.getElementById('add-routine-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const input = document.getElementById('new-routine-input');
-            const text = input.value.trim();
-            if (!text) return;
-            
-            const quadrant = document.getElementById('new-routine-quadrant').value;
-            state.config.dailyPresets.push({ id: Date.now().toString(), text, quadrant });
-            input.value = '';
-            dbSaveData();
-            renderRoutines();
-            showToast('Rutina configurada');
+            e.preventDefault(); const text = document.getElementById('new-routine-input').value.trim(), q = document.getElementById('new-routine-quadrant').value;
+            if (!text) return; state.config.dailyPresets.push({ id: Date.now().toString(), text, quadrant: q }); document.getElementById('new-routine-input').value = '';
+            dbSaveData(); renderRoutines(); showToast('Rutina configurada');
         });
+        document.getElementById('btn-open-routines').addEventListener('click', () => { renderRoutines(); document.getElementById('modal-routines').classList.remove('hidden'); });
+        document.getElementById('btn-close-routines').addEventListener('click', () => document.getElementById('modal-routines').classList.add('hidden'));
 
         document.getElementById('btn-open-profile').addEventListener('click', () => {
-            const arch = getArchetype();
-            const rank = getRank(getVisualStreak());
-            
+            const arch = getArchetype(), rank = getRank(getVisualStreak());
             document.getElementById('profile-header-bg').className = `pt-8 pb-12 px-6 flex flex-col items-center justify-center text-center relative ${arch.color}`;
-            document.getElementById('profile-icon').innerText = arch.icon;
-            document.getElementById('profile-name').innerText = arch.name;
-            document.getElementById('profile-desc').innerText = arch.desc;
-            document.getElementById('profile-advice').innerText = arch.advice;
+            document.getElementById('profile-icon').innerText = arch.icon; document.getElementById('profile-name').innerText = arch.name;
+            document.getElementById('profile-desc').innerText = arch.desc; document.getElementById('profile-advice').innerText = arch.advice;
             document.getElementById('profile-streak').innerText = getVisualStreak();
-            
-            document.getElementById('profile-rank').innerHTML = `<i data-lucide="${rank.icon}" class="w-4 h-4"></i> ${rank.title}`;
-            document.getElementById('profile-rank').className = `text-sm font-bold flex items-center gap-1 justify-end ${rank.color}`;
-            
-            const psContainer = document.getElementById('profile-streak-container');
-            if (state.config.streakEnabled) {
-                psContainer.classList.remove('hidden');
-                psContainer.classList.add('flex');
-            } else {
-                psContainer.classList.add('hidden');
-                psContainer.classList.remove('flex');
-            }
-
-            lucide.createIcons();
-            document.getElementById('modal-profile').classList.remove('hidden');
+            document.getElementById('profile-rank').innerHTML = `<i data-lucide="${rank.icon}" class="w-4 h-4"></i> ${rank.title}`; document.getElementById('profile-rank').className = `text-sm font-bold flex items-center gap-1 justify-end ${rank.color}`;
+            const psC = document.getElementById('profile-streak-container');
+            if(state.config.streakEnabled) { psC.classList.remove('hidden'); psC.classList.add('flex'); } else { psC.classList.add('hidden'); psC.classList.remove('flex'); }
+            lucide.createIcons(); document.getElementById('modal-profile').classList.remove('hidden');
         });
-        
         document.getElementById('btn-close-profile').addEventListener('click', () => document.getElementById('modal-profile').classList.add('hidden'));
+        document.getElementById('toggle-streak').addEventListener('change', (e) => { state.config.streakEnabled = e.target.checked; dbSaveData(); renderApp(); });
+        document.getElementById('reset-time-input').addEventListener('change', (e) => { if(e.target.value) { state.config.resetTime = e.target.value; dbSaveData(); showToast("Hora guardada"); checkDailyReset(); startTimer(); } });
 
-        document.getElementById('btn-close-edit').addEventListener('click', () => {
-            document.getElementById('modal-edit').classList.add('hidden');
+        document.getElementById('btn-open-guide-prio').addEventListener('click', () => document.getElementById('modal-guide-prio').classList.remove('hidden'));
+        document.getElementById('btn-close-guide-prio').addEventListener('click', () => document.getElementById('modal-guide-prio').classList.add('hidden'));
+        document.getElementById('btn-close-intro').addEventListener('click', () => { state.config.hasSeenIntro = true; document.getElementById('modal-intro').classList.add('hidden'); dbSaveData(); });
+
+        const toggleForms = (type) => {
+            document.getElementById('toggle-dist').className = `flex-1 py-2 text-xs ${type==='dist'?'font-black bg-white text-sky-600 shadow-sm':'font-bold text-slate-500 hover:text-slate-700'} rounded-lg transition-all`;
+            document.getElementById('toggle-abc').className = `flex-1 py-2 text-xs ${type==='abc'?'font-black bg-white text-sky-600 shadow-sm':'font-bold text-slate-500 hover:text-slate-700'} rounded-lg transition-all`;
+            document.getElementById('form-dist').classList.toggle('hidden', type !== 'dist'); document.getElementById('form-dist').classList.toggle('flex', type === 'dist');
+            document.getElementById('form-abc').classList.toggle('hidden', type !== 'abc'); document.getElementById('form-abc').classList.toggle('flex', type === 'abc');
+            document.getElementById(type === 'dist' ? 'new-dist-date' : 'new-abc-date').value = getLocalISOString();
+        };
+        document.getElementById('toggle-dist').onclick = () => toggleForms('dist');
+        document.getElementById('toggle-abc').onclick = () => toggleForms('abc');
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                state.filterView = e.target.dataset.filter;
+                document.querySelectorAll('.filter-btn').forEach(b => { b.className = `flex-1 sm:flex-none px-4 py-1.5 text-xs font-bold rounded-lg transition-all filter-btn ${b.dataset.filter === state.filterView ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`; });
+                renderApp();
+            });
         });
+        document.getElementById('btn-expand-all').onclick = () => document.querySelectorAll('details.entry-details').forEach(d => d.open = true);
+        document.getElementById('btn-collapse-all').onclick = () => document.querySelectorAll('details.entry-details').forEach(d => d.open = false);
 
-        document.getElementById('btn-save-edit').addEventListener('click', () => {
-            const id = document.getElementById('edit-task-id').value;
-            const newText = document.getElementById('edit-task-input').value.trim();
-            const newQuadrant = document.getElementById('edit-task-quadrant').value;
-            
-            if(newText && id) {
-                const taskIndex = state.tasks.findIndex(t => t.id === id);
-                if(taskIndex > -1) {
-                    state.tasks[taskIndex].text = newText;
-                    state.tasks[taskIndex].quadrant = newQuadrant;
-                    registerUserAction();
-                    renderApp();
-                    showToast('Tarea actualizada');
-                }
+        const renderMenteClara = () => {
+            const container = document.getElementById('entries-container');
+            let filtered = state.entries;
+            if(state.filterView !== 'all') filtered = state.entries.filter(e => e.recordType === state.filterView);
+            filtered.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+            if(filtered.length === 0){
+                container.innerHTML = `<div class="h-64 flex flex-col items-center justify-center text-slate-400 border-2 border-dashed border-slate-200 rounded-3xl bg-white/50"><i data-lucide="clock" class="w-12 h-12 mb-3 opacity-40"></i><p class="font-medium">No hay registros.</p></div>`;
+                return;
             }
-            document.getElementById('modal-edit').classList.add('hidden');
-        });
 
-        const attachQuadrantEvents = () => {
-            const container = document.getElementById('quadrants-container');
-            const newContainer = container.cloneNode(true);
-            container.parentNode.replaceChild(newContainer, container);
-            
-            newContainer.addEventListener('click', (e) => {
-                if (e.target.closest('.btn-delete')) {
-                    const id = e.target.closest('.btn-delete').dataset.id;
-                    const task = state.tasks.find(t => t.id === id);
-                    if(task) {
-                        showCustomModal(
-                            'Finalizar Tarea',
-                            `¿Seguro que quieres dar por finalizada la tarea "${task.text}"?`,
-                            `<button id="btn-confirm-delete-task" class="w-full py-2.5 rounded-xl font-bold text-sm transition-colors bg-green-500 hover:bg-green-600 text-white mb-2">Sí, finalizar</button>
-                             <button id="btn-cancel-delete-task" class="w-full py-2.5 rounded-xl font-bold text-sm transition-colors bg-slate-200 hover:bg-slate-300 text-slate-800">Cancelar</button>`
-                        );
-                        document.getElementById('btn-confirm-delete-task').onclick = () => {
-                            state.tasks = state.tasks.filter(t => t.id !== id);
-                            hideCustomModal();
-                            registerUserAction();
-                            renderApp();
-                            showToast('Tarea completada');
-                        };
-                        document.getElementById('btn-cancel-delete-task').onclick = hideCustomModal;
-                    }
+            container.innerHTML = filtered.map(entry => {
+                const isDist = entry.recordType === 'dist';
+                const fDate = formatUIDate(entry.date);
+                if (isDist) {
+                    const info = distTypes[entry.type] || { name: 'Distorsión', icon: 'zap', color: 'slate' };
+                    return `<details class="entry-details group bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                        <summary class="list-none cursor-pointer p-4 flex items-center justify-between bg-white hover:bg-slate-50 transition-colors focus:outline-none">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-${info.color}-100 text-${info.color}-600 flex items-center justify-center shrink-0"><i data-lucide="${info.icon}" class="w-5 h-5"></i></div>
+                                <div class="pr-4"><h3 class="font-black text-slate-800 text-sm md:text-base leading-tight">${info.name}</h3><p class="text-xs text-slate-500 font-medium flex items-center gap-1 mt-0.5"><i data-lucide="clock" class="w-3 h-3"></i> ${fDate}</p></div>
+                            </div>
+                            <div class="flex items-center gap-3 shrink-0">
+                                <p class="text-xs text-slate-400 hidden md:block max-w-[200px] truncate italic">"${entry.ejemplo}"</p><i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform group-open:rotate-180"></i>
+                            </div>
+                        </summary>
+                        <div class="p-5 border-t border-slate-100 bg-slate-50/50">
+                            <div class="flex justify-end gap-2 mb-4">
+                                <button class="btn-edit-dist px-3 py-1.5 text-xs font-bold text-sky-600 bg-sky-50 hover:bg-sky-100 rounded-lg flex items-center gap-1" data-id="${entry.id}"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i> Editar</button>
+                                <button class="btn-delete-mente px-3 py-1.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg flex items-center gap-1" data-id="${entry.id}"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Eliminar</button>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="bg-white p-4 rounded-xl border border-slate-200"><p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 border-b border-slate-100 pb-1">Mi Pensamiento</p><p class="text-sm font-medium text-slate-800 text-wrap-fix">"${entry.ejemplo}"</p></div>
+                                <div class="bg-white p-4 rounded-xl border border-slate-200"><p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 border-b border-slate-100 pb-1">Consecuencias</p><p class="text-sm text-slate-600 text-wrap-fix">${entry.consecuencias}</p></div>
+                                <div class="bg-emerald-50/30 p-4 rounded-xl border border-emerald-100"><p class="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-2 border-b border-emerald-100 pb-1">Beneficios</p><p class="text-sm text-emerald-800 font-medium text-wrap-fix">${entry.beneficios}</p></div>
+                            </div>
+                        </div>
+                    </details>`;
+                } else {
+                    return `<details class="entry-details group bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                        <summary class="list-none cursor-pointer p-4 flex items-center justify-between bg-white hover:bg-slate-50 transition-colors focus:outline-none">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-slate-800 text-white flex items-center justify-center shrink-0"><i data-lucide="layout-grid" class="w-5 h-5"></i></div>
+                                <div class="pr-4"><h3 class="font-black text-slate-800 text-sm md:text-base leading-tight">Modelo ABC</h3><p class="text-xs text-slate-500 font-medium flex items-center gap-1 mt-0.5"><i data-lucide="clock" class="w-3 h-3"></i> ${fDate}</p></div>
+                            </div>
+                            <div class="flex items-center gap-3 shrink-0"><p class="text-xs text-slate-400 hidden md:block max-w-[200px] truncate">Sit: ${entry.abc_a}</p><i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform group-open:rotate-180"></i></div>
+                        </summary>
+                        <div class="p-5 border-t border-slate-100 bg-slate-50/50">
+                            <div class="flex justify-end gap-2 mb-4">
+                                <button class="btn-edit-abc px-3 py-1.5 text-xs font-bold text-sky-600 bg-sky-50 hover:bg-sky-100 rounded-lg flex items-center gap-1" data-id="${entry.id}"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i> Editar</button>
+                                <button class="btn-delete-mente px-3 py-1.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg flex items-center gap-1" data-id="${entry.id}"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Eliminar</button>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100"><p class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">A: Situación</p><p class="text-sm font-medium text-slate-800 text-wrap-fix">${entry.abc_a}</p></div>
+                                <div class="bg-red-50/50 p-4 rounded-xl border border-red-100"><p class="text-[10px] font-black text-red-600 uppercase tracking-widest mb-1">B: Pensamiento</p><p class="text-sm font-bold text-slate-800 italic mb-2 text-wrap-fix">"${entry.abc_b_pen}"</p>${entry.abc_b_pru ? `<p class="text-[10px] font-bold text-red-500/80 uppercase tracking-widest mb-1">Pruebas:</p><p class="text-xs text-slate-600 text-wrap-fix">${entry.abc_b_pru}</p>` : ''}</div>
+                                <div class="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100 grid grid-cols-1 md:grid-cols-3 gap-3">
+                                    <div class="col-span-full mb-[-8px]"><p class="text-[10px] font-black text-emerald-600 uppercase tracking-widest">C: Manifestaciones</p></div>
+                                    <div><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Emocionales</p><p class="text-xs text-slate-700 text-wrap-fix">${entry.abc_c_emo}</p></div>
+                                    <div><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Conductuales</p><p class="text-xs text-slate-700 text-wrap-fix">${entry.abc_c_con || '-'}</p></div>
+                                    <div><p class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Físicas</p><p class="text-xs text-slate-700 text-wrap-fix">${entry.abc_c_fis || '-'}</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </details>`;
                 }
-                if (e.target.closest('.btn-edit')) {
-                    const id = e.target.closest('.btn-edit').dataset.id;
-                    const task = state.tasks.find(t => t.id === id);
-                    if(task) {
-                        document.getElementById('edit-task-id').value = task.id;
-                        document.getElementById('edit-task-input').value = task.text;
-                        document.getElementById('edit-task-quadrant').value = task.quadrant;
-                        document.getElementById('modal-edit').classList.remove('hidden');
-                        document.getElementById('edit-task-input').focus();
-                    }
-                }
-                if (e.target.closest('.btn-clear')) {
-                    const qid = e.target.closest('.btn-clear').dataset.id;
-                    const qDef = quadrantsDef.find(q => q.id === qid);
-                    showCustomModal(
-                        'Vaciar Cuadrante',
-                        `¿Estás seguro de que deseas eliminar TODAS las tareas de "${qDef.title}"?`,
-                        `<button id="btn-confirm-clear" class="w-full py-2.5 rounded-xl font-bold text-sm transition-colors bg-red-500 hover:bg-red-600 text-white mb-2">Sí, vaciar</button>
-                         <button id="btn-cancel-clear" class="w-full py-2.5 rounded-xl font-bold text-sm transition-colors bg-slate-200 hover:bg-slate-300 text-slate-800">Cancelar</button>`
-                    );
-                    document.getElementById('btn-confirm-clear').onclick = () => {
-                        state.tasks = state.tasks.filter(t => t.quadrant !== qid);
-                        hideCustomModal();
-                        registerUserAction();
-                        renderApp();
-                        showToast('Cuadrante vaciado');
-                    };
-                    document.getElementById('btn-cancel-clear').onclick = hideCustomModal;
-                }
-                if (e.target.closest('.btn-sort')) {
-                    const qid = e.target.closest('.btn-sort').dataset.id;
-                    const qTasks = state.tasks.filter(t => t.quadrant === qid).sort((a, b) => a.text.toLowerCase().localeCompare(b.text.toLowerCase()));
-                    const otherTasks = state.tasks.filter(t => t.quadrant !== qid);
-                    state.tasks = [...otherTasks, ...qTasks];
-                    showToast('Tareas ordenadas alfabéticamente');
-                    renderApp();
-                }
-            });
-
-            newContainer.addEventListener('change', (e) => {
-                if (e.target.classList.contains('mobile-move')) {
-                    const id = e.target.dataset.id;
-                    const newQ = e.target.value;
-                    const task = state.tasks.find(t => t.id === id);
-                    if (task) {
-                        task.quadrant = newQ;
-                        registerUserAction();
-                        renderApp();
-                    }
-                }
-            });
+            }).join('');
         };
 
-        document.getElementById('btn-open-sync').addEventListener('click', () => {
-            document.getElementById('modal-sync').classList.remove('hidden');
-            if (window.Peer && !peerInstance) {
-                const code = Math.random().toString(36).substring(2, 6).toUpperCase();
-                peerInstance = new Peer(`prio-${code}`);
-                
-                peerInstance.on('open', () => {
-                    document.getElementById('my-peer-id').innerText = code;
-                });
-
-                peerInstance.on('connection', (conn) => {
-                    p2pConnection = conn;
-                    setupConnection(conn);
-                });
-                
-                peerInstance.on('error', (err) => {
-                    showToast("Error en red. Usa los archivos JSON.", "error");
-                });
+        document.getElementById('entries-container').addEventListener('click', (e) => {
+            if (e.target.closest('.btn-delete-mente')) {
+                const id = e.target.closest('.btn-delete-mente').dataset.id;
+                showConfirm('Eliminar registro', '¿Seguro que deseas borrar este análisis?', () => { state.entries = state.entries.filter(t => t.id !== id); dbSaveData(); renderApp(); showToast('Registro eliminado'); });
+            }
+            if (e.target.closest('.btn-edit-dist')) {
+                const entry = state.entries.find(t => t.id === e.target.closest('.btn-edit-dist').dataset.id);
+                if(entry) {
+                    document.getElementById('edit-dist-id').value = entry.id; document.getElementById('edit-dist-date').value = getLocalISOString(entry.date);
+                    document.getElementById('edit-dist-type').value = entry.type; document.getElementById('edit-dist-ejemplo').value = entry.ejemplo;
+                    document.getElementById('edit-dist-consecuencias').value = entry.consecuencias; document.getElementById('edit-dist-beneficios').value = entry.beneficios;
+                    document.getElementById('modal-edit-dist').classList.remove('hidden');
+                }
+            }
+            if (e.target.closest('.btn-edit-abc')) {
+                const entry = state.entries.find(t => t.id === e.target.closest('.btn-edit-abc').dataset.id);
+                if(entry) {
+                    document.getElementById('edit-abc-id').value = entry.id; document.getElementById('edit-abc-date').value = getLocalISOString(entry.date);
+                    document.getElementById('edit-abc-a').value = entry.abc_a; document.getElementById('edit-abc-b-pen').value = entry.abc_b_pen;
+                    document.getElementById('edit-abc-b-pru').value = entry.abc_b_pru || ''; document.getElementById('edit-abc-c-emo').value = entry.abc_c_emo;
+                    document.getElementById('edit-abc-c-con').value = entry.abc_c_con || ''; document.getElementById('edit-abc-c-fis').value = entry.abc_c_fis || '';
+                    document.getElementById('modal-edit-abc').classList.remove('hidden');
+                }
             }
         });
 
+        document.getElementById('form-dist').addEventListener('submit', (e) => {
+            e.preventDefault(); const dateVal = document.getElementById('new-dist-date').value;
+            state.entries.push({ id: Date.now().toString(), recordType: 'dist', date: new Date(dateVal).toISOString(), type: document.getElementById('new-type').value, ejemplo: document.getElementById('new-ejemplo').value.trim(), consecuencias: document.getElementById('new-consecuencias').value.trim(), beneficios: document.getElementById('new-beneficios').value.trim() });
+            document.getElementById('new-ejemplo').value = ''; document.getElementById('new-consecuencias').value = ''; document.getElementById('new-beneficios').value = ''; document.getElementById('new-dist-date').value = getLocalISOString();
+            dbSaveData(); renderApp(); showToast('Distorsión registrada');
+        });
+        document.getElementById('form-abc').addEventListener('submit', (e) => {
+            e.preventDefault(); const dateVal = document.getElementById('new-abc-date').value;
+            state.entries.push({ id: Date.now().toString(), recordType: 'abc', date: new Date(dateVal).toISOString(), abc_a: document.getElementById('abc-a').value.trim(), abc_b_pen: document.getElementById('abc-b-pen').value.trim(), abc_b_pru: document.getElementById('abc-b-pru').value.trim(), abc_c_emo: document.getElementById('abc-c-emo').value.trim(), abc_c_con: document.getElementById('abc-c-con').value.trim(), abc_c_fis: document.getElementById('abc-c-fis').value.trim() });
+            document.getElementById('form-abc').reset(); document.getElementById('new-abc-date').value = getLocalISOString();
+            dbSaveData(); renderApp(); showToast('Autoregistro ABC guardado');
+        });
+
+        document.getElementById('btn-save-edit-dist').addEventListener('click', () => {
+            const id = document.getElementById('edit-dist-id').value, idx = state.entries.findIndex(e => e.id === id);
+            if(idx > -1) { state.entries[idx] = { ...state.entries[idx], date: new Date(document.getElementById('edit-dist-date').value).toISOString(), type: document.getElementById('edit-dist-type').value, ejemplo: document.getElementById('edit-dist-ejemplo').value.trim(), consecuencias: document.getElementById('edit-dist-consecuencias').value.trim(), beneficios: document.getElementById('edit-dist-beneficios').value.trim() }; dbSaveData(); renderApp(); showToast('Registro actualizado'); document.getElementById('modal-edit-dist').classList.add('hidden'); }
+        });
+        document.getElementById('btn-save-edit-abc').addEventListener('click', () => {
+            const id = document.getElementById('edit-abc-id').value, idx = state.entries.findIndex(e => e.id === id);
+            if(idx > -1) { state.entries[idx] = { ...state.entries[idx], date: new Date(document.getElementById('edit-abc-date').value).toISOString(), abc_a: document.getElementById('edit-abc-a').value.trim(), abc_b_pen: document.getElementById('edit-abc-b-pen').value.trim(), abc_b_pru: document.getElementById('edit-abc-b-pru').value.trim(), abc_c_emo: document.getElementById('edit-abc-c-emo').value.trim(), abc_c_con: document.getElementById('edit-abc-c-con').value.trim(), abc_c_fis: document.getElementById('edit-abc-c-fis').value.trim() }; dbSaveData(); renderApp(); showToast('Registro actualizado'); document.getElementById('modal-edit-abc').classList.add('hidden'); }
+        });
+
+        document.getElementById('btn-open-guide-mente').addEventListener('click', () => document.getElementById('modal-guide-mente').classList.remove('hidden'));
+        document.getElementById('btn-close-guide-mente').addEventListener('click', () => document.getElementById('modal-guide-mente').classList.add('hidden'));
+        document.getElementById('btn-close-edit-dist').addEventListener('click', () => document.getElementById('modal-edit-dist').classList.add('hidden'));
+        document.getElementById('btn-close-edit-abc').addEventListener('click', () => document.getElementById('modal-edit-abc').classList.add('hidden'));
+
+        document.querySelectorAll('.btn-open-sync').forEach(btn => btn.addEventListener('click', () => { document.getElementById('modal-sync').classList.remove('hidden'); initP2P(); }));
         document.getElementById('btn-close-sync').addEventListener('click', () => document.getElementById('modal-sync').classList.add('hidden'));
 
-        const setupConnection = (conn) => {
-            conn.on('open', () => {
-                document.getElementById('sync-setup').classList.add('hidden');
-                document.getElementById('sync-connected').classList.remove('hidden');
-            });
-            conn.on('data', (data) => {
-                if (data.type === 'SYNC_DATA') {
-                    processSyncData(data.data, data.mode);
+        document.getElementById('btn-export-pdf').addEventListener('click', () => {
+            if(state.entries.length === 0) { showToast("No hay registros ABC/Distorsiones para exportar", "error"); return; }
+            const printArea = document.createElement('div');
+            const distEntries = state.entries.filter(e => e.recordType === 'dist').sort((a,b) => new Date(b.date) - new Date(a.date));
+            const abcEntries = state.entries.filter(e => e.recordType === 'abc').sort((a,b) => new Date(b.date) - new Date(a.date));
+            
+            let distHTML = '';
+            if(distEntries.length > 0) {
+                let rows = distEntries.map(e => `<tr class="pdf-row" style="border-bottom: 1px solid #e2e8f0; background: #ffffff;"><td class="pdf-wrap-text" style="padding: 10px; font-size: 11px; font-weight: bold; color: #334155; width: 20%;">${distTypes[e.type]?.name || ''}<br><span style="font-size:8px; font-weight:normal; color:#94a3b8;">${formatUIDate(e.date)}</span></td><td class="pdf-wrap-text" style="padding: 10px; font-size: 11px; color: #475569; width: 30%;"><i>"${e.ejemplo}"</i></td><td class="pdf-wrap-text" style="padding: 10px; font-size: 11px; color: #475569; width: 25%;">${e.consecuencias}</td><td class="pdf-wrap-text" style="padding: 10px; font-size: 11px; color: #15803d; width: 25%;">${e.beneficios}</td></tr>`).join('');
+                distHTML = `<h3 style="font-size: 14px; color: #0ea5e9; font-weight: bold; margin-bottom: 10px; text-transform: uppercase;">1. Distorsiones Cognitivas</h3><table style="table-layout: fixed; width: 100%; border-collapse: collapse; margin-bottom: 30px; border: 1px solid #cbd5e1;"><thead><tr style="background-color: #f1f5f9; text-align: left;"><th style="border-bottom: 2px solid #cbd5e1; padding: 10px; font-size: 10px; text-transform: uppercase; color: #64748b; width: 20%;">Distorsión / Fecha</th><th style="border-bottom: 2px solid #cbd5e1; padding: 10px; font-size: 10px; text-transform: uppercase; color: #64748b; width: 30%;">Mi Pensamiento</th><th style="border-bottom: 2px solid #cbd5e1; padding: 10px; font-size: 10px; text-transform: uppercase; color: #64748b; width: 25%;">Consecuencias</th><th style="border-bottom: 2px solid #cbd5e1; padding: 10px; font-size: 10px; text-transform: uppercase; color: #64748b; width: 25%;">Beneficios</th></tr></thead><tbody>${rows}</tbody></table>`;
+            }
+
+            let abcHTML = '';
+            if(abcEntries.length > 0) {
+                let rows = abcEntries.map(e => `<tr class="pdf-row" style="border-bottom: 2px solid #cbd5e1; background: #ffffff;"><td class="pdf-wrap-text" style="padding: 10px; font-size: 11px; color: #334155; width: 25%; border-right: 1px solid #e2e8f0; vertical-align: top;"><strong style="color: #2563eb; font-size: 10px;">A: Situación</strong><br/>${e.abc_a}<br/><span style="font-size:8px; color:#94a3b8; display:block; margin-top:4px;">${formatUIDate(e.date)}</span></td><td class="pdf-wrap-text" style="padding: 10px; font-size: 11px; color: #475569; width: 35%; border-right: 1px solid #e2e8f0; vertical-align: top;"><strong style="color: #dc2626; font-size: 10px;">B: Pensamiento</strong><br/><i>"${e.abc_b_pen}"</i><br/><br/><strong style="color: #ef4444; font-size: 9px;">Pruebas:</strong><br/>${e.abc_b_pru || '-'}</td><td class="pdf-wrap-text" style="padding: 10px; font-size: 10px; color: #475569; width: 40%; vertical-align: top;"><strong style="color: #059669; font-size: 10px;">C: Manifestaciones</strong><br/><b>Emocionales:</b> ${e.abc_c_emo}<br/><b>Conductuales:</b> ${e.abc_c_con || '-'}<br/><b>Físicas:</b> ${e.abc_c_fis || '-'}</td></tr>`).join('');
+                abcHTML = `<h3 style="font-size: 14px; color: #0ea5e9; font-weight: bold; margin-bottom: 10px; text-transform: uppercase; page-break-before: auto;">2. Modelo ABC</h3><table style="table-layout: fixed; width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #cbd5e1;"><tbody>${rows}</tbody></table>`;
+            }
+
+            printArea.innerHTML = `<div style="padding: 30px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #0f172a;"><h1 style="text-align: center; color: #0ea5e9; font-size: 22px; margin-bottom: 5px; text-transform: uppercase; font-weight: 900;">IntegraMente (MenteClara)</h1><h2 style="text-align: center; font-size: 14px; color: #64748b; margin-bottom: 30px;">Reporte Clínico de Registros</h2>${distHTML}${abcHTML}<div style="margin-top: 30px; text-align: center; font-size: 10px; color: #94a3b8;">Documento generado el ${new Date().toLocaleDateString()}</div></div>`;
+            const opt = { margin: [0.4, 0.4, 0.4, 0.4], filename: 'MenteClara_Reporte.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }, pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } };
+            showToast("Generando PDF...");
+            html2pdf().set(opt).from(printArea).save().then(() => showToast("PDF descargado correctamente"));
+        });
+
+        const processSyncData = (payload, mode) => {
+            try {
+                if (mode === 'overwrite') {
+                    if (payload.tasks) state.tasks = payload.tasks;
+                    if (payload.config) state.config = payload.config;
+                    if (payload.entries) state.entries = payload.entries;
+                    showToast("Datos sobrescritos exitosamente.");
+                } else if (mode === 'merge') {
+                    if (payload.tasks) payload.tasks.forEach(rt => { if (!state.tasks.find(lt => lt.id === rt.id)) state.tasks.push(rt); });
+                    if (payload.entries) payload.entries.forEach(ext => { if(!state.entries.find(l => l.id === ext.id)) state.entries.push(ext); });
+                    if (payload.config) {
+                        state.config.streak = Math.max(state.config.streak || 0, payload.config.streak || 0);
+                        if (payload.config.streakEnabled !== undefined) state.config.streakEnabled = payload.config.streakEnabled;
+                        if (payload.config.resetTime !== undefined) state.config.resetTime = payload.config.resetTime;
+                        if (payload.config.dailyPresets) payload.config.dailyPresets.forEach(rp => { if (!state.config.dailyPresets.find(lp => lp.text === rp.text)) state.config.dailyPresets.push(rp); });
+                    }
+                    showToast("Datos fusionados correctamente.");
                 }
-            });
-            conn.on('close', () => {
-                p2pConnection = null;
-                document.getElementById('sync-setup').classList.remove('hidden');
-                document.getElementById('sync-connected').classList.add('hidden');
-            });
+                document.getElementById('toggle-streak').checked = state.config.streakEnabled;
+                document.getElementById('reset-time-input').value = state.config.resetTime;
+                dbSaveData(); checkDailyReset(); startTimer(); renderApp();
+            } catch(e) { showToast("Error al procesar datos", "error"); }
         };
 
-        document.getElementById('btn-connect').addEventListener('click', () => {
-            const val = document.getElementById('connect-id-input').value.trim().toUpperCase();
-            if (!peerInstance || !val) return;
-            const btn = document.getElementById('btn-connect');
-            btn.innerText = '...';
-            btn.disabled = true;
-            
-            p2pConnection = peerInstance.connect(`prio-${val}`);
-            setupConnection(p2pConnection);
-
-            setTimeout(() => {
-                btn.innerText = 'Unir';
-                btn.disabled = false;
-            }, 3000);
-        });
-
-        document.getElementById('btn-sync-merge').addEventListener('click', () => {
-            if (p2pConnection && p2pConnection.open) {
-                const payload = { tasks: state.tasks, config: state.config };
-                p2pConnection.send({ type: 'SYNC_DATA', data: payload, mode: 'merge' });
-                showToast("Datos enviados correctamente.");
-            }
-        });
-
-        document.getElementById('btn-sync-overwrite').addEventListener('click', () => {
-             if (p2pConnection && p2pConnection.open) {
-                const payload = { tasks: state.tasks, config: state.config };
-                p2pConnection.send({ type: 'SYNC_DATA', data: payload, mode: 'overwrite' });
-                showToast("Datos enviados correctamente.");
-            }
-        });
-
-        document.getElementById('btn-copy-id').addEventListener('click', () => {
-            const code = document.getElementById('my-peer-id').innerText;
-            if(code !== 'Cargando...' && code !== '...') {
-                navigator.clipboard.writeText(code).then(() => showToast("Copiado"));
-            }
-        });
-
         document.getElementById('btn-export-json').addEventListener('click', () => {
-            const payload = { tasks: state.tasks, config: state.config };
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", `prioriza_tareas.json`);
-            document.body.appendChild(downloadAnchorNode);
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
-            showToast("Archivo exportado");
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ tasks: state.tasks, config: state.config, entries: state.entries }));
+            const a = document.createElement('a'); a.href = dataStr; a.download = `integramente_respaldo.json`; document.body.appendChild(a); a.click(); a.remove(); showToast("JSON exportado");
         });
-
-        document.getElementById('btn-import-json').addEventListener('click', () => {
-            document.getElementById('file-input').click();
-        });
-
+        document.getElementById('btn-import-json').addEventListener('click', () => document.getElementById('file-input').click());
         document.getElementById('file-input').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
+            const file = e.target.files[0]; if (!file) return;
             const reader = new FileReader();
             reader.onload = (event) => {
                 try {
                     const importedData = JSON.parse(event.target.result);
-                    
-                    showCustomModal(
-                        'Importar Archivo',
-                        '¿Cómo deseas añadir los datos del archivo?',
-                        `<button id="btn-import-merge" class="w-full py-2.5 rounded-xl font-bold text-sm transition-colors bg-blue-600 hover:bg-blue-700 text-white mb-2">Fusionar (No borra lo actual)</button>
-                         <button id="btn-import-over" class="w-full py-2.5 rounded-xl font-bold text-sm transition-colors bg-red-500 hover:bg-red-600 text-white mb-2">Sobrescribir todo</button>
-                         <button id="btn-import-cancel" class="w-full py-2.5 rounded-xl font-bold text-sm transition-colors bg-slate-200 hover:bg-slate-300 text-slate-800">Cancelar</button>`
-                    );
-                    
-                    document.getElementById('btn-import-merge').onclick = () => {
-                        processSyncData(importedData, 'merge');
-                        hideCustomModal();
-                    };
-                    document.getElementById('btn-import-over').onclick = () => {
-                        processSyncData(importedData, 'overwrite');
-                        hideCustomModal();
-                    };
-                    document.getElementById('btn-import-cancel').onclick = hideCustomModal;
-
-                } catch (err) {
-                    showToast("Error al leer el archivo JSON.", "error");
-                }
-                e.target.value = null;
+                    showConfirm('Importar Archivo', '¿Cómo deseas añadir los datos del archivo?', () => { processSyncData(importedData, 'merge'); });
+                    document.getElementById('confirm-actions').innerHTML = `
+                        <button id="btn-import-merge" class="w-full py-2.5 rounded-xl font-bold text-sm bg-indigo-600 hover:bg-indigo-700 text-white mb-2">Fusionar (No borra lo actual)</button>
+                        <button id="btn-import-over" class="w-full py-2.5 rounded-xl font-bold text-sm bg-red-500 hover:bg-red-600 text-white mb-2">Sobrescribir todo</button>
+                        <button id="btn-import-cancel" class="w-full py-2.5 rounded-xl font-bold text-sm bg-slate-200 hover:bg-slate-300 text-slate-800">Cancelar</button>`;
+                    document.getElementById('btn-import-merge').onclick = () => { processSyncData(importedData, 'merge'); document.getElementById('modal-confirm').classList.add('hidden'); };
+                    document.getElementById('btn-import-over').onclick = () => { processSyncData(importedData, 'overwrite'); document.getElementById('modal-confirm').classList.add('hidden'); };
+                    document.getElementById('btn-import-cancel').onclick = () => document.getElementById('modal-confirm').classList.add('hidden');
+                } catch(err) { showToast("Error de formato", "error"); }
             };
-            reader.readAsText(file);
+            reader.readAsText(file); e.target.value = null;
         });
 
-        lucide.createIcons();
+        const initP2P = () => {
+            if (window.Peer && !peerInstance) {
+                const code = Math.random().toString(36).substring(2, 6).toUpperCase();
+                peerInstance = new Peer(`integra-${code}`);
+                peerInstance.on('open', () => document.getElementById('my-peer-id').innerText = code);
+                peerInstance.on('connection', (conn) => { p2pConnection = conn; setupConnection(conn); });
+                peerInstance.on('error', () => showToast("Error P2P. Intenta manual.", "error"));
+            }
+        };
+        const setupConnection = (conn) => {
+            conn.on('open', () => { document.getElementById('sync-setup').classList.add('hidden'); document.getElementById('sync-connected').classList.remove('hidden'); });
+            conn.on('data', (data) => { if(data.type === 'SYNC_DATA') processSyncData(data.payload, data.mode); });
+            conn.on('close', () => { p2pConnection = null; document.getElementById('sync-setup').classList.remove('hidden'); document.getElementById('sync-connected').classList.add('hidden'); });
+        };
+        document.getElementById('btn-connect').onclick = () => {
+            const val = document.getElementById('connect-id-input').value.trim().toUpperCase();
+            if(!val || !peerInstance) return; 
+            const btn = document.getElementById('btn-connect'); btn.innerText = '...'; btn.disabled = true;
+            p2pConnection = peerInstance.connect(`integra-${val}`); setupConnection(p2pConnection);
+            setTimeout(() => { btn.innerText = 'Unir'; btn.disabled = false; }, 3000);
+        };
+        document.getElementById('btn-copy-id').onclick = () => {
+            const code = document.getElementById('my-peer-id').innerText;
+            if(code !== 'Cargando...') navigator.clipboard.writeText(code).then(() => showToast("Copiado"));
+        };
+        document.getElementById('btn-sync-merge').onclick = () => { if(p2pConnection) p2pConnection.send({ type: 'SYNC_DATA', payload: { tasks: state.tasks, config: state.config, entries: state.entries }, mode: 'merge' }); showToast("Enviado"); };
+        document.getElementById('btn-sync-overwrite').onclick = () => { if(p2pConnection) p2pConnection.send({ type: 'SYNC_DATA', payload: { tasks: state.tasks, config: state.config, entries: state.entries }, mode: 'overwrite' }); showToast("Enviado"); };
+
+        document.getElementById('new-dist-date').value = getLocalISOString();
+        document.getElementById('new-abc-date').value = getLocalISOString();
         dbLoadData();
 
     </script>
